@@ -1,0 +1,26 @@
+# Turns red when aio has a final release this package is behind, until the Release workflow is run
+# for it.
+name: Watch aio releases
+
+on:
+  schedule:
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - run: node scripts/watch-aio.ts
+        env:
+          GH_TOKEN: ${{ secrets.AIO_READ_TOKEN }}
+          AIO_REPOSITORY: ${{ vars.AIO_REPOSITORY }}

@@ -1,0 +1,2233 @@
+openapi: 3.1.0
+info:
+  title: 'Laravel public API'
+  version: v1
+  description: 'The public developer API of this install, major version v1 (current). Every path here is stable for the life of the version: fields are added, never removed or retyped, and a breaking change arrives as a new version while this one keeps serving.'
+servers:
+  - url: /
+tags:
+  - name: account-states
+  - name: articles
+  - name: form-entries
+  - name: magic-link
+  - name: me
+  - name: me-addresses
+  - name: me-billing-entry
+  - name: me-entitlements
+  - name: me-orders
+  - name: me-push-devices
+  - name: me-referral
+  - name: orders
+  - name: pages
+  - name: products
+  - name: sync.articles
+  - name: sync.form-entries
+  - name: sync.me-addresses
+  - name: sync.me-orders
+  - name: sync.orders
+  - name: sync.pages
+  - name: sync.products
+  - name: version
+  - name: webhook-deliveries
+paths:
+  /api/v1:
+    get:
+      operationId: getApiVersion
+      tags:
+        - version
+      summary: 'The lifecycle of this API version'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiEnvelope' }
+  /api/v1/account-states:
+    get:
+      operationId: listAccountStates
+      tags:
+        - account-states
+      summary: 'List account states'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiEnvelope' }
+      security:
+        - bearerAuth: []
+  /api/v1/articles:
+    get:
+      operationId: listArticles
+      tags:
+        - articles
+      summary: 'List articles'
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: order
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+      responses:
+        200:
+          description: 'A page of records'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ArticleListResponse' }
+        401:
+          description: 'The token is missing, malformed or expired'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        403:
+          description: 'The token lacks the ability this endpoint requires'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        422:
+          description: 'The request was understood and refused by validation'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        429:
+          description: 'The rate-limit budget for this window is spent'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+      security:
+        - bearerAuth: []
+    post:
+      operationId: createArticle
+      tags:
+        - articles
+      summary: 'Create one of articles'
+      responses:
+        201:
+          description: 'One record'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ArticleResponse' }
+        401:
+          description: 'The token is missing, malformed or expired'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        403:
+          description: 'The token lacks the ability this endpoint requires'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        422:
+          description: 'The request was understood and refused by validation'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        429:
+          description: 'The rate-limit budget for this window is spent'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreArticlePayload'
+      security:
+        - bearerAuth: []
+  '/api/v1/articles/{id}':
+    get:
+      operationId: getArticle
+      tags:
+        - articles
+      summary: 'Read one of articles'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: 'One record'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ArticleResponse' }
+        401:
+          description: 'The token is missing, malformed or expired'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        403:
+          description: 'The token lacks the ability this endpoint requires'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        422:
+          description: 'The request was understood and refused by validation'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        429:
+          description: 'The rate-limit budget for this window is spent'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        404:
+          description: 'No such record'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+      security:
+        - bearerAuth: []
+    patch:
+      operationId: updateArticle
+      tags:
+        - articles
+      summary: 'Update one of articles'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: 'One record'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ArticleResponse' }
+        401:
+          description: 'The token is missing, malformed or expired'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        403:
+          description: 'The token lacks the ability this endpoint requires'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        422:
+          description: 'The request was understood and refused by validation'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        429:
+          description: 'The rate-limit budget for this window is spent'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        404:
+          description: 'No such record'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateArticlePayload'
+      security:
+        - bearerAuth: []
+  /api/v1/auth/magic-link:
+    post:
+      operationId: requestMagicLink
+      tags:
+        - magic-link
+      summary: 'Request magic link'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiEnvelope' }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MagicLinkPayload'
+  /api/v1/auth/magic-link/token:
+    post:
+      operationId: tokenMagicLink
+      tags:
+        - magic-link
+      summary: 'Token magic link'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiEnvelope' }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MagicLinkTokenPayload'
+  /api/v1/form-entries:
+    get:
+      operationId: listFormEntries
+      tags:
+        - form-entries
+      summary: 'List form entries'
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: order
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+      responses:
+        200:
+          description: 'A page of records'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/FormEntryListResponse' }
+        401:
+          description: 'The token is missing, malformed or expired'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        403:
+          description: 'The token lacks the ability this endpoint requires'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        422:
+          description: 'The request was understood and refused by validation'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        429:
+          description: 'The rate-limit budget for this window is spent'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+      security:
+        - bearerAuth: []
+  '/api/v1/form-entries/{id}':
+    get:
+      operationId: getFormEntry
+      tags:
+        - form-entries
+      summary: 'Read one of form entries'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: 'One record'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/FormEntryResponse' }
+        401:
+          description: 'The token is missing, malformed or expired'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        403:
+          description: 'The token lacks the ability this endpoint requires'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        422:
+          description: 'The request was understood and refused by validation'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        429:
+          description: 'The rate-limit budget for this window is spent'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        404:
+          description: 'No such record'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+      security:
+        - bearerAuth: []
+  /api/v1/me:
+    get:
+      operationId: getMe
+      tags:
+        - me
+      summary: 'Read one of me'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiEnvelope' }
+      security:
+        - bearerAuth: []
+    patch:
+      operationId: updateMe
+      tags:
+        - me
+      summary: 'Update one of me'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiEnvelope' }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMePayload'
+      security:
+        - bearerAuth: []
+  /api/v1/me/addresses:
+    get:
+      operationId: listMeAddresses
+      tags:
+        - me-addresses
+      summary: 'List me addresses'
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: order
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+      responses:
+        200:
+          description: 'A page of records'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/UserAddressListResponse' }
+        401:
+          description: 'The token is missing, malformed or expired'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        403:
+          description: 'The token lacks the ability this endpoint requires'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        422:
+          description: 'The request was understood and refused by validation'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        429:
+          description: 'The rate-limit budget for this window is spent'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+      security:
+        - bearerAuth: []
+    post:
+      operationId: createMeAddress
+      tags:
+        - me-addresses
+      summary: 'Create one of me addresses'
+      responses:
+        201:
+          description: 'One record'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/UserAddressResponse' }
+        401:
+          description: 'The token is missing, malformed or expired'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        403:
+          description: 'The token lacks the ability this endpoint requires'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        422:
+          description: 'The request was understood and refused by validation'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        429:
+          description: 'The rate-limit budget for this window is spent'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreMeAddressPayload'
+      security:
+        - bearerAuth: []
+  '/api/v1/me/addresses/{id}':
+    delete:
+      operationId: deleteMeAddress
+      tags:
+        - me-addresses
+      summary: 'Destroy me addresses'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: 'One record'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/UserAddressResponse' }
+        401:
+          description: 'The token is missing, malformed or expired'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        403:
+          description: 'The token lacks the ability this endpoint requires'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        422:
+          description: 'The request was understood and refused by validation'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        429:
+          description: 'The rate-limit budget for this window is spent'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        404:
+          description: 'No such record'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+      security:
+        - bearerAuth: []
+    patch:
+      operationId: updateMeAddress
+      tags:
+        - me-addresses
+      summary: 'Update one of me addresses'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: 'One record'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/UserAddressResponse' }
+        401:
+          description: 'The token is missing, malformed or expired'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        403:
+          description: 'The token lacks the ability this endpoint requires'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        422:
+          description: 'The request was understood and refused by validation'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        429:
+          description: 'The rate-limit budget for this window is spent'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        404:
+          description: 'No such record'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMeAddressPayload'
+      security:
+        - bearerAuth: []
+  /api/v1/me/billing-entry:
+    get:
+      operationId: getMeBillingEntry
+      tags:
+        - me-billing-entry
+      summary: 'Read one of me billing entry'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiEnvelope' }
+      security:
+        - bearerAuth: []
+  /api/v1/me/entitlements:
+    get:
+      operationId: listMeEntitlements
+      tags:
+        - me-entitlements
+      summary: 'List me entitlements'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiEnvelope' }
+      security:
+        - bearerAuth: []
+  /api/v1/me/orders:
+    get:
+      operationId: listMeOrders
+      tags:
+        - me-orders
+      summary: 'List me orders'
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: order
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+      responses:
+        200:
+          description: 'A page of records'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/OrderListResponse' }
+        401:
+          description: 'The token is missing, malformed or expired'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        403:
+          description: 'The token lacks the ability this endpoint requires'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        422:
+          description: 'The request was understood and refused by validation'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        429:
+          description: 'The rate-limit budget for this window is spent'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+      security:
+        - bearerAuth: []
+  '/api/v1/me/orders/{id}':
+    get:
+      operationId: getMeOrder
+      tags:
+        - me-orders
+      summary: 'Read one of me orders'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: 'One record'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/OrderResponse' }
+        401:
+          description: 'The token is missing, malformed or expired'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        403:
+          description: 'The token lacks the ability this endpoint requires'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        422:
+          description: 'The request was understood and refused by validation'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        429:
+          description: 'The rate-limit budget for this window is spent'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        404:
+          description: 'No such record'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+      security:
+        - bearerAuth: []
+  /api/v1/me/push-devices:
+    post:
+      operationId: createMePushDevice
+      tags:
+        - me-push-devices
+      summary: 'Create one of me push devices'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiEnvelope' }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreMePushDevicePayload'
+      security:
+        - bearerAuth: []
+  /api/v1/me/push-devices/unregister:
+    post:
+      operationId: unregisterMePushDevice
+      tags:
+        - me-push-devices
+      summary: 'Unregister me push devices'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiEnvelope' }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnregisterMePushDevicePayload'
+      security:
+        - bearerAuth: []
+  /api/v1/me/referral:
+    get:
+      operationId: getMeReferral
+      tags:
+        - me-referral
+      summary: 'Read one of me referral'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiEnvelope' }
+      security:
+        - bearerAuth: []
+  /api/v1/me/referral/rewards:
+    get:
+      operationId: rewardsMeReferral
+      tags:
+        - me-referral
+      summary: 'Rewards me referral'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiEnvelope' }
+      security:
+        - bearerAuth: []
+  /api/v1/openapi.json:
+    get:
+      operationId: getOpenApiDocument
+      tags:
+        - version
+      summary: 'The OpenAPI document describing this version'
+      responses:
+        200:
+          description: 'The OpenAPI document of this version'
+          content:
+            application/json:
+              schema: { type: object, additionalProperties: true }
+  /api/v1/orders:
+    get:
+      operationId: listOrders
+      tags:
+        - orders
+      summary: 'List orders'
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: order
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+      responses:
+        200:
+          description: 'A page of records'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/OrderListResponse' }
+        401:
+          description: 'The token is missing, malformed or expired'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        403:
+          description: 'The token lacks the ability this endpoint requires'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        422:
+          description: 'The request was understood and refused by validation'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        429:
+          description: 'The rate-limit budget for this window is spent'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+      security:
+        - bearerAuth: []
+  '/api/v1/orders/{id}':
+    get:
+      operationId: getOrder
+      tags:
+        - orders
+      summary: 'Read one of orders'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: 'One record'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/OrderResponse' }
+        401:
+          description: 'The token is missing, malformed or expired'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        403:
+          description: 'The token lacks the ability this endpoint requires'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        422:
+          description: 'The request was understood and refused by validation'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        429:
+          description: 'The rate-limit budget for this window is spent'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        404:
+          description: 'No such record'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+      security:
+        - bearerAuth: []
+  /api/v1/pages:
+    get:
+      operationId: listPages
+      tags:
+        - pages
+      summary: 'List pages'
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: order
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+      responses:
+        200:
+          description: 'A page of records'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PageListResponse' }
+        401:
+          description: 'The token is missing, malformed or expired'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        403:
+          description: 'The token lacks the ability this endpoint requires'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        422:
+          description: 'The request was understood and refused by validation'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        429:
+          description: 'The rate-limit budget for this window is spent'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+      security:
+        - bearerAuth: []
+  '/api/v1/pages/{id}':
+    get:
+      operationId: getPage
+      tags:
+        - pages
+      summary: 'Read one of pages'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: 'One record'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PageResponse' }
+        401:
+          description: 'The token is missing, malformed or expired'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        403:
+          description: 'The token lacks the ability this endpoint requires'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        422:
+          description: 'The request was understood and refused by validation'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        429:
+          description: 'The rate-limit budget for this window is spent'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        404:
+          description: 'No such record'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+      security:
+        - bearerAuth: []
+  /api/v1/products:
+    get:
+      operationId: listProducts
+      tags:
+        - products
+      summary: 'List products'
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: order
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+      responses:
+        200:
+          description: 'A page of records'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ProductListResponse' }
+        401:
+          description: 'The token is missing, malformed or expired'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        403:
+          description: 'The token lacks the ability this endpoint requires'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        422:
+          description: 'The request was understood and refused by validation'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        429:
+          description: 'The rate-limit budget for this window is spent'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+      security:
+        - bearerAuth: []
+  '/api/v1/products/{id}':
+    get:
+      operationId: getProduct
+      tags:
+        - products
+      summary: 'Read one of products'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: 'One record'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ProductResponse' }
+        401:
+          description: 'The token is missing, malformed or expired'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        403:
+          description: 'The token lacks the ability this endpoint requires'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        422:
+          description: 'The request was understood and refused by validation'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        429:
+          description: 'The rate-limit budget for this window is spent'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+        404:
+          description: 'No such record'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiError' }
+      security:
+        - bearerAuth: []
+  /api/v1/sync/articles:
+    get:
+      operationId: pullSync.article
+      tags:
+        - sync.articles
+      summary: 'Pull sync.articles'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiEnvelope' }
+      security:
+        - bearerAuth: []
+    post:
+      operationId: pushSync.article
+      tags:
+        - sync.articles
+      summary: 'Push sync.articles'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiEnvelope' }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SyncPushPayload'
+      security:
+        - bearerAuth: []
+  /api/v1/sync/form-entries:
+    get:
+      operationId: pullSync.formEntry
+      tags:
+        - sync.form-entries
+      summary: 'Pull sync.form entries'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiEnvelope' }
+      security:
+        - bearerAuth: []
+  /api/v1/sync/me-addresses:
+    get:
+      operationId: pullSync.meAddress
+      tags:
+        - sync.me-addresses
+      summary: 'Pull sync.me addresses'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiEnvelope' }
+      security:
+        - bearerAuth: []
+    post:
+      operationId: pushSync.meAddress
+      tags:
+        - sync.me-addresses
+      summary: 'Push sync.me addresses'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiEnvelope' }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SyncPushPayload'
+      security:
+        - bearerAuth: []
+  /api/v1/sync/me-orders:
+    get:
+      operationId: pullSync.meOrder
+      tags:
+        - sync.me-orders
+      summary: 'Pull sync.me orders'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiEnvelope' }
+      security:
+        - bearerAuth: []
+  /api/v1/sync/orders:
+    get:
+      operationId: pullSync.order
+      tags:
+        - sync.orders
+      summary: 'Pull sync.orders'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiEnvelope' }
+      security:
+        - bearerAuth: []
+  /api/v1/sync/pages:
+    get:
+      operationId: pullSync.page
+      tags:
+        - sync.pages
+      summary: 'Pull sync.pages'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiEnvelope' }
+      security:
+        - bearerAuth: []
+  /api/v1/sync/products:
+    get:
+      operationId: pullSync.product
+      tags:
+        - sync.products
+      summary: 'Pull sync.products'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiEnvelope' }
+      security:
+        - bearerAuth: []
+  '/api/v1/webhook-subscriptions/{subscription}/deliveries':
+    get:
+      operationId: listWebhookDeliveries
+      tags:
+        - webhook-deliveries
+      summary: 'List webhook deliveries'
+      parameters:
+        - name: subscription
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiEnvelope' }
+      security:
+        - bearerAuth: []
+  '/api/v1/webhook-subscriptions/{subscription}/deliveries/{event}/redeliver':
+    post:
+      operationId: redeliverWebhookDelivery
+      tags:
+        - webhook-deliveries
+      summary: 'Redeliver webhook deliveries'
+      parameters:
+        - name: subscription
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: event
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiEnvelope' }
+      security:
+        - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    ApiEnvelope:
+      type: object
+      required:
+        - status
+        - message
+        - data
+      properties:
+        status:
+          type: boolean
+          const: true
+        message:
+          type: string
+        data:
+          description: 'Any JSON value: an object, a list or null. The route declares no resource shape.'
+    ApiError:
+      type: object
+      required:
+        - status
+        - message
+      properties:
+        status:
+          type: boolean
+          const: false
+        message:
+          type: string
+        error_class:
+          type: string
+        data:
+          type:
+            - object
+            - 'null'
+          additionalProperties: true
+    Article:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        slug:
+          oneOf:
+            - type: string
+            - type: 'null'
+        description:
+          oneOf:
+            - type: string
+            - type: 'null'
+        keywords:
+          oneOf:
+            - type: string
+            - type: 'null'
+        cover:
+          description: 'The absolute URL the image is served at, built when the response is made, so it follows the address the site has then.'
+          oneOf:
+            - type: string
+            - type: 'null'
+        status:
+          type: integer
+        sort:
+          oneOf:
+            - type: integer
+            - type: 'null'
+        published_at:
+          type: string
+          format: date-time
+        expired_at:
+          oneOf:
+            - type: string
+              format: date-time
+            - type: 'null'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArticleCategorySummary'
+      required:
+        - id
+        - title
+        - status
+        - published_at
+        - created_at
+        - updated_at
+        - categories
+    ArticleCategorySummary:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        slug:
+          oneOf:
+            - type: string
+            - type: 'null'
+      required:
+        - id
+        - title
+    ArticleListResponse:
+      type: object
+      required:
+        - status
+        - message
+        - data
+        - meta
+      properties:
+        status:
+          type: boolean
+          const: true
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Article'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    ArticleResponse:
+      type: object
+      required:
+        - status
+        - message
+        - data
+      properties:
+        status:
+          type: boolean
+          const: true
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/Article'
+    FormEntry:
+      type: object
+      properties:
+        id:
+          type: integer
+        form_id:
+          type: integer
+        user_id:
+          oneOf:
+            - type: integer
+            - type: 'null'
+        name:
+          oneOf:
+            - type: string
+            - type: 'null'
+        first_name:
+          oneOf:
+            - type: string
+            - type: 'null'
+        last_name:
+          oneOf:
+            - type: string
+            - type: 'null'
+        email:
+          oneOf:
+            - type: string
+            - type: 'null'
+        mobile:
+          oneOf:
+            - type: string
+            - type: 'null'
+        data:
+          oneOf:
+            - type: object
+              additionalProperties: true
+            - type: 'null'
+        is_spam:
+          type: string
+        submitted_at:
+          type: string
+          format: date-time
+        created_at:
+          oneOf:
+            - type: string
+              format: date-time
+            - type: 'null'
+        updated_at:
+          oneOf:
+            - type: string
+              format: date-time
+            - type: 'null'
+      required:
+        - id
+        - form_id
+        - is_spam
+        - submitted_at
+    FormEntryListResponse:
+      type: object
+      required:
+        - status
+        - message
+        - data
+        - meta
+      properties:
+        status:
+          type: boolean
+          const: true
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormEntry'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    FormEntryResponse:
+      type: object
+      required:
+        - status
+        - message
+        - data
+      properties:
+        status:
+          type: boolean
+          const: true
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/FormEntry'
+    MagicLinkPayload:
+      type: object
+      properties:
+        email:
+          type: string
+        abilities:
+          type: array
+          items:
+            type: string
+            enum:
+              - 'me:read'
+              - 'me:write'
+              - 'me-orders:read'
+              - 'me-addresses:read'
+              - 'me-addresses:write'
+              - 'me-entitlements:read'
+              - 'me-push-devices:write'
+              - 'me-checkout:write'
+              - 'me-store-purchases:write'
+              - 'me-referral:read'
+              - 'me-billing:read'
+        device_name:
+          type: string
+        code_challenge:
+          type: string
+      required:
+        - email
+        - abilities
+        - device_name
+        - code_challenge
+    MagicLinkTokenPayload:
+      type: object
+      properties:
+        link:
+          type: string
+        code_verifier:
+          type: string
+        code:
+          type: string
+        recovery_code:
+          type: string
+        lost_second_factor:
+          type: boolean
+      required:
+        - link
+        - code_verifier
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+        reference:
+          type: string
+        subject_reference:
+          oneOf:
+            - type: string
+            - type: 'null'
+        user_id:
+          oneOf:
+            - type: integer
+            - type: 'null'
+        coupon_id:
+          oneOf:
+            - type: integer
+            - type: 'null'
+        status:
+          oneOf:
+            - type: integer
+            - type: 'null'
+        mode:
+          type: string
+        subscription_start_state:
+          oneOf:
+            - type: string
+            - type: 'null'
+        subscription_start_refusal:
+          oneOf:
+            - type: string
+            - type: 'null'
+        summary:
+          oneOf:
+            - type: string
+            - type: 'null'
+        amount:
+          type: integer
+        discounted_amount:
+          type: integer
+        shipping_amount:
+          type: integer
+        tax_amount:
+          type: integer
+        tax_included:
+          type: boolean
+        total_amount:
+          type: integer
+        total_shown:
+          type: string
+        note:
+          oneOf:
+            - type: string
+            - type: 'null'
+        created_at:
+          oneOf:
+            - type: string
+              format: date-time
+            - type: 'null'
+        updated_at:
+          type: string
+          format: date-time
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderLineSummary'
+      required:
+        - id
+        - reference
+        - mode
+        - amount
+        - discounted_amount
+        - shipping_amount
+        - tax_amount
+        - tax_included
+        - total_amount
+        - total_shown
+        - updated_at
+        - items
+    OrderLineSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+        product_id:
+          oneOf:
+            - type: integer
+            - type: 'null'
+        quantity:
+          type: integer
+        price:
+          type: integer
+      required:
+        - id
+        - quantity
+        - price
+    OrderListResponse:
+      type: object
+      required:
+        - status
+        - message
+        - data
+        - meta
+      properties:
+        status:
+          type: boolean
+          const: true
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    OrderResponse:
+      type: object
+      required:
+        - status
+        - message
+        - data
+      properties:
+        status:
+          type: boolean
+          const: true
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/Order'
+    Page:
+      type: object
+      properties:
+        id:
+          type: integer
+        reference:
+          type: string
+        name:
+          oneOf:
+            - type: string
+            - type: 'null'
+        title:
+          oneOf:
+            - type: string
+            - type: 'null'
+        slug:
+          oneOf:
+            - type: string
+            - type: 'null'
+        description:
+          oneOf:
+            - type: string
+            - type: 'null'
+        keywords:
+          oneOf:
+            - type: string
+            - type: 'null'
+        language:
+          oneOf:
+            - type: string
+            - type: 'null'
+        parent_id:
+          oneOf:
+            - type: integer
+            - type: 'null'
+        status:
+          oneOf:
+            - type: integer
+            - type: 'null'
+        published_at:
+          type: string
+          format: date-time
+        expired_at:
+          oneOf:
+            - type: string
+              format: date-time
+            - type: 'null'
+        created_at:
+          oneOf:
+            - type: string
+              format: date-time
+            - type: 'null'
+        updated_at:
+          type: string
+          format: date-time
+      required:
+        - id
+        - reference
+        - published_at
+        - updated_at
+    PageListResponse:
+      type: object
+      required:
+        - status
+        - message
+        - data
+        - meta
+      properties:
+        status:
+          type: boolean
+          const: true
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Page'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    PageResponse:
+      type: object
+      required:
+        - status
+        - message
+        - data
+      properties:
+        status:
+          type: boolean
+          const: true
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/Page'
+    PaginationMeta:
+      type: object
+      required:
+        - current_page
+        - last_page
+        - per_page
+        - total
+      properties:
+        current_page:
+          type: integer
+        last_page:
+          type: integer
+        per_page:
+          type: integer
+        total:
+          type: integer
+        from:
+          oneOf:
+            - type: integer
+            - type: 'null'
+        to:
+          oneOf:
+            - type: integer
+            - type: 'null'
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+        title:
+          type: string
+        subtitle:
+          oneOf:
+            - type: string
+            - type: 'null'
+        slug:
+          oneOf:
+            - type: string
+            - type: 'null'
+        cover:
+          description: 'The absolute URL the image is served at, built when the response is made, so it follows the address the site has then.'
+          oneOf:
+            - type: string
+            - type: 'null'
+        description:
+          oneOf:
+            - type: string
+            - type: 'null'
+        keywords:
+          oneOf:
+            - type: string
+            - type: 'null'
+        price:
+          oneOf:
+            - type: integer
+            - type: 'null'
+        original_price:
+          oneOf:
+            - type: integer
+            - type: 'null'
+        currency:
+          oneOf:
+            - type: string
+            - type: 'null'
+        prices:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductPriceSummary'
+        status:
+          type: integer
+        sort:
+          oneOf:
+            - type: integer
+            - type: 'null'
+        published_at:
+          type: string
+          format: date-time
+        expired_at:
+          oneOf:
+            - type: string
+              format: date-time
+            - type: 'null'
+        created_at:
+          oneOf:
+            - type: string
+              format: date-time
+            - type: 'null'
+        updated_at:
+          type: string
+          format: date-time
+      required:
+        - id
+        - type
+        - title
+        - prices
+        - status
+        - published_at
+        - updated_at
+    ProductListResponse:
+      type: object
+      required:
+        - status
+        - message
+        - data
+        - meta
+      properties:
+        status:
+          type: boolean
+          const: true
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    ProductPriceSummary:
+      type: object
+      properties:
+        currency:
+          type: string
+        price:
+          type: integer
+        original_price:
+          oneOf:
+            - type: integer
+            - type: 'null'
+      required:
+        - currency
+        - price
+    ProductResponse:
+      type: object
+      required:
+        - status
+        - message
+        - data
+      properties:
+        status:
+          type: boolean
+          const: true
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/Product'
+    StoreArticlePayload:
+      type: object
+      properties:
+        title:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+        keywords:
+          type: string
+        content:
+          type: string
+        cover:
+          type: string
+        status:
+          type: integer
+          enum:
+            - 0
+            - 1
+        sort:
+          type: integer
+        published_at:
+          type: string
+          format: date-time
+        expired_at:
+          type: string
+          format: date-time
+        categories:
+          type: array
+          items:
+            type: integer
+      required:
+        - title
+        - content
+    StoreMeAddressPayload:
+      type: object
+      properties:
+        name:
+          type: string
+        mobile:
+          type: string
+        address:
+          type: string
+        address_extra:
+          type: string
+        town:
+          type: string
+        city:
+          type: string
+        province:
+          type: string
+        postcode:
+          type: string
+        country:
+          type: string
+        note:
+          type: string
+        remark:
+          type: string
+        sort:
+          type: integer
+      required:
+        - name
+        - address
+    StoreMePushDevicePayload:
+      type: object
+      properties:
+        token:
+          type: string
+        platform:
+          type: string
+          enum:
+            - ios
+            - android
+            - web
+        provider:
+          type: string
+          enum:
+            - apns
+            - fcm
+        app_identifier:
+          type: string
+        installation_id:
+          type: string
+        metadata:
+          type: object
+          additionalProperties: true
+      required:
+        - token
+        - platform
+    SyncPushPayload:
+      type: object
+      properties:
+        mutations:
+          type: array
+      required:
+        - mutations
+    UnregisterMePushDevicePayload:
+      type: object
+      properties:
+        token:
+          type: string
+      required:
+        - token
+    UpdateArticlePayload:
+      type: object
+      properties:
+        title:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+        keywords:
+          type: string
+        content:
+          type: string
+        cover:
+          type: string
+        status:
+          type: integer
+          enum:
+            - 0
+            - 1
+        sort:
+          type: integer
+        published_at:
+          type: string
+          format: date-time
+        expired_at:
+          type: string
+          format: date-time
+        categories:
+          type: array
+          items:
+            type: integer
+    UpdateMeAddressPayload:
+      type: object
+      properties:
+        name:
+          type: string
+        mobile:
+          type: string
+        address:
+          type: string
+        address_extra:
+          type: string
+        town:
+          type: string
+        city:
+          type: string
+        province:
+          type: string
+        postcode:
+          type: string
+        country:
+          type: string
+        note:
+          type: string
+        remark:
+          type: string
+        sort:
+          type: integer
+    UpdateMePayload:
+      type: object
+      properties:
+        name:
+          type: string
+      required:
+        - name
+    UserAddress:
+      type: object
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        name:
+          oneOf:
+            - type: string
+            - type: 'null'
+        mobile:
+          oneOf:
+            - type: string
+            - type: 'null'
+        address:
+          oneOf:
+            - type: string
+            - type: 'null'
+        address_extra:
+          oneOf:
+            - type: string
+            - type: 'null'
+        town:
+          oneOf:
+            - type: string
+            - type: 'null'
+        city:
+          oneOf:
+            - type: string
+            - type: 'null'
+        province:
+          oneOf:
+            - type: string
+            - type: 'null'
+        postcode:
+          oneOf:
+            - type: string
+            - type: 'null'
+        country:
+          oneOf:
+            - type: string
+            - type: 'null'
+        note:
+          oneOf:
+            - type: string
+            - type: 'null'
+        remark:
+          oneOf:
+            - type: string
+            - type: 'null'
+        sort:
+          oneOf:
+            - type: integer
+            - type: 'null'
+        created_at:
+          oneOf:
+            - type: string
+              format: date-time
+            - type: 'null'
+        updated_at:
+          oneOf:
+            - type: string
+              format: date-time
+            - type: 'null'
+      required:
+        - id
+        - user_id
+    UserAddressListResponse:
+      type: object
+      required:
+        - status
+        - message
+        - data
+        - meta
+      properties:
+        status:
+          type: boolean
+          const: true
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserAddress'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    UserAddressResponse:
+      type: object
+      required:
+        - status
+        - message
+        - data
+      properties:
+        status:
+          type: boolean
+          const: true
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/UserAddress'

@@ -1,0 +1,137 @@
+# Run by hand after each aio release, naming its tag, or again with the pinned tag to ship a fix to
+# the client alone. It repoints the pin at exactly that tag, proves the document and regenerates,
+# runs every check including the contract test against an install serving at least that document,
+# records the release as a commit and tag on the default branch, and then publishes it. A run whose
+# recording reached the default branch but whose publish failed is dispatched again with the same
+# inputs from it, and publishes the recorded commit.
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      aio_tag:
+        description: The aio release tag to generate from, e.g. v0.7.0
+        required: true
+      version:
+        description: The @appsolutely/sdk version to publish, e.g. 0.2.0
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    # A run from any other branch would release that branch's code.
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      AIO_TAG: ${{ inputs.aio_tag }}
+      VERSION: ${{ inputs.version }}
+      DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+    steps:
+      # npm signs provenance only for a package published from a public repository, so a private one
+      # is refused here, before a version is recorded that could not then be published. A lookup
+      # that fails fails the run.
+      - name: Refuse a private repository
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          visibility=$(gh api "repos/$GITHUB_REPOSITORY" --jq .private)
+          if [ "$visibility" != "false" ]; then
+            echo "::error::This repository is private; npm provenance needs a public one, so nothing is released."
+            exit 1
+          fi
+      # The aio repository is a repository variable, so this package names none; an unset one would
+      # make the checkout below read this repository instead.
+      - name: Refuse a run with no aio repository
+        env:
+          AIO_REPOSITORY: ${{ vars.AIO_REPOSITORY }}
+        run: |
+          if [ -z "$AIO_REPOSITORY" ]; then
+            echo "::error::Set the AIO_REPOSITORY repository variable to the aio repository, as owner/name."
+            exit 1
+          fi
+      # Neither checkout keeps its token in git config, so the dependencies the checks run cannot
+      # push or read aio; only the recording step below is handed a credential.
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/checkout@v6
+        with:
+          repository: ${{ vars.AIO_REPOSITORY }}
+          ref: refs/tags/${{ inputs.aio_tag }}
+          path: .aio
+          fetch-depth: 0
+          persist-credentials: false
+          token: ${{ secrets.AIO_READ_TOKEN }}
+      - uses: pnpm/action-setup@v5
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+      - run: pnpm install --frozen-lockfile
+
+      - id: decide
+        run: pnpm release:decide --aio .aio --aio-tag "$AIO_TAG" --version "$VERSION"
+      - if: steps.decide.outputs.mode == 'release'
+        run: pnpm spec:pin --aio .aio --ref "$AIO_TAG"
+      - run: pnpm check:spec
+      - if: steps.decide.outputs.mode == 'release'
+        run: |
+          pnpm generate
+          npm pkg set version="$VERSION"
+
+      - run: pnpm verify
+      - run: pnpm test:contract
+        env:
+          APPSOLUTELY_CONTRACT_BASE_URL: ${{ secrets.APPSOLUTELY_CONTRACT_BASE_URL }}
+          APPSOLUTELY_CONTRACT_TOKEN: ${{ secrets.APPSOLUTELY_CONTRACT_TOKEN }}
+      # Packing builds dist/, so the check below reads exactly the files the tarball carries.
+      - run: pnpm pack --pack-destination .release && pnpm check:publishable --aio-tag "$AIO_TAG"
+      - uses: actions/upload-artifact@v6
+        with:
+          name: package
+          path: .release/appsolutely-sdk-${{ inputs.version }}.tgz
+          if-no-files-found: error
+
+      - if: steps.decide.outputs.mode == 'release'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json spec/openapi.yaml src/generated/schema.ts
+          git commit -m "chore(release): $VERSION, generated from aio $AIO_TAG"
+          git tag "v$VERSION"
+          git push --atomic "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:refs/heads/$DEFAULT_BRANCH" "v$VERSION"
+
+  # The only job that can mint the identity npm signs provenance with, and it runs no dependency
+  # code: it installs nothing and publishes the tarball the release job checked, after the commit
+  # and tag that name the version are on the default branch.
+  publish:
+    needs: release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - uses: actions/download-artifact@v7
+        with:
+          name: package
+          path: .release
+      - run: npm publish ".release/appsolutely-sdk-$VERSION.tgz" --provenance --access public --ignore-scripts
+        env:
+          VERSION: ${{ inputs.version }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

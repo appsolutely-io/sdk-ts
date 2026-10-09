@@ -1,0 +1,63 @@
+{
+  "name": "@appsolutely/sdk",
+  "version": "0.1.0",
+  "description": "Typed TypeScript client for the Appsolutely public API, generated from the OpenAPI document an aio release ships.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/appsolutely-io/sdk-ts.git"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@12.8.1",
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "node --test \"test/*.test.ts\"",
+    "test:contract": "node --test \"test/contract/*.test.ts\"",
+    "build": "node scripts/clean.ts && tsc -p tsconfig.build.json",
+    "prepack": "pnpm build",
+    "spec:pin": "node scripts/pin-spec.ts",
+    "generate": "node scripts/generate.ts",
+    "check:spec": "node scripts/validate-spec.ts",
+    "check:generated": "node scripts/generate.ts --check",
+    "check:consumer": "node scripts/check-consumer.ts --typescript 5.4.5,5.9.3,6.0.3,7.0.2",
+    "check:publishable": "node scripts/check-publishable.ts",
+    "verify": "pnpm format:check && pnpm check:spec && pnpm check:generated && pnpm typecheck && pnpm test && pnpm check:consumer",
+    "release:decide": "node scripts/release-decide.ts",
+    "watch:aio": "node scripts/watch-aio.ts",
+    "prepublishOnly": "pnpm build && pnpm check:publishable"
+  },
+  "devDependencies": {
+    "@seriousme/openapi-schema-validator": "^2.11.0",
+    "@types/node": "^24.0.0",
+    "openapi-typescript": "^7.13.0",
+    "prettier": "^3.9.9",
+    "typescript": "~5.9.3",
+    "yaml": "^2.9.1"
+  },
+  "appsolutely": {
+    "spec": {
+      "path": "docs/api/openapi.yaml",
+      "tag": "v0.17.0",
+      "commit": "34731d2613eccd0c79249324a0ccb0e4c133655b",
+      "sha256": "322f48426079f16171551bc6c40370e456e2b906aead2445586e3d80447bbcc7"
+    }
+  },
+  "dependencies": {
+    "openapi-fetch": "^0.17.0"
+  }
+}
