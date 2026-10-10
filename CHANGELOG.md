@@ -7,6 +7,11 @@ and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **BREAKING** — the client follows the API's plain-HTTP wire format. A success's `data` is the resource itself, or `{ data, next_cursor }` for a list, in place of a `status`/`message`/`data` envelope; a `202` or `204` with no body resolves with `data` undefined. A refusal's `error` is the RFC 9457 problem document (`type`, `title`, `status`, `detail`, and extensions such as `errors`), with `type` typed to the problem URIs each operation documents, in place of `ApiError`. Lists page by `limit` and the opaque `cursor`, in place of `per_page` and `page`, and every `id` is a string.
+- A create the document keys (creating an article or a member address, redelivering a webhook) is sent a generated `Idempotency-Key` when the caller passes none, a new one per call; a key passed in `params.header` is sent as given, and a `fetch` that retries the `Request` it is given repeats its key.
+
 ### Added
 
 - `createClient`, an [openapi-fetch](https://openapi-ts.dev/openapi-fetch/) client typed from the OpenAPI document of one aio release, with every schema exported from the package root under its own name.
