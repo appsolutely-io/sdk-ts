@@ -46,15 +46,16 @@ test('the install serves every operation the pinned document describes', async (
 });
 
 test('a read answers a typed page of articles', async () => {
-  const { data, error, response } = await client.GET('/api/v1/articles', { params: { query: { per_page: 5 } } });
+  const { data, error, response } = await client.GET('/api/v1/articles', { params: { query: { limit: 5 } } });
 
   assert.equal(response.status, 200, JSON.stringify(error));
   assert.ok(data !== undefined);
   const articles: Article[] = typed(data.data);
   assert.ok(Array.isArray(articles));
-  assert.equal(typeof data.meta.total, 'number');
+  assert.ok(articles.length <= 5);
+  assert.ok(data.next_cursor === undefined || typeof data.next_cursor === 'string');
   for (const article of articles) {
-    assert.equal(typeof article.id, 'number');
+    assert.equal(typeof article.id, 'string');
     assert.equal(typeof article.title, 'string');
     assert.ok(Array.isArray(article.categories));
   }
@@ -67,7 +68,7 @@ test('a write is read back through the same client', async () => {
   });
   assert.equal(created.response.status, 201, JSON.stringify(created.error));
   assert.ok(created.data !== undefined);
-  const article: Article = typed(created.data.data);
+  const article: Article = typed(created.data);
   assert.equal(article.title, title);
 
   const path = { id: article.id };
@@ -79,16 +80,16 @@ test('a write is read back through the same client', async () => {
 
   const read = await client.GET('/api/v1/articles/{id}', { params: { path } });
   assert.ok(read.data !== undefined, JSON.stringify(read.error));
-  const reread: Article = typed(read.data.data);
+  const reread: Article = typed(read.data);
   assert.equal(reread.title, `${title} (edited)`);
   assert.equal(reread.status, 0);
 });
 
-test('a missing token is refused with the typed error body', async () => {
+test('a missing token is refused with a typed problem document', async () => {
   const { data, error, response } = await createClient({ baseUrl }).GET('/api/v1/articles');
 
   assert.equal(data, undefined);
   assert.equal(response.status, 401);
-  assert.equal(error?.status, false);
-  assert.equal(typeof error?.message, 'string');
+  assert.equal(error?.type, 'https://appsolutely.io/problems/unauthenticated');
+  assert.equal(error?.status, 401);
 });
