@@ -1,4 +1,4 @@
-import createFetchClient, { defaultPathSerializer, type Client } from 'openapi-fetch';
+import createFetchClient, { defaultPathSerializer, type Client, type Middleware } from 'openapi-fetch';
 import type { paths } from './generated/schema.ts';
 
 export interface ClientOptions {
@@ -12,7 +12,54 @@ export interface ClientOptions {
   fetch?: ((request: Request) => Promise<Response>) | undefined;
 }
 
-export type AppsolutelyClient = Client<paths, 'application/json'>;
+const IDEMPOTENCY_KEY = 'Idempotency-Key';
+
+type KeyedParameters = { parameters: { header: { [IDEMPOTENCY_KEY]: string } } };
+
+/** An operation whose `Idempotency-Key` header the client fills, so the caller may leave it out. */
+type WithOptionalKey<Operation> = Operation extends KeyedParameters
+  ? Omit<Operation, 'parameters'> & {
+      parameters: Omit<Operation['parameters'], 'header'> & {
+        header?: Omit<Operation['parameters']['header'], typeof IDEMPOTENCY_KEY> & { [IDEMPOTENCY_KEY]?: string };
+      };
+    }
+  : Operation;
+
+/** The document's paths, with the `Idempotency-Key` of every keyed create optional. */
+export type ClientPaths = {
+  [Path in keyof paths]: { [Method in keyof paths[Path]]: WithOptionalKey<paths[Path][Method]> };
+};
+
+/** Successes are `application/json`; refusals are RFC 9457 `application/problem+json`, typed as `error`. */
+export type AppsolutelyClient = Client<ClientPaths, 'application/json' | 'application/problem+json'>;
+
+type KeyedOperation = {
+  [Path in keyof paths]: {
+    [Method in keyof paths[Path]]-?: paths[Path][Method] extends KeyedParameters
+      ? `${Uppercase<Method & string>} ${Path & string}`
+      : never;
+  }[keyof paths[Path]];
+}[keyof paths];
+
+// Typed against the document, so a keyed create added or removed there fails the typecheck until listed here.
+const KEYED_OPERATIONS: Record<KeyedOperation, true> = {
+  'POST /api/v1/articles': true,
+  'POST /api/v1/me/addresses': true,
+  'POST /api/v1/webhook-subscriptions/{subscription}/deliveries/{event}/redeliver': true,
+};
+
+/**
+ * Sends a generated `Idempotency-Key` on each keyed create the caller sent none for. The key is on the
+ * Request handed to `fetch`, so a fetch that retries that Request repeats the key and gets the first answer.
+ */
+const idempotencyKey: Middleware = {
+  onRequest({ request, schemaPath }) {
+    if (`${request.method} ${schemaPath}` in KEYED_OPERATIONS && !request.headers.has(IDEMPOTENCY_KEY)) {
+      request.headers.set(IDEMPOTENCY_KEY, globalThis.crypto.randomUUID());
+    }
+    return request;
+  },
+};
 
 function assertBaseUrl(baseUrl: string): void {
   let url: URL | undefined;
@@ -53,7 +100,7 @@ function pathSerializer(pathname: string, pathParams: Record<string, unknown>): 
 /**
  * A typed client for one install's public API. Every path, parameter, body and response is
  * typed from the OpenAPI document the package was generated from; a refusal resolves as the
- * typed `error` body rather than throwing.
+ * typed problem document in `error` rather than throwing, branched on by its `type`.
  */
 export function createClient(options: ClientOptions): AppsolutelyClient {
   assertBaseUrl(options.baseUrl);
@@ -71,7 +118,7 @@ export function createClient(options: ClientOptions): AppsolutelyClient {
     plainHeaders[name] = value;
   });
 
-  return createFetchClient<paths, 'application/json'>({
+  const client = createFetchClient<ClientPaths, 'application/json' | 'application/problem+json'>({
     baseUrl: options.baseUrl,
     // A plain object: openapi-fetch tells a Headers apart with instanceof against the global at request
     // time, so a Headers made before a polyfill replaces the global would be read as having no entries.
@@ -79,4 +126,6 @@ export function createClient(options: ClientOptions): AppsolutelyClient {
     pathSerializer,
     ...(options.fetch === undefined ? {} : { fetch: options.fetch }),
   });
+  client.use(idempotencyKey);
+  return client;
 }

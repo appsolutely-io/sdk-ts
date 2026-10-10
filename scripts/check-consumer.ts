@@ -22,15 +22,15 @@ type Assert<T extends false> = T;
 const client = createClient({ baseUrl: 'https://example.com', token: 'token' });
 
 export async function read(): Promise<[Article, Page[]]> {
-  const article = await client.GET('/api/v1/articles/{id}', { params: { path: { id: 1 } } });
+  const article = await client.GET('/api/v1/articles/{id}', { params: { path: { id: '1' } } });
   const pages = await client.GET('/api/v1/pages');
   if (article.data === undefined || pages.data === undefined) {
-    throw new Error(article.error?.message ?? pages.error?.message);
+    throw new Error(article.error?.type ?? pages.error?.type);
   }
-  type Checks = [Assert<IsAny<typeof article.data.data>>, Assert<IsAny<typeof pages.data.data>>];
+  type Checks = [Assert<IsAny<typeof article.data>>, Assert<IsAny<typeof pages.data.data>>];
   const checks: Checks | undefined = undefined;
   void checks;
-  return [article.data.data, pages.data.data];
+  return [article.data, pages.data.data];
 }
 `;
 
@@ -39,10 +39,10 @@ const runtimeSource = `import { createClient } from '@appsolutely/sdk';
 const seen = [];
 const fetch = async (request) => {
   seen.push([request.url, request.headers.get('Authorization')]);
-  return Response.json({ status: true, message: 'ok', data: [] });
+  return Response.json({ data: [] });
 };
 const { data } = await createClient({ baseUrl: 'https://example.com', token: 't', fetch }).GET('/api/v1/pages');
-if (JSON.stringify(seen) !== JSON.stringify([['https://example.com/api/v1/pages', 'Bearer t']]) || data?.status !== true) {
+if (JSON.stringify(seen) !== JSON.stringify([['https://example.com/api/v1/pages', 'Bearer t']]) || !Array.isArray(data?.data)) {
   throw new Error('The installed client did not send the expected request: ' + JSON.stringify(seen));
 }
 `;

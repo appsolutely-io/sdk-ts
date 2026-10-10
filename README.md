@@ -23,12 +23,13 @@ const client = createClient({
 });
 
 const { data, error } = await client.GET('/api/v1/articles', {
-  params: { query: { per_page: 20 } },
+  params: { query: { limit: 20 } },
 });
 if (error) {
-  throw new Error(error.message);
+  throw new Error(`${error.type}: ${error.detail ?? error.title}`);
 }
 const articles: Article[] = data.data;
+const next = data.next_cursor; // absent on the last page
 
 const created = await client.POST('/api/v1/articles', {
   body: { title: 'Hello', content: '<p>First post</p>', status: 0 },
@@ -38,9 +39,12 @@ const created = await client.POST('/api/v1/articles', {
 - `baseUrl` is the install's address, including any path it is served under. It must be an absolute `http` or `https` URL.
 - `token` is a Sanctum personal access token issued by the install (`php artisan aio:api:token`), sent as `Authorization: Bearer` on every request. Leave it out for the routes that need none.
 - `headers` adds headers to every request, in any form `new Headers()` accepts; an `Accept` header you set replaces the default, and `token` always sets `Authorization`. `fetch` replaces the fetch implementation.
-- Each HTTP method is a client method (`GET`, `POST`, `PATCH`, `DELETE`, ...), typed by path. A refusal does not throw: it resolves with `error` set to the typed error body and `data` undefined, and `response` is always the raw `Response`.
+- Each HTTP method is a client method (`GET`, `POST`, `PATCH`, `DELETE`, ...), typed by path. A success's `data` is the resource itself, or `{ data, next_cursor }` for a list; a `202` or `204` with no body resolves with `data` undefined. `response` is always the raw `Response`.
+- A refusal does not throw: it resolves with `error` set to the RFC 9457 problem document (`type`, `title`, `status`, `detail`, and extensions such as `errors` on `validation-failed`) and `data` undefined. Branch on `error.type`, a URI under `https://appsolutely.io/problems/` typed to the ones each operation documents.
+- A list is paged by `limit` (1 to 100) and `cursor`: send the previous page's `next_cursor` as `cursor` with the query otherwise unchanged; `next_cursor` is absent on the last page.
+- A create the document keys (creating an article or a member address, redelivering a webhook) is sent a generated `Idempotency-Key`, a new one per call. To retry a create safely after a lost answer, pass your own in `params.header` and send the same one again; a `fetch` that retries the `Request` it is given repeats its key. On `409`, `429` or `503` the answer's `Retry-After` says when to send it again.
 - A path parameter that is empty, `.` or `..` rejects with a `TypeError` before anything is sent, since the URL would resolve to another route.
-- Every schema in the document is exported from the package root under its own name (`Article`, `Page`, `Product`, `Order`, `FormEntry`, `ApiError`, ...), alongside `paths`, `components` and `operations`.
+- Every schema in the document is exported from the package root under its own name (`Article`, `ArticlePage`, `Page`, `Product`, `Order`, `FormEntry`, `Problem`, `ValidationProblem`, ...), alongside `paths`, `components` and `operations`.
 
 The client is [openapi-fetch](https://openapi-ts.dev/openapi-fetch/), whose documentation covers middleware, query and body serialisation, and the other request options.
 
