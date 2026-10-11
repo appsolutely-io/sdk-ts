@@ -15,6 +15,7 @@ and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `billingEntry(client, query)` asks whether the app shows "Manage billing" here: `entry` is the platform's answer when the entry appears (its wording, the presentation to open it with, whether the store's own token is needed first, and the address), `null` when it does not, and a refusal is the problem document in `error`.
 - `createClient`, an [openapi-fetch](https://openapi-ts.dev/openapi-fetch/) client typed from the OpenAPI document of one aio release, with every schema exported from the package root under its own name.
 - A Sanctum personal access token sent as `Authorization: Bearer` on every request; a token that is empty or not a single run of visible ASCII is refused when the client is created, and `baseUrl` must be an absolute `http` or `https` URL.
 - `package.json` records the aio release the client was generated from (`appsolutely.spec`: tag, commit and sha256 of the document).
