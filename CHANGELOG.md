@@ -9,6 +9,7 @@ and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- The client is generated from aio v0.22.0's document: every parameter a public operation takes is now typed (the billing entry's query, account states, sync pulls, webhook delivery filters and paging), along with the site app backend's operations; `Idempotency-Key` is filled for its keyed creates (registering a webhook endpoint, starting a secret rotation, redelivering a delivery).
 - **BREAKING** — the client follows the API's plain-HTTP wire format. A success's `data` is the resource itself, or `{ data, next_cursor }` for a list, in place of a `status`/`message`/`data` envelope; a `202` or `204` with no body resolves with `data` undefined. A refusal's `error` is the RFC 9457 problem document (`type`, `title`, `status`, `detail`, and extensions such as `errors`), with `type` typed to the problem URIs each operation documents, in place of `ApiError`. Lists page by `limit` and the opaque `cursor`, in place of `per_page` and `page`, and every `id` is a string.
 - A create the document keys (creating an article or a member address, redelivering a webhook) is sent a generated `Idempotency-Key` when the caller passes none, a new one per call; a key passed in `params.header` is sent as given, and a `fetch` that retries the `Request` it is given repeats its key.
 
