@@ -105,6 +105,74 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/deliveries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List deliveries */
+        get: operations["listDeliveries"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/deliveries/{event}/redeliveries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Redeliver deliveries */
+        post: operations["redeliverDelivery"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/entitlements": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List backend entitlements */
+        get: operations["listBackendEntitlements"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/entitlements/{sub}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read one of backend entitlements */
+        get: operations["getBackendEntitlement"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/form-entries": {
         parameters: {
             query?: never;
@@ -569,6 +637,126 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/webhook-endpoints": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List webhook endpoints */
+        get: operations["listWebhookEndpoints"];
+        put?: never;
+        /** Create one of webhook endpoints */
+        post: operations["createWebhookEndpoint"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/webhook-endpoints/{endpoint}/disable": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Disable webhook endpoints */
+        post: operations["disableWebhookEndpoint"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/webhook-endpoints/{endpoint}/enable": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Enable webhook endpoints */
+        post: operations["enableWebhookEndpoint"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/webhook-endpoints/{endpoint}/secret-rotations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Start webhook endpoints.secret rotations */
+        post: operations["startWebhookEndpoints.secretRotation"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/webhook-endpoints/{endpoint}/secret-rotations/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Cancel webhook endpoints.secret rotations */
+        post: operations["cancelWebhookEndpoints.secretRotation"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/webhook-endpoints/{endpoint}/secret-rotations/complete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Complete webhook endpoints.secret rotations */
+        post: operations["completeWebhookEndpoints.secretRotation"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/webhook-endpoints/{endpoint}/test-deliveries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Test Deliveries webhook endpoints */
+        post: operations["test-deliveriesWebhookEndpoint"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/webhook-subscriptions/{subscription}/deliveries": {
         parameters: {
             query?: never;
@@ -657,6 +845,9 @@ export interface components {
             needs_store_token?: boolean | null;
             url?: string | null;
             expires_at?: string | null;
+        };
+        ConfirmWebhookRotationPayload: {
+            confirm: string;
         };
         FormEntry: {
             id: string;
@@ -854,6 +1045,10 @@ export interface components {
             expired_at?: string;
             categories?: number[];
         };
+        StoreBackendWebhookEndpointPayload: {
+            url: string;
+            event_types: ("article.created" | "article.updated" | "article.deleted" | "page.created" | "page.updated" | "page.deleted" | "form.submitted" | "order.paid" | "order.completed" | "order.shipped" | "order.cancelled" | "order.status_updated" | "order.expired" | "order.revived" | "order.payment_arrived_late" | "subscription.started" | "subscription.renewed" | "subscription.payment_due" | "subscription.payment_failed" | "subscription.authentication_required" | "subscription.cancel_scheduled" | "subscription.resumed" | "subscription.ended" | "refund.requested" | "refund.processed" | "order.refunded" | "payment.refunded" | "payment.reversed" | "referral.reward_issued" | "product.created" | "product.updated" | "product.deleted" | "account.suspended" | "account.reinstated" | "account.erased" | "account.entitlements_changed" | "account.email_changed")[];
+        };
         StoreMeAddressPayload: {
             name: string;
             mobile?: string;
@@ -1003,6 +1198,7 @@ export type ArticleCategorySummary = components['schemas']['ArticleCategorySumma
 export type ArticleFeed = components['schemas']['ArticleFeed'];
 export type ArticlePage = components['schemas']['ArticlePage'];
 export type BillingEntry = components['schemas']['BillingEntry'];
+export type ConfirmWebhookRotationPayload = components['schemas']['ConfirmWebhookRotationPayload'];
 export type FormEntry = components['schemas']['FormEntry'];
 export type FormEntryFeed = components['schemas']['FormEntryFeed'];
 export type FormEntryPage = components['schemas']['FormEntryPage'];
@@ -1023,6 +1219,7 @@ export type ProductFeed = components['schemas']['ProductFeed'];
 export type ProductPage = components['schemas']['ProductPage'];
 export type ProductPriceSummary = components['schemas']['ProductPriceSummary'];
 export type StoreArticlePayload = components['schemas']['StoreArticlePayload'];
+export type StoreBackendWebhookEndpointPayload = components['schemas']['StoreBackendWebhookEndpointPayload'];
 export type StoreMeAddressPayload = components['schemas']['StoreMeAddressPayload'];
 export type StoreMePushDevicePayload = components['schemas']['StoreMePushDevicePayload'];
 export type SyncPushPayload = components['schemas']['SyncPushPayload'];
@@ -1103,7 +1300,9 @@ export interface operations {
     };
     listAccountStates: {
         parameters: {
-            query?: never;
+            query: {
+                subjects: string[];
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -1154,7 +1353,7 @@ export interface operations {
                     };
                 };
             };
-            /** @description Refused: `mode-from-credential`, `validation-failed`. */
+            /** @description Refused: `validation-failed`, `mode-from-credential`. */
             422: {
                 headers: {
                     RateLimit: components["headers"]["RateLimit"];
@@ -1165,7 +1364,7 @@ export interface operations {
                 content: {
                     "application/problem+json": components["schemas"]["ValidationProblem"] & {
                         /** @enum {unknown} */
-                        type?: "https://appsolutely.io/problems/mode-from-credential" | "https://appsolutely.io/problems/validation-failed";
+                        type?: "https://appsolutely.io/problems/validation-failed" | "https://appsolutely.io/problems/mode-from-credential";
                     };
                 };
             };
@@ -1869,6 +2068,522 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"] & {
                         /** @enum {unknown} */
                         type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+        };
+    };
+    listDeliveries: {
+        parameters: {
+            query?: {
+                status?: "pending" | "succeeded" | "failed";
+                since?: string;
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page"];
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`. */
+            403: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope";
+                    };
+                };
+            };
+            /** @description Refused: `validation-failed`, `invalid-cursor`, `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/validation-failed" | "https://appsolutely.io/problems/invalid-cursor" | "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    redeliverDelivery: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description A create a retry could repeat takes an `Idempotency-Key` header: a structured-field String or a bare token of 1 to 255 characters, chosen by the client per request. The same key with the same request answers the first outcome again, with `Idempotent-Replayed: true`; with a different request it is refused. A duplicate sent while the first is still running waits for it for up to 20 seconds, then is answered `409` `idempotency-key-in-use` with `Retry-After` and should be sent again, as is any request whose key could not be claimed in that time; a create whose own write waits on a lock longer than the database allows a statement is answered `503` `temporarily-unavailable` with `Retry-After` at once, without being run again. Neither spends the key. A key is honoured for 24 hours, then is a new key. */
+                "Idempotency-Key": string;
+            };
+            path: {
+                event: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Accepted */
+            202: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Refused: `idempotency-key-required`, `idempotency-key-invalid`. */
+            400: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/idempotency-key-required" | "https://appsolutely.io/problems/idempotency-key-invalid";
+                    };
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`. */
+            403: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope";
+                    };
+                };
+            };
+            /** @description Refused: `not-found`. */
+            404: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/not-found";
+                    };
+                };
+            };
+            /** @description Refused: `idempotency-key-in-use`. */
+            409: {
+                headers: {
+                    /** @description On `idempotency-key-in-use`: seconds to wait before sending the request again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/idempotency-key-in-use";
+                    };
+                };
+            };
+            /** @description Refused: `unsupported-media-type`. */
+            415: {
+                headers: {
+                    /** @description The media type a body is taken in. */
+                    Accept?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unsupported-media-type";
+                    };
+                };
+            };
+            /** @description Refused: `mode-from-credential`, `idempotency-key-reused`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/mode-from-credential" | "https://appsolutely.io/problems/idempotency-key-reused";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`, `temporarily-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable" | "https://appsolutely.io/problems/temporarily-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    listBackendEntitlements: {
+        parameters: {
+            query?: {
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page"];
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`. */
+            403: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope";
+                    };
+                };
+            };
+            /** @description Refused: `validation-failed`, `invalid-cursor`, `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/validation-failed" | "https://appsolutely.io/problems/invalid-cursor" | "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    getBackendEntitlement: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sub: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`. */
+            403: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope";
+                    };
+                };
+            };
+            /** @description Refused: `not-found`. */
+            404: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/not-found";
+                    };
+                };
+            };
+            /** @description Refused: `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
                     };
                 };
             };
@@ -2833,7 +3548,13 @@ export interface operations {
     };
     getMeBillingEntry: {
         parameters: {
-            query?: never;
+            query: {
+                store: "app_store" | "google_play" | "direct";
+                storefront?: string;
+                store_token?: string;
+                platform?: "ios" | "ipados" | "macos" | "tvos" | "visionos" | "watchos";
+                os_version?: string;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -2884,7 +3605,7 @@ export interface operations {
                     };
                 };
             };
-            /** @description Refused: `mode-from-credential`, `validation-failed`. */
+            /** @description Refused: `validation-failed`, `mode-from-credential`. */
             422: {
                 headers: {
                     RateLimit: components["headers"]["RateLimit"];
@@ -2895,7 +3616,7 @@ export interface operations {
                 content: {
                     "application/problem+json": components["schemas"]["ValidationProblem"] & {
                         /** @enum {unknown} */
-                        type?: "https://appsolutely.io/problems/mode-from-credential" | "https://appsolutely.io/problems/validation-failed";
+                        type?: "https://appsolutely.io/problems/validation-failed" | "https://appsolutely.io/problems/mode-from-credential";
                     };
                 };
             };
@@ -3642,7 +4363,10 @@ export interface operations {
     };
     rewardsMeReferral: {
         parameters: {
-            query?: never;
+            query?: {
+                limit?: number;
+                cursor?: string;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -4371,7 +5095,10 @@ export interface operations {
     };
     "pullSync.article": {
         parameters: {
-            query?: never;
+            query?: {
+                cursor?: string;
+                limit?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -4581,7 +5308,10 @@ export interface operations {
     };
     "pullSync.formEntry": {
         parameters: {
-            query?: never;
+            query?: {
+                cursor?: string;
+                limit?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -4683,7 +5413,10 @@ export interface operations {
     };
     "pullSync.meAddress": {
         parameters: {
-            query?: never;
+            query?: {
+                cursor?: string;
+                limit?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -4927,7 +5660,10 @@ export interface operations {
     };
     "pullSync.meOrder": {
         parameters: {
-            query?: never;
+            query?: {
+                cursor?: string;
+                limit?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -5046,7 +5782,10 @@ export interface operations {
     };
     "pullSync.order": {
         parameters: {
-            query?: never;
+            query?: {
+                cursor?: string;
+                limit?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -5148,7 +5887,10 @@ export interface operations {
     };
     "pullSync.page": {
         parameters: {
-            query?: never;
+            query?: {
+                cursor?: string;
+                limit?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -5250,7 +5992,10 @@ export interface operations {
     };
     "pullSync.product": {
         parameters: {
-            query?: never;
+            query?: {
+                cursor?: string;
+                limit?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -5350,9 +6095,1217 @@ export interface operations {
             };
         };
     };
-    listWebhookDeliveries: {
+    listWebhookEndpoints: {
+        parameters: {
+            query?: {
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page"];
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`. */
+            403: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope";
+                    };
+                };
+            };
+            /** @description Refused: `validation-failed`, `invalid-cursor`, `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/validation-failed" | "https://appsolutely.io/problems/invalid-cursor" | "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    createWebhookEndpoint: {
         parameters: {
             query?: never;
+            header: {
+                /** @description A create a retry could repeat takes an `Idempotency-Key` header: a structured-field String or a bare token of 1 to 255 characters, chosen by the client per request. The same key with the same request answers the first outcome again, with `Idempotent-Replayed: true`; with a different request it is refused. A duplicate sent while the first is still running waits for it for up to 20 seconds, then is answered `409` `idempotency-key-in-use` with `Retry-After` and should be sent again, as is any request whose key could not be claimed in that time; a create whose own write waits on a lock longer than the database allows a statement is answered `503` `temporarily-unavailable` with `Retry-After` at once, without being run again. Neither spends the key. A key is honoured for 24 hours, then is a new key. */
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StoreBackendWebhookEndpointPayload"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Refused: `idempotency-key-required`, `idempotency-key-invalid`. */
+            400: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/idempotency-key-required" | "https://appsolutely.io/problems/idempotency-key-invalid";
+                    };
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`. */
+            403: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope";
+                    };
+                };
+            };
+            /** @description Refused: `idempotency-key-in-use`, `endpoint-exists`. */
+            409: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    /** @description On `idempotency-key-in-use`: seconds to wait before sending the request again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/idempotency-key-in-use" | "https://appsolutely.io/problems/endpoint-exists";
+                    };
+                };
+            };
+            /** @description Refused: `unsupported-media-type`. */
+            415: {
+                headers: {
+                    /** @description The media type a body is taken in. */
+                    Accept?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unsupported-media-type";
+                    };
+                };
+            };
+            /** @description Refused: `validation-failed`, `mode-from-credential`, `idempotency-key-reused`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/validation-failed" | "https://appsolutely.io/problems/mode-from-credential" | "https://appsolutely.io/problems/idempotency-key-reused";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`, `temporarily-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable" | "https://appsolutely.io/problems/temporarily-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    disableWebhookEndpoint: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                endpoint: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`, `forbidden`. */
+            403: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope" | "https://appsolutely.io/problems/forbidden";
+                    };
+                };
+            };
+            /** @description Refused: `not-found`. */
+            404: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/not-found";
+                    };
+                };
+            };
+            /** @description Refused: `unsupported-media-type`. */
+            415: {
+                headers: {
+                    /** @description The media type a body is taken in. */
+                    Accept?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unsupported-media-type";
+                    };
+                };
+            };
+            /** @description Refused: `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    enableWebhookEndpoint: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                endpoint: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`, `forbidden`. */
+            403: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope" | "https://appsolutely.io/problems/forbidden";
+                    };
+                };
+            };
+            /** @description Refused: `not-found`. */
+            404: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/not-found";
+                    };
+                };
+            };
+            /** @description Refused: `unsupported-media-type`. */
+            415: {
+                headers: {
+                    /** @description The media type a body is taken in. */
+                    Accept?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unsupported-media-type";
+                    };
+                };
+            };
+            /** @description Refused: `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    "startWebhookEndpoints.secretRotation": {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description A create a retry could repeat takes an `Idempotency-Key` header: a structured-field String or a bare token of 1 to 255 characters, chosen by the client per request. The same key with the same request answers the first outcome again, with `Idempotent-Replayed: true`; with a different request it is refused. A duplicate sent while the first is still running waits for it for up to 20 seconds, then is answered `409` `idempotency-key-in-use` with `Retry-After` and should be sent again, as is any request whose key could not be claimed in that time; a create whose own write waits on a lock longer than the database allows a statement is answered `503` `temporarily-unavailable` with `Retry-After` at once, without being run again. Neither spends the key. A key is honoured for 24 hours, then is a new key. */
+                "Idempotency-Key": string;
+            };
+            path: {
+                endpoint: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Refused: `idempotency-key-required`, `idempotency-key-invalid`. */
+            400: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/idempotency-key-required" | "https://appsolutely.io/problems/idempotency-key-invalid";
+                    };
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`, `forbidden`. */
+            403: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope" | "https://appsolutely.io/problems/forbidden";
+                    };
+                };
+            };
+            /** @description Refused: `not-found`. */
+            404: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/not-found";
+                    };
+                };
+            };
+            /** @description Refused: `idempotency-key-in-use`, `rotation-in-progress`. */
+            409: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    /** @description On `idempotency-key-in-use`: seconds to wait before sending the request again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/idempotency-key-in-use" | "https://appsolutely.io/problems/rotation-in-progress";
+                    };
+                };
+            };
+            /** @description Refused: `unsupported-media-type`. */
+            415: {
+                headers: {
+                    /** @description The media type a body is taken in. */
+                    Accept?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unsupported-media-type";
+                    };
+                };
+            };
+            /** @description Refused: `mode-from-credential`, `idempotency-key-reused`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/mode-from-credential" | "https://appsolutely.io/problems/idempotency-key-reused";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`, `temporarily-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable" | "https://appsolutely.io/problems/temporarily-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    "cancelWebhookEndpoints.secretRotation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                endpoint: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ConfirmWebhookRotationPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`, `forbidden`. */
+            403: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope" | "https://appsolutely.io/problems/forbidden";
+                    };
+                };
+            };
+            /** @description Refused: `not-found`. */
+            404: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/not-found";
+                    };
+                };
+            };
+            /** @description Refused: `no-rotation`, `rotation-mismatch`. */
+            409: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/no-rotation" | "https://appsolutely.io/problems/rotation-mismatch";
+                    };
+                };
+            };
+            /** @description Refused: `unsupported-media-type`. */
+            415: {
+                headers: {
+                    /** @description The media type a body is taken in. */
+                    Accept?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unsupported-media-type";
+                    };
+                };
+            };
+            /** @description Refused: `validation-failed`, `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/validation-failed" | "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    "completeWebhookEndpoints.secretRotation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                endpoint: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ConfirmWebhookRotationPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`, `forbidden`. */
+            403: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope" | "https://appsolutely.io/problems/forbidden";
+                    };
+                };
+            };
+            /** @description Refused: `not-found`. */
+            404: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/not-found";
+                    };
+                };
+            };
+            /** @description Refused: `no-rotation`, `rotation-mismatch`. */
+            409: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/no-rotation" | "https://appsolutely.io/problems/rotation-mismatch";
+                    };
+                };
+            };
+            /** @description Refused: `unsupported-media-type`. */
+            415: {
+                headers: {
+                    /** @description The media type a body is taken in. */
+                    Accept?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unsupported-media-type";
+                    };
+                };
+            };
+            /** @description Refused: `validation-failed`, `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/validation-failed" | "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    "test-deliveriesWebhookEndpoint": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                endpoint: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Accepted */
+            202: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`, `forbidden`. */
+            403: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope" | "https://appsolutely.io/problems/forbidden";
+                    };
+                };
+            };
+            /** @description Refused: `not-found`. */
+            404: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/not-found";
+                    };
+                };
+            };
+            /** @description Refused: `subscription-inactive`. */
+            409: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/subscription-inactive";
+                    };
+                };
+            };
+            /** @description Refused: `unsupported-media-type`. */
+            415: {
+                headers: {
+                    /** @description The media type a body is taken in. */
+                    Accept?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unsupported-media-type";
+                    };
+                };
+            };
+            /** @description Refused: `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    listWebhookDeliveries: {
+        parameters: {
+            query?: {
+                status?: "pending" | "succeeded" | "failed";
+                since?: string;
+                limit?: number;
+                cursor?: string;
+            };
             header?: never;
             path: {
                 subscription: string;

@@ -8,6 +8,8 @@ servers:
 tags:
   - name: account-states
   - name: articles
+  - name: backend-entitlements
+  - name: deliveries
   - name: form-entries
   - name: magic-link
   - name: me
@@ -29,6 +31,8 @@ tags:
   - name: sync.products
   - name: version
   - name: webhook-deliveries
+  - name: webhook-endpoints
+  - name: webhook-endpoints.secret-rotations
 paths:
   /api/v1:
     get:
@@ -88,6 +92,14 @@ paths:
       tags:
         - account-states
       summary: 'List account states'
+      parameters:
+        - name: subjects
+          in: query
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         200:
           description: OK
@@ -129,10 +141,10 @@ paths:
             X-Request-Id:
               $ref: '#/components/headers/X-Request-Id'
         422:
-          description: 'Refused: `mode-from-credential`, `validation-failed`.'
+          description: 'Refused: `validation-failed`, `mode-from-credential`.'
           content:
             application/problem+json:
-              schema: { allOf: [{ $ref: '#/components/schemas/ValidationProblem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/mode-from-credential', 'https://appsolutely.io/problems/validation-failed'] } } }] }
+              schema: { allOf: [{ $ref: '#/components/schemas/ValidationProblem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/validation-failed', 'https://appsolutely.io/problems/mode-from-credential'] } } }] }
           headers:
             RateLimit:
               $ref: '#/components/headers/RateLimit'
@@ -787,6 +799,492 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/MagicLinkTokenPayload'
+  /api/v1/deliveries:
+    get:
+      operationId: listDeliveries
+      tags:
+        - deliveries
+      summary: 'List deliveries'
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - pending
+              - succeeded
+              - failed
+        - name: since
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: cursor
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Page' }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        401:
+          description: 'Refused: `unauthenticated`, `invalid-token`.'
+          headers:
+            WWW-Authenticate:
+              description: "The Bearer challenge for this API's realm."
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/unauthenticated', 'https://appsolutely.io/problems/invalid-token'] } } }] }
+        403:
+          description: 'Refused: `wrong-audience`, `insufficient-scope`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/wrong-audience', 'https://appsolutely.io/problems/insufficient-scope'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        422:
+          description: 'Refused: `validation-failed`, `invalid-cursor`, `mode-from-credential`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/ValidationProblem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/validation-failed', 'https://appsolutely.io/problems/invalid-cursor', 'https://appsolutely.io/problems/mode-from-credential'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        429:
+          description: 'Refused: `rate-limited`.'
+          headers:
+            Retry-After:
+              description: 'Seconds to wait before asking again.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/rate-limited'] } } }] }
+        503:
+          description: 'Refused: `standing-unavailable`.'
+          headers:
+            Retry-After:
+              description: 'Seconds to wait before asking again.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/standing-unavailable'] } } }] }
+      security:
+        - bearerAuth: []
+  '/api/v1/deliveries/{event}/redeliveries':
+    post:
+      operationId: redeliverDelivery
+      tags:
+        - deliveries
+      summary: 'Redeliver deliveries'
+      parameters:
+        - name: event
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: Idempotency-Key
+          in: header
+          required: true
+          description: 'A create a retry could repeat takes an `Idempotency-Key` header: a structured-field String or a bare token of 1 to 255 characters, chosen by the client per request. The same key with the same request answers the first outcome again, with `Idempotent-Replayed: true`; with a different request it is refused. A duplicate sent while the first is still running waits for it for up to 20 seconds, then is answered `409` `idempotency-key-in-use` with `Retry-After` and should be sent again, as is any request whose key could not be claimed in that time; a create whose own write waits on a lock longer than the database allows a statement is answered `503` `temporarily-unavailable` with `Retry-After` at once, without being run again. Neither spends the key. A key is honoured for 24 hours, then is a new key.'
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 512
+      responses:
+        202:
+          description: Accepted
+          headers:
+            Idempotent-Replayed:
+              description: '`true` on an answer repeated for a request sent again under the same key.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/json:
+              schema: { type: object, additionalProperties: true }
+        400:
+          description: 'Refused: `idempotency-key-required`, `idempotency-key-invalid`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/idempotency-key-required', 'https://appsolutely.io/problems/idempotency-key-invalid'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        401:
+          description: 'Refused: `unauthenticated`, `invalid-token`.'
+          headers:
+            WWW-Authenticate:
+              description: "The Bearer challenge for this API's realm."
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/unauthenticated', 'https://appsolutely.io/problems/invalid-token'] } } }] }
+        403:
+          description: 'Refused: `wrong-audience`, `insufficient-scope`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/wrong-audience', 'https://appsolutely.io/problems/insufficient-scope'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        404:
+          description: 'Refused: `not-found`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/not-found'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        409:
+          description: 'Refused: `idempotency-key-in-use`.'
+          headers:
+            Retry-After:
+              description: 'On `idempotency-key-in-use`: seconds to wait before sending the request again.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/idempotency-key-in-use'] } } }] }
+        415:
+          description: 'Refused: `unsupported-media-type`.'
+          headers:
+            Accept:
+              description: 'The media type a body is taken in.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/unsupported-media-type'] } } }] }
+        422:
+          description: 'Refused: `mode-from-credential`, `idempotency-key-reused`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/mode-from-credential', 'https://appsolutely.io/problems/idempotency-key-reused'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        429:
+          description: 'Refused: `rate-limited`.'
+          headers:
+            Retry-After:
+              description: 'Seconds to wait before asking again.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/rate-limited'] } } }] }
+        503:
+          description: 'Refused: `standing-unavailable`, `temporarily-unavailable`.'
+          headers:
+            Retry-After:
+              description: 'Seconds to wait before asking again.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/standing-unavailable', 'https://appsolutely.io/problems/temporarily-unavailable'] } } }] }
+      security:
+        - bearerAuth: []
+  /api/v1/entitlements:
+    get:
+      operationId: listBackendEntitlements
+      tags:
+        - backend-entitlements
+      summary: 'List backend entitlements'
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: cursor
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Page' }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        401:
+          description: 'Refused: `unauthenticated`, `invalid-token`.'
+          headers:
+            WWW-Authenticate:
+              description: "The Bearer challenge for this API's realm."
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/unauthenticated', 'https://appsolutely.io/problems/invalid-token'] } } }] }
+        403:
+          description: 'Refused: `wrong-audience`, `insufficient-scope`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/wrong-audience', 'https://appsolutely.io/problems/insufficient-scope'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        422:
+          description: 'Refused: `validation-failed`, `invalid-cursor`, `mode-from-credential`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/ValidationProblem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/validation-failed', 'https://appsolutely.io/problems/invalid-cursor', 'https://appsolutely.io/problems/mode-from-credential'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        429:
+          description: 'Refused: `rate-limited`.'
+          headers:
+            Retry-After:
+              description: 'Seconds to wait before asking again.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/rate-limited'] } } }] }
+        503:
+          description: 'Refused: `standing-unavailable`.'
+          headers:
+            Retry-After:
+              description: 'Seconds to wait before asking again.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/standing-unavailable'] } } }] }
+      security:
+        - bearerAuth: []
+  '/api/v1/entitlements/{sub}':
+    get:
+      operationId: getBackendEntitlement
+      tags:
+        - backend-entitlements
+      summary: 'Read one of backend entitlements'
+      parameters:
+        - name: sub
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema: { type: object, additionalProperties: true }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        401:
+          description: 'Refused: `unauthenticated`, `invalid-token`.'
+          headers:
+            WWW-Authenticate:
+              description: "The Bearer challenge for this API's realm."
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/unauthenticated', 'https://appsolutely.io/problems/invalid-token'] } } }] }
+        403:
+          description: 'Refused: `wrong-audience`, `insufficient-scope`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/wrong-audience', 'https://appsolutely.io/problems/insufficient-scope'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        404:
+          description: 'Refused: `not-found`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/not-found'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        422:
+          description: 'Refused: `mode-from-credential`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/mode-from-credential'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        429:
+          description: 'Refused: `rate-limited`.'
+          headers:
+            Retry-After:
+              description: 'Seconds to wait before asking again.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/rate-limited'] } } }] }
+        503:
+          description: 'Refused: `standing-unavailable`.'
+          headers:
+            Retry-After:
+              description: 'Seconds to wait before asking again.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/standing-unavailable'] } } }] }
+      security:
+        - bearerAuth: []
   /api/v1/form-entries:
     get:
       operationId: listFormEntries
@@ -1681,6 +2179,43 @@ paths:
       tags:
         - me-billing-entry
       summary: 'Read one of me billing entry'
+      parameters:
+        - name: store
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - app_store
+              - google_play
+              - direct
+        - name: storefront
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: store_token
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: platform
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - ios
+              - ipados
+              - macos
+              - tvos
+              - visionos
+              - watchos
+        - name: os_version
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
         200:
           description: OK
@@ -1722,10 +2257,10 @@ paths:
             X-Request-Id:
               $ref: '#/components/headers/X-Request-Id'
         422:
-          description: 'Refused: `mode-from-credential`, `validation-failed`.'
+          description: 'Refused: `validation-failed`, `mode-from-credential`.'
           content:
             application/problem+json:
-              schema: { allOf: [{ $ref: '#/components/schemas/ValidationProblem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/mode-from-credential', 'https://appsolutely.io/problems/validation-failed'] } } }] }
+              schema: { allOf: [{ $ref: '#/components/schemas/ValidationProblem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/validation-failed', 'https://appsolutely.io/problems/mode-from-credential'] } } }] }
           headers:
             RateLimit:
               $ref: '#/components/headers/RateLimit'
@@ -2404,6 +2939,17 @@ paths:
       tags:
         - me-referral
       summary: 'Rewards me referral'
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: cursor
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
         200:
           description: OK
@@ -3094,6 +3640,17 @@ paths:
       tags:
         - sync.articles
       summary: 'Pull sync.articles'
+      parameters:
+        - name: cursor
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
       responses:
         200:
           description: OK
@@ -3276,6 +3833,17 @@ paths:
       tags:
         - sync.form-entries
       summary: 'Pull sync.form entries'
+      parameters:
+        - name: cursor
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
       responses:
         200:
           description: OK
@@ -3363,6 +3931,17 @@ paths:
       tags:
         - sync.me-addresses
       summary: 'Pull sync.me addresses'
+      parameters:
+        - name: cursor
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
       responses:
         200:
           description: OK
@@ -3575,6 +4154,17 @@ paths:
       tags:
         - sync.me-orders
       summary: 'Pull sync.me orders'
+      parameters:
+        - name: cursor
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
       responses:
         200:
           description: OK
@@ -3677,6 +4267,17 @@ paths:
       tags:
         - sync.orders
       summary: 'Pull sync.orders'
+      parameters:
+        - name: cursor
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
       responses:
         200:
           description: OK
@@ -3764,6 +4365,17 @@ paths:
       tags:
         - sync.pages
       summary: 'Pull sync.pages'
+      parameters:
+        - name: cursor
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
       responses:
         200:
           description: OK
@@ -3851,6 +4463,17 @@ paths:
       tags:
         - sync.products
       summary: 'Pull sync.products'
+      parameters:
+        - name: cursor
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
       responses:
         200:
           description: OK
@@ -3932,6 +4555,1086 @@ paths:
               schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/rate-limited'] } } }] }
       security:
         - bearerAuth: []
+  /api/v1/webhook-endpoints:
+    get:
+      operationId: listWebhookEndpoints
+      tags:
+        - webhook-endpoints
+      summary: 'List webhook endpoints'
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: cursor
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Page' }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        401:
+          description: 'Refused: `unauthenticated`, `invalid-token`.'
+          headers:
+            WWW-Authenticate:
+              description: "The Bearer challenge for this API's realm."
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/unauthenticated', 'https://appsolutely.io/problems/invalid-token'] } } }] }
+        403:
+          description: 'Refused: `wrong-audience`, `insufficient-scope`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/wrong-audience', 'https://appsolutely.io/problems/insufficient-scope'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        422:
+          description: 'Refused: `validation-failed`, `invalid-cursor`, `mode-from-credential`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/ValidationProblem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/validation-failed', 'https://appsolutely.io/problems/invalid-cursor', 'https://appsolutely.io/problems/mode-from-credential'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        429:
+          description: 'Refused: `rate-limited`.'
+          headers:
+            Retry-After:
+              description: 'Seconds to wait before asking again.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/rate-limited'] } } }] }
+        503:
+          description: 'Refused: `standing-unavailable`.'
+          headers:
+            Retry-After:
+              description: 'Seconds to wait before asking again.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/standing-unavailable'] } } }] }
+      security:
+        - bearerAuth: []
+    post:
+      operationId: createWebhookEndpoint
+      tags:
+        - webhook-endpoints
+      summary: 'Create one of webhook endpoints'
+      parameters:
+        - name: Idempotency-Key
+          in: header
+          required: true
+          description: 'A create a retry could repeat takes an `Idempotency-Key` header: a structured-field String or a bare token of 1 to 255 characters, chosen by the client per request. The same key with the same request answers the first outcome again, with `Idempotent-Replayed: true`; with a different request it is refused. A duplicate sent while the first is still running waits for it for up to 20 seconds, then is answered `409` `idempotency-key-in-use` with `Retry-After` and should be sent again, as is any request whose key could not be claimed in that time; a create whose own write waits on a lock longer than the database allows a statement is answered `503` `temporarily-unavailable` with `Retry-After` at once, without being run again. Neither spends the key. A key is honoured for 24 hours, then is a new key.'
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 512
+      responses:
+        201:
+          description: Created
+          headers:
+            Idempotent-Replayed:
+              description: '`true` on an answer repeated for a request sent again under the same key.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/json:
+              schema: { type: object, additionalProperties: true }
+        400:
+          description: 'Refused: `idempotency-key-required`, `idempotency-key-invalid`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/idempotency-key-required', 'https://appsolutely.io/problems/idempotency-key-invalid'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        401:
+          description: 'Refused: `unauthenticated`, `invalid-token`.'
+          headers:
+            WWW-Authenticate:
+              description: "The Bearer challenge for this API's realm."
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/unauthenticated', 'https://appsolutely.io/problems/invalid-token'] } } }] }
+        403:
+          description: 'Refused: `wrong-audience`, `insufficient-scope`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/wrong-audience', 'https://appsolutely.io/problems/insufficient-scope'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        409:
+          description: 'Refused: `idempotency-key-in-use`, `endpoint-exists`.'
+          headers:
+            Idempotent-Replayed:
+              description: '`true` on an answer repeated for a request sent again under the same key.'
+              schema: { type: string }
+            Retry-After:
+              description: 'On `idempotency-key-in-use`: seconds to wait before sending the request again.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/idempotency-key-in-use', 'https://appsolutely.io/problems/endpoint-exists'] } } }] }
+        415:
+          description: 'Refused: `unsupported-media-type`.'
+          headers:
+            Accept:
+              description: 'The media type a body is taken in.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/unsupported-media-type'] } } }] }
+        422:
+          description: 'Refused: `validation-failed`, `mode-from-credential`, `idempotency-key-reused`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/ValidationProblem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/validation-failed', 'https://appsolutely.io/problems/mode-from-credential', 'https://appsolutely.io/problems/idempotency-key-reused'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        429:
+          description: 'Refused: `rate-limited`.'
+          headers:
+            Retry-After:
+              description: 'Seconds to wait before asking again.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/rate-limited'] } } }] }
+        503:
+          description: 'Refused: `standing-unavailable`, `temporarily-unavailable`.'
+          headers:
+            Retry-After:
+              description: 'Seconds to wait before asking again.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/standing-unavailable', 'https://appsolutely.io/problems/temporarily-unavailable'] } } }] }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreBackendWebhookEndpointPayload'
+      security:
+        - bearerAuth: []
+  '/api/v1/webhook-endpoints/{endpoint}/disable':
+    post:
+      operationId: disableWebhookEndpoint
+      tags:
+        - webhook-endpoints
+      summary: 'Disable webhook endpoints'
+      parameters:
+        - name: endpoint
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema: { type: object, additionalProperties: true }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        401:
+          description: 'Refused: `unauthenticated`, `invalid-token`.'
+          headers:
+            WWW-Authenticate:
+              description: "The Bearer challenge for this API's realm."
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/unauthenticated', 'https://appsolutely.io/problems/invalid-token'] } } }] }
+        403:
+          description: 'Refused: `wrong-audience`, `insufficient-scope`, `forbidden`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/wrong-audience', 'https://appsolutely.io/problems/insufficient-scope', 'https://appsolutely.io/problems/forbidden'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        404:
+          description: 'Refused: `not-found`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/not-found'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        415:
+          description: 'Refused: `unsupported-media-type`.'
+          headers:
+            Accept:
+              description: 'The media type a body is taken in.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/unsupported-media-type'] } } }] }
+        422:
+          description: 'Refused: `mode-from-credential`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/mode-from-credential'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        429:
+          description: 'Refused: `rate-limited`.'
+          headers:
+            Retry-After:
+              description: 'Seconds to wait before asking again.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/rate-limited'] } } }] }
+        503:
+          description: 'Refused: `standing-unavailable`.'
+          headers:
+            Retry-After:
+              description: 'Seconds to wait before asking again.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/standing-unavailable'] } } }] }
+      security:
+        - bearerAuth: []
+  '/api/v1/webhook-endpoints/{endpoint}/enable':
+    post:
+      operationId: enableWebhookEndpoint
+      tags:
+        - webhook-endpoints
+      summary: 'Enable webhook endpoints'
+      parameters:
+        - name: endpoint
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema: { type: object, additionalProperties: true }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        401:
+          description: 'Refused: `unauthenticated`, `invalid-token`.'
+          headers:
+            WWW-Authenticate:
+              description: "The Bearer challenge for this API's realm."
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/unauthenticated', 'https://appsolutely.io/problems/invalid-token'] } } }] }
+        403:
+          description: 'Refused: `wrong-audience`, `insufficient-scope`, `forbidden`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/wrong-audience', 'https://appsolutely.io/problems/insufficient-scope', 'https://appsolutely.io/problems/forbidden'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        404:
+          description: 'Refused: `not-found`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/not-found'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        415:
+          description: 'Refused: `unsupported-media-type`.'
+          headers:
+            Accept:
+              description: 'The media type a body is taken in.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/unsupported-media-type'] } } }] }
+        422:
+          description: 'Refused: `mode-from-credential`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/mode-from-credential'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        429:
+          description: 'Refused: `rate-limited`.'
+          headers:
+            Retry-After:
+              description: 'Seconds to wait before asking again.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/rate-limited'] } } }] }
+        503:
+          description: 'Refused: `standing-unavailable`.'
+          headers:
+            Retry-After:
+              description: 'Seconds to wait before asking again.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/standing-unavailable'] } } }] }
+      security:
+        - bearerAuth: []
+  '/api/v1/webhook-endpoints/{endpoint}/secret-rotations':
+    post:
+      operationId: startWebhookEndpoints.secretRotation
+      tags:
+        - webhook-endpoints.secret-rotations
+      summary: 'Start webhook endpoints.secret rotations'
+      parameters:
+        - name: endpoint
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: Idempotency-Key
+          in: header
+          required: true
+          description: 'A create a retry could repeat takes an `Idempotency-Key` header: a structured-field String or a bare token of 1 to 255 characters, chosen by the client per request. The same key with the same request answers the first outcome again, with `Idempotent-Replayed: true`; with a different request it is refused. A duplicate sent while the first is still running waits for it for up to 20 seconds, then is answered `409` `idempotency-key-in-use` with `Retry-After` and should be sent again, as is any request whose key could not be claimed in that time; a create whose own write waits on a lock longer than the database allows a statement is answered `503` `temporarily-unavailable` with `Retry-After` at once, without being run again. Neither spends the key. A key is honoured for 24 hours, then is a new key.'
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 512
+      responses:
+        201:
+          description: Created
+          headers:
+            Idempotent-Replayed:
+              description: '`true` on an answer repeated for a request sent again under the same key.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/json:
+              schema: { type: object, additionalProperties: true }
+        400:
+          description: 'Refused: `idempotency-key-required`, `idempotency-key-invalid`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/idempotency-key-required', 'https://appsolutely.io/problems/idempotency-key-invalid'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        401:
+          description: 'Refused: `unauthenticated`, `invalid-token`.'
+          headers:
+            WWW-Authenticate:
+              description: "The Bearer challenge for this API's realm."
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/unauthenticated', 'https://appsolutely.io/problems/invalid-token'] } } }] }
+        403:
+          description: 'Refused: `wrong-audience`, `insufficient-scope`, `forbidden`.'
+          headers:
+            Idempotent-Replayed:
+              description: '`true` on an answer repeated for a request sent again under the same key.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/wrong-audience', 'https://appsolutely.io/problems/insufficient-scope', 'https://appsolutely.io/problems/forbidden'] } } }] }
+        404:
+          description: 'Refused: `not-found`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/not-found'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        409:
+          description: 'Refused: `idempotency-key-in-use`, `rotation-in-progress`.'
+          headers:
+            Idempotent-Replayed:
+              description: '`true` on an answer repeated for a request sent again under the same key.'
+              schema: { type: string }
+            Retry-After:
+              description: 'On `idempotency-key-in-use`: seconds to wait before sending the request again.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/idempotency-key-in-use', 'https://appsolutely.io/problems/rotation-in-progress'] } } }] }
+        415:
+          description: 'Refused: `unsupported-media-type`.'
+          headers:
+            Accept:
+              description: 'The media type a body is taken in.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/unsupported-media-type'] } } }] }
+        422:
+          description: 'Refused: `mode-from-credential`, `idempotency-key-reused`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/mode-from-credential', 'https://appsolutely.io/problems/idempotency-key-reused'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        429:
+          description: 'Refused: `rate-limited`.'
+          headers:
+            Retry-After:
+              description: 'Seconds to wait before asking again.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/rate-limited'] } } }] }
+        503:
+          description: 'Refused: `standing-unavailable`, `temporarily-unavailable`.'
+          headers:
+            Retry-After:
+              description: 'Seconds to wait before asking again.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/standing-unavailable', 'https://appsolutely.io/problems/temporarily-unavailable'] } } }] }
+      security:
+        - bearerAuth: []
+  '/api/v1/webhook-endpoints/{endpoint}/secret-rotations/cancel':
+    post:
+      operationId: cancelWebhookEndpoints.secretRotation
+      tags:
+        - webhook-endpoints.secret-rotations
+      summary: 'Cancel webhook endpoints.secret rotations'
+      parameters:
+        - name: endpoint
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema: { type: object, additionalProperties: true }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        401:
+          description: 'Refused: `unauthenticated`, `invalid-token`.'
+          headers:
+            WWW-Authenticate:
+              description: "The Bearer challenge for this API's realm."
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/unauthenticated', 'https://appsolutely.io/problems/invalid-token'] } } }] }
+        403:
+          description: 'Refused: `wrong-audience`, `insufficient-scope`, `forbidden`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/wrong-audience', 'https://appsolutely.io/problems/insufficient-scope', 'https://appsolutely.io/problems/forbidden'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        404:
+          description: 'Refused: `not-found`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/not-found'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        409:
+          description: 'Refused: `no-rotation`, `rotation-mismatch`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/no-rotation', 'https://appsolutely.io/problems/rotation-mismatch'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        415:
+          description: 'Refused: `unsupported-media-type`.'
+          headers:
+            Accept:
+              description: 'The media type a body is taken in.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/unsupported-media-type'] } } }] }
+        422:
+          description: 'Refused: `validation-failed`, `mode-from-credential`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/ValidationProblem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/validation-failed', 'https://appsolutely.io/problems/mode-from-credential'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        429:
+          description: 'Refused: `rate-limited`.'
+          headers:
+            Retry-After:
+              description: 'Seconds to wait before asking again.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/rate-limited'] } } }] }
+        503:
+          description: 'Refused: `standing-unavailable`.'
+          headers:
+            Retry-After:
+              description: 'Seconds to wait before asking again.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/standing-unavailable'] } } }] }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfirmWebhookRotationPayload'
+      security:
+        - bearerAuth: []
+  '/api/v1/webhook-endpoints/{endpoint}/secret-rotations/complete':
+    post:
+      operationId: completeWebhookEndpoints.secretRotation
+      tags:
+        - webhook-endpoints.secret-rotations
+      summary: 'Complete webhook endpoints.secret rotations'
+      parameters:
+        - name: endpoint
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema: { type: object, additionalProperties: true }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        401:
+          description: 'Refused: `unauthenticated`, `invalid-token`.'
+          headers:
+            WWW-Authenticate:
+              description: "The Bearer challenge for this API's realm."
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/unauthenticated', 'https://appsolutely.io/problems/invalid-token'] } } }] }
+        403:
+          description: 'Refused: `wrong-audience`, `insufficient-scope`, `forbidden`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/wrong-audience', 'https://appsolutely.io/problems/insufficient-scope', 'https://appsolutely.io/problems/forbidden'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        404:
+          description: 'Refused: `not-found`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/not-found'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        409:
+          description: 'Refused: `no-rotation`, `rotation-mismatch`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/no-rotation', 'https://appsolutely.io/problems/rotation-mismatch'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        415:
+          description: 'Refused: `unsupported-media-type`.'
+          headers:
+            Accept:
+              description: 'The media type a body is taken in.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/unsupported-media-type'] } } }] }
+        422:
+          description: 'Refused: `validation-failed`, `mode-from-credential`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/ValidationProblem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/validation-failed', 'https://appsolutely.io/problems/mode-from-credential'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        429:
+          description: 'Refused: `rate-limited`.'
+          headers:
+            Retry-After:
+              description: 'Seconds to wait before asking again.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/rate-limited'] } } }] }
+        503:
+          description: 'Refused: `standing-unavailable`.'
+          headers:
+            Retry-After:
+              description: 'Seconds to wait before asking again.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/standing-unavailable'] } } }] }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfirmWebhookRotationPayload'
+      security:
+        - bearerAuth: []
+  '/api/v1/webhook-endpoints/{endpoint}/test-deliveries':
+    post:
+      operationId: test-deliveriesWebhookEndpoint
+      tags:
+        - webhook-endpoints
+      summary: 'Test Deliveries webhook endpoints'
+      parameters:
+        - name: endpoint
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        202:
+          description: Accepted
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        401:
+          description: 'Refused: `unauthenticated`, `invalid-token`.'
+          headers:
+            WWW-Authenticate:
+              description: "The Bearer challenge for this API's realm."
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/unauthenticated', 'https://appsolutely.io/problems/invalid-token'] } } }] }
+        403:
+          description: 'Refused: `wrong-audience`, `insufficient-scope`, `forbidden`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/wrong-audience', 'https://appsolutely.io/problems/insufficient-scope', 'https://appsolutely.io/problems/forbidden'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        404:
+          description: 'Refused: `not-found`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/not-found'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        409:
+          description: 'Refused: `subscription-inactive`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/subscription-inactive'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        415:
+          description: 'Refused: `unsupported-media-type`.'
+          headers:
+            Accept:
+              description: 'The media type a body is taken in.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/unsupported-media-type'] } } }] }
+        422:
+          description: 'Refused: `mode-from-credential`.'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/mode-from-credential'] } } }] }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        429:
+          description: 'Refused: `rate-limited`.'
+          headers:
+            Retry-After:
+              description: 'Seconds to wait before asking again.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/rate-limited'] } } }] }
+        503:
+          description: 'Refused: `standing-unavailable`.'
+          headers:
+            Retry-After:
+              description: 'Seconds to wait before asking again.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/standing-unavailable'] } } }] }
+      security:
+        - bearerAuth: []
   '/api/v1/webhook-subscriptions/{subscription}/deliveries':
     get:
       operationId: listWebhookDeliveries
@@ -3942,6 +5645,31 @@ paths:
         - name: subscription
           in: path
           required: true
+          schema:
+            type: string
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - pending
+              - succeeded
+              - failed
+        - name: since
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: cursor
+          in: query
+          required: false
           schema:
             type: string
       responses:
@@ -4372,6 +6100,13 @@ components:
             - type: 'null'
       required:
         - available
+    ConfirmWebhookRotationPayload:
+      type: object
+      properties:
+        confirm:
+          type: string
+      required:
+        - confirm
     FormEntry:
       type: object
       properties:
@@ -4947,6 +6682,56 @@ components:
       required:
         - title
         - content
+    StoreBackendWebhookEndpointPayload:
+      type: object
+      properties:
+        url:
+          type: string
+        event_types:
+          type: array
+          items:
+            type: string
+            enum:
+              - article.created
+              - article.updated
+              - article.deleted
+              - page.created
+              - page.updated
+              - page.deleted
+              - form.submitted
+              - order.paid
+              - order.completed
+              - order.shipped
+              - order.cancelled
+              - order.status_updated
+              - order.expired
+              - order.revived
+              - order.payment_arrived_late
+              - subscription.started
+              - subscription.renewed
+              - subscription.payment_due
+              - subscription.payment_failed
+              - subscription.authentication_required
+              - subscription.cancel_scheduled
+              - subscription.resumed
+              - subscription.ended
+              - refund.requested
+              - refund.processed
+              - order.refunded
+              - payment.refunded
+              - payment.reversed
+              - referral.reward_issued
+              - product.created
+              - product.updated
+              - product.deleted
+              - account.suspended
+              - account.reinstated
+              - account.erased
+              - account.entitlements_changed
+              - account.email_changed
+      required:
+        - url
+        - event_types
     StoreMeAddressPayload:
       type: object
       properties:
