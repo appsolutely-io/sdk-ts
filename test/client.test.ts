@@ -144,6 +144,28 @@ test('a keyed create is sent a generated Idempotency-Key, a new one per call', a
   assert.notEqual(keys[0], keys[1]);
 });
 
+test('a purchase and a subscription change are sent a generated Idempotency-Key', async () => {
+  const { calls, fetch } = recordingFetch(201, { id: '1' });
+  const client = createClient({ baseUrl: 'https://example.com', token: 't', fetch });
+
+  await client.POST('/api/v1/me/checkout-sessions', {
+    body: {
+      lines: [{ product: 'pro', quantity: 1 }],
+      success_url: 'https://app.example/ok',
+      cancel_url: 'https://app.example/no',
+    },
+  });
+  await client.POST('/api/v1/me/subscriptions/{subscription}/changes', {
+    params: { path: { subscription: '0f6c1c36-0d3a-4e8e-9a4b-3f1f2a0b5c6d' } },
+    body: { sku: 'team' },
+  });
+
+  for (const call of calls) {
+    assert.match(call.headers.get('Idempotency-Key') ?? '', /^[0-9a-f-]{36}$/);
+  }
+  assert.equal(calls.length, 2);
+});
+
 test('an Idempotency-Key the caller passes is sent as given', async () => {
   const { calls, fetch } = recordingFetch(202, { id: '1' });
   const client = createClient({ baseUrl: 'https://example.com', token: 't', fetch });
