@@ -105,6 +105,60 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/checkout-sessions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create one of checkout sessions */
+        post: operations["createCheckoutSession"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/checkout-sessions/{session}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read one of checkout sessions */
+        get: operations["getCheckoutSession"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/client": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read one of client
+         * @description Any valid client-credentials token may read its own credential; no scope is needed. A member's OAuth token is refused `403 wrong-audience`, and a personal access token `401`, as on every backend route.
+         */
+        get: operations["getClient"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/deliveries": {
         parameters: {
             query?: never;
@@ -167,6 +221,41 @@ export interface paths {
         get: operations["getBackendEntitlement"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/feature-keys": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List feature keys */
+        get: operations["listFeatureKeys"];
+        put?: never;
+        /** Create one of feature keys */
+        post: operations["createFeatureKey"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/feature-keys/{key}/retirement": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Retire feature keys */
+        post: operations["retireFeatureKey"];
         delete?: never;
         options?: never;
         head?: never;
@@ -278,6 +367,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/me/checkout-sessions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create one of me checkout sessions */
+        post: operations["createMeCheckoutSession"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/checkout-sessions/{session}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read one of me checkout sessions */
+        get: operations["getMeCheckoutSession"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/me/entitlements": {
         parameters: {
             query?: never;
@@ -323,6 +446,23 @@ export interface paths {
         get: operations["getMeOrder"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/portal-sessions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create one of me portal sessions */
+        post: operations["createMePortalSession"];
         delete?: never;
         options?: never;
         head?: never;
@@ -391,6 +531,108 @@ export interface paths {
         get: operations["rewardsMeReferral"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/store-purchases/intents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Intents me store purchases */
+        post: operations["intentsMeStorePurchase"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/store-purchases/transactions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Transactions me store purchases */
+        post: operations["transactionsMeStorePurchase"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/subscriptions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List me subscriptions */
+        get: operations["listMeSubscriptions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/subscriptions/{subscription}/cancellation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Cancel me subscriptions */
+        post: operations["cancelMeSubscription"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/subscriptions/{subscription}/changes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Change me subscriptions */
+        post: operations["changeMeSubscription"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/subscriptions/{subscription}/resumption": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Resume me subscriptions */
+        post: operations["resumeMeSubscription"];
         delete?: never;
         options?: never;
         head?: never;
@@ -482,6 +724,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/portal-sessions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create one of portal sessions */
+        post: operations["createPortalSession"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/products": {
         parameters: {
             query?: never;
@@ -510,6 +769,282 @@ export interface paths {
         get: operations["getProduct"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/products/{product}/feature-values": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List product feature values */
+        get: operations["listProductFeatureValues"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/products/{product}/feature-values/{key}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Update one of product feature values */
+        put: operations["updateProductFeatureValue"];
+        post?: never;
+        /** Destroy product feature values */
+        delete: operations["deleteProductFeatureValue"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/return-targets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List return targets */
+        get: operations["listReturnTargets"];
+        put?: never;
+        /** Create one of return targets */
+        post: operations["createReturnTarget"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/return-targets/{target}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Destroy return targets */
+        delete: operations["deleteReturnTarget"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/role-assignments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List role assignments */
+        get: operations["listRoleAssignments"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/role-assignments/{sub}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read one of role assignments */
+        get: operations["getRoleAssignment"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/role-assignments/{sub}/{key}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Assign role assignments */
+        put: operations["assignRoleAssignment"];
+        post?: never;
+        /** Revoke role assignments */
+        delete: operations["revokeRoleAssignment"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/roles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List roles */
+        get: operations["listRoles"];
+        put?: never;
+        /** Create one of roles */
+        post: operations["createRole"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/roles/{key}/retirement": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Retire roles */
+        post: operations["retireRole"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/seat-pools/{payer}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List seat pools */
+        get: operations["listSeatPools"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/seats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create one of seats */
+        post: operations["createSeat"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/seats/{sub}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Destroy seats */
+        delete: operations["deleteSeat"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/store-purchases/intents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Intents store purchases */
+        post: operations["intentsStorePurchase"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/store-purchases/transactions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Transactions store purchases */
+        post: operations["transactionsStorePurchase"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/subscriptions/{subscription}/test-clock": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Attach test clocks */
+        post: operations["attachTestClock"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/subscriptions/{subscription}/test-clock/advance": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Advance test clocks */
+        post: operations["advanceTestClock"];
         delete?: never;
         options?: never;
         head?: never;
@@ -795,15 +1330,111 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        AccountEntitlement: {
+            key: string;
+            label: string;
+            /** @description For a key the site totals per window, the current window's plan baseline plus every pack still live. */
+            quantity: number;
+            /** Format: date-time */
+            expires_at?: string | null;
+            /**
+             * Format: date-time
+             * @description The window a per-window total is for. Reset a meter when this changes, not when the clock passes `period_end`. Null for every other entry.
+             */
+            period_start: string | null;
+            /**
+             * Format: date-time
+             * @description When the window ends; null for an open run of packs with no plan, and for every entry that is not a per-window total.
+             */
+            period_end: string | null;
+            /** @description The addends of a per-window total: the plan baseline, then each pack still live with the reference of the order that paid it. Null for every other entry. */
+            breakdown: components["schemas"]["AccountEntitlementTerm"][] | null;
+        };
+        AccountEntitlementList: {
+            data: components["schemas"]["AccountEntitlement"][];
+        };
+        AccountEntitlementTerm: {
+            /** @enum {string} */
+            source: "plan" | "purchase";
+            value: number;
+            payment_reference?: string | null;
+            /** Format: date-time */
+            ends_at?: string | null;
+        };
+        AccountState: {
+            subject: string;
+            sequence: number;
+            /**
+             * @description `unknown` for a subject this site never handed out, answered `200` with empty lists rather than `404`, which a reconciler would read as nothing changed.
+             * @enum {string}
+             */
+            status: "active" | "suspended" | "erased" | "unknown";
+            email?: string | null;
+            email_verified: boolean;
+            entitlements: components["schemas"]["AccountEntitlement"][];
+            totals: {
+                [key: string]: unknown;
+            };
+            /** @description Every subscription of the account that is not `canceled` and counts in the credential's mode, oldest first. A write to any field an entry carries raises `sequence`. */
+            subscriptions: components["schemas"]["AccountSubscription"][];
+        };
+        AccountStateList: {
+            data: components["schemas"]["AccountState"][];
+        };
+        AccountStatePage: {
+            data: components["schemas"]["AccountState"][];
+            /** @description Pass as `cursor` for the next page. Absent on the last page. */
+            next_cursor?: string;
+        };
+        AccountSubscription: {
+            /** Format: uuid */
+            id: string;
+            type: string;
+            /** @enum {string} */
+            status: "trialing" | "active" | "past_due" | "on_hold" | "incomplete" | "canceled";
+            mode: string;
+            cancel_at_period_end: boolean;
+            transition_cause: string | null;
+            recovery_reason: string | null;
+            /** Format: date-time */
+            current_period_start: string | null;
+            /** Format: date-time */
+            current_period_end: string | null;
+            /** Format: date-time */
+            trial_ends_at: string | null;
+            /** Format: date-time */
+            ended_at: string | null;
+            subject_reference: string | null;
+            /** @description The period awaiting payment once its start has passed. It appears by the clock, so between its start and the renewal run that writes it — at most that run's interval — a read can show it at the `sequence` of the last delivery. */
+            pending_period: {
+                [key: string]: unknown;
+            } | null;
+            product: string | null;
+            sku: string | null;
+            quantity: number;
+            /** @enum {string} */
+            billed_by: "site" | "app_store" | "google_play";
+            /** @enum {string|null} */
+            environment: "production" | "sandbox" | null;
+            /** Format: date-time */
+            resumes_at: string | null;
+            manage_url: string | null;
+        };
+        AdvanceTestClockPayload: {
+            seconds: number;
+        };
         ApiVersion: {
             version: string;
             status: string;
+            /** Format: date-time */
             deprecated_at?: string | null;
+            /** Format: date-time */
             sunset_at?: string | null;
             successor?: string | null;
             documentation?: string | null;
         };
         Article: {
+            /** Format: uuid */
             id: string;
             title: string;
             slug?: string | null;
@@ -815,6 +1446,7 @@ export interface components {
             sort?: number | null;
             /** Format: date-time */
             published_at: string;
+            /** Format: date-time */
             expired_at?: string | null;
             /** Format: date-time */
             created_at: string;
@@ -823,6 +1455,7 @@ export interface components {
             categories: components["schemas"]["ArticleCategorySummary"][];
         };
         ArticleCategorySummary: {
+            /** Format: uuid */
             id: string;
             title: string;
             slug?: string | null;
@@ -838,18 +1471,107 @@ export interface components {
             /** @description Pass as `cursor` for the next page. Absent on the last page. */
             next_cursor?: string;
         };
+        AskBackendStorePurchaseIntentPayload: {
+            /** @enum {string} */
+            store: "app_store" | "google_play";
+            product: string;
+            sku?: string | null;
+            subject: string;
+        };
+        AskMeStorePurchaseIntentPayload: {
+            /** @enum {string} */
+            store: "app_store" | "google_play";
+            product: string;
+            sku?: string | null;
+        };
+        BackendClient: {
+            client_id: string;
+            /**
+             * @description The mode of money the client acts in, fixed when it was registered: `production` or `test`, spelled as every other `mode` on this API.
+             * @enum {string}
+             */
+            mode: "production" | "test";
+            /** @description The site's canonical address, always `https://`; the issuer's host and port when no canonical domain is set. */
+            site: string;
+            /** @description The scopes this token holds, sorted. */
+            scopes: string[];
+        };
         BillingEntry: {
             available: boolean;
             wording?: string | null;
             presentation?: string | null;
             needs_store_token?: boolean | null;
             url?: string | null;
+            /** Format: date-time */
             expires_at?: string | null;
+        };
+        ChangeMeSubscriptionPayload: {
+            sku?: string | null;
+            quantity?: number | null;
+            return_url?: string | null;
+        };
+        CheckoutSession: {
+            id: string;
+            url: string;
+            /** @enum {string} */
+            status: "open" | "expired" | "awaiting_payment" | "payment_overdue" | "complete" | "canceled";
+            /** Format: date-time */
+            expires_at: string;
+            /** @enum {string} */
+            mode: "production" | "test";
+            lines: components["schemas"]["CheckoutSessionLine"][];
+            promotion_code: string | null;
+            success_url: string;
+            cancel_url: string;
+            order: components["schemas"]["CheckoutSessionOrder"] | null;
+            may_still_bill?: components["schemas"]["SubscriptionSource"][];
+        };
+        CheckoutSessionLine: {
+            product: string;
+            quantity: number;
+        };
+        CheckoutSessionOrder: {
+            reference: string;
         };
         ConfirmWebhookRotationPayload: {
             confirm: string;
         };
+        EndpointWebhookDelivery: {
+            /** Format: uuid */
+            endpoint_id: string;
+            /** @description The delivery's `webhook-id` header: deduplicate on it, and name it to ask for a redelivery. */
+            webhook_id: string;
+            type: string;
+            /** Format: date-time */
+            occurred_at: string;
+            status: string;
+            attempts: number;
+            last_response_status: number | null;
+            /** Format: date-time */
+            next_attempt_at: string | null;
+            /** Format: date-time */
+            delivered_at: string | null;
+            /** Format: date-time */
+            failed_at: string | null;
+        };
+        EndpointWebhookDeliveryPage: {
+            data: components["schemas"]["EndpointWebhookDelivery"][];
+            /** @description Pass as `cursor` for the next page. Absent on the last page. */
+            next_cursor?: string;
+        };
+        FeatureKey: {
+            key: string;
+            /** @enum {string} */
+            kind: "boolean" | "quantity" | "config";
+            retired: boolean;
+            /** Format: date-time */
+            retired_at?: string | null;
+        };
+        FeatureKeyList: {
+            data: components["schemas"]["FeatureKey"][];
+        };
         FormEntry: {
+            /** Format: uuid */
             id: string;
             form?: string | null;
             name?: string | null;
@@ -860,10 +1582,12 @@ export interface components {
             data?: {
                 [key: string]: unknown;
             } | null;
-            is_spam: number;
+            is_spam: boolean;
             /** Format: date-time */
             submitted_at: string;
+            /** Format: date-time */
             created_at?: string | null;
+            /** Format: date-time */
             updated_at?: string | null;
         };
         FormEntryFeed: {
@@ -877,33 +1601,71 @@ export interface components {
             /** @description Pass as `cursor` for the next page. Absent on the last page. */
             next_cursor?: string;
         };
-        List: {
-            data: {
-                [key: string]: unknown;
-            }[];
-        };
         MagicLinkPayload: {
             email: string;
-            abilities: ("me:read" | "me:write" | "me-orders:read" | "me-addresses:read" | "me-addresses:write" | "me-entitlements:read" | "me-push-devices:write" | "me-checkout:write" | "me-store-purchases:write" | "me-referral:read" | "me-billing:read")[];
+            abilities: ("me:read" | "me:write" | "me-orders:read" | "me-addresses:read" | "me-addresses:write" | "me-entitlements:read" | "me-push-devices:write" | "me-checkout:write" | "me-store-purchases:write" | "me-subscriptions:read" | "me-subscriptions:write" | "me-referral:read" | "me-billing:read")[];
             device_name: string;
             code_challenge: string;
+        };
+        MagicLinkToken: {
+            token: string;
+            abilities: string[];
+            /** Format: date-time */
+            expires_at: string | null;
         };
         MagicLinkTokenPayload: {
             link: string;
             code_verifier: string;
-            code?: string;
-            recovery_code?: string;
-            lost_second_factor?: boolean;
+            code?: string | null;
+            recovery_code?: string | null;
+            lost_second_factor?: boolean | null;
         };
         Member: {
+            /** @description The account subject: the name an application the member signed in to knows them by, and the `subject` of their account state. */
             id: string;
             name?: string | null;
             email?: string | null;
+            /** Format: date-time */
             email_verified_at?: string | null;
+            /** Format: date-time */
             created_at?: string | null;
+            /** Format: date-time */
             updated_at?: string | null;
         };
+        MemberSubscription: {
+            /** Format: uuid */
+            id: string;
+            product?: string | null;
+            sku?: string | null;
+            status: string;
+            quantity: number;
+            currency: string;
+            /** Format: date-time */
+            current_period_end?: string | null;
+            cancel_at_period_end: boolean;
+            pending_sku?: string | null;
+            pending_quantity?: number | null;
+            /** @enum {string} */
+            billed_by: "site" | "app_store" | "google_play";
+            manage_url?: string | null;
+        };
+        MemberSubscriptionChange: {
+            applied: boolean;
+            subscription?: components["schemas"]["MemberSubscription"] | null;
+            confirmation?: components["schemas"]["PortalSession"] | null;
+        };
+        MemberSubscriptionList: {
+            data: components["schemas"]["MemberSubscription"][];
+        };
+        OpenBackendPortalSessionPayload: {
+            return_url: string;
+            subject: string;
+        };
+        OpenMePortalSessionPayload: {
+            return_url: string;
+        };
         Order: {
+            /** @description The order number, the same as `reference`: what the buyer is shown, drawn at random. */
             id: string;
             reference: string;
             subject_reference?: string | null;
@@ -921,6 +1683,9 @@ export interface components {
             total_amount: number;
             total_shown: string;
             note?: string | null;
+            /** @description Where to send the signed-in member to finish paying for this order, on the site's own address: a page that sends them on to the provider page the payment was started on. Null on a guest's order (that page opens only with the order's own token, which no API answer carries), when there is nothing to pay there (the order is not waiting for its money, or no payment is in flight on a provider page), and once that provider page has expired. Where the provider gave the page no expiry, it is named until the order itself stops waiting. */
+            payment_url?: string | null;
+            /** Format: date-time */
             created_at?: string | null;
             /** Format: date-time */
             updated_at: string;
@@ -933,7 +1698,9 @@ export interface components {
             has_more: boolean;
         };
         OrderLineSummary: {
+            /** Format: uuid */
             id: string;
+            /** Format: uuid */
             product?: string | null;
             quantity: number;
             currency: string;
@@ -945,7 +1712,9 @@ export interface components {
             next_cursor?: string;
         };
         Page: {
+            /** Format: uuid */
             id: string;
+            /** @description The key starter content finds the page by; not its `id`. */
             reference: string;
             name?: string | null;
             title?: string | null;
@@ -953,12 +1722,17 @@ export interface components {
             description?: string | null;
             keywords?: string | null;
             language?: string | null;
-            /** @description The `reference` of the page this one sits under, or null at the top. */
+            /**
+             * Format: uuid
+             * @description The `id` of the page this one sits under, or null at the top.
+             */
             parent?: string | null;
             status?: number | null;
             /** Format: date-time */
             published_at: string;
+            /** Format: date-time */
             expired_at?: string | null;
+            /** Format: date-time */
             created_at?: string | null;
             /** Format: date-time */
             updated_at: string;
@@ -973,6 +1747,15 @@ export interface components {
             data: components["schemas"]["Page"][];
             /** @description Pass as `cursor` for the next page. Absent on the last page. */
             next_cursor?: string;
+        };
+        PortalSession: {
+            id: string;
+            url?: string | null;
+            status: string;
+            /** Format: date-time */
+            expires_at: string;
+            mode: string;
+            return_url: string;
         };
         /** @description An RFC 9457 problem document. Members beyond these are the extensions the type names. */
         Problem: {
@@ -991,6 +1774,7 @@ export interface components {
             [key: string]: unknown;
         };
         Product: {
+            /** Format: uuid */
             id: string;
             type: string;
             title: string;
@@ -1008,10 +1792,23 @@ export interface components {
             sort?: number | null;
             /** Format: date-time */
             published_at: string;
+            /** Format: date-time */
             expired_at?: string | null;
+            /** Format: date-time */
             created_at?: string | null;
             /** Format: date-time */
             updated_at: string;
+        };
+        ProductFeatureValue: {
+            key: string;
+            /** @enum {string} */
+            kind: "boolean" | "quantity" | "config";
+            /** @description Any JSON value; its type is named by the record it belongs to. */
+            value: unknown;
+            retired: boolean;
+        };
+        ProductFeatureValueList: {
+            data: components["schemas"]["ProductFeatureValue"][];
         };
         ProductFeed: {
             upserts: components["schemas"]["Product"][];
@@ -1029,58 +1826,265 @@ export interface components {
             price: number;
             original_price?: number | null;
         };
+        PushDevice: {
+            token: string;
+            platform: string;
+            provider: string;
+            app_identifier: string | null;
+            installation_id: string | null;
+            /** Format: date-time */
+            last_used_at: string | null;
+        };
+        Redelivery: {
+            data: components["schemas"]["EndpointWebhookDelivery"][];
+            /** @description Each endpoint of the mode that was owed the event and refuses it now, with why. */
+            refused: components["schemas"]["RedeliveryRefusal"][];
+        };
+        RedeliveryRefusal: {
+            /** Format: uuid */
+            endpoint_id: string;
+            reason: string;
+        };
+        Referral: {
+            code: string;
+            programme: string;
+            discount: components["schemas"]["ReferralDiscount"];
+            min_order_amount: number;
+            reward: components["schemas"]["ReferralTerms"];
+        };
+        ReferralDiscount: {
+            type: string;
+            value: number;
+            max_discount: number | null;
+            currency: string | null;
+        };
+        ReferralReward: {
+            /** Format: uuid */
+            id: string;
+            /** @enum {string} */
+            type: "credit" | "cashback";
+            state: string;
+            value: number;
+            currency: string;
+            /** Format: date-time */
+            hold_until: string | null;
+            code: string | null;
+            /** Format: date-time */
+            expires_at: string | null;
+            /** Format: date-time */
+            earned_at: string;
+        };
+        ReferralRewardPage: {
+            data: components["schemas"]["ReferralReward"][];
+            /** @description Pass as `cursor` for the next page. Absent on the last page. */
+            next_cursor?: string;
+        };
+        ReferralTerms: {
+            /** @enum {string} */
+            type: "credit" | "cashback";
+            value: number;
+            currency: string;
+        };
+        ResumeMeSubscriptionPayload: {
+            return_url: string;
+        };
+        ReturnTarget: {
+            /** Format: uuid */
+            id: string;
+            url: string;
+            /** Format: date-time */
+            created_at: string;
+        };
+        ReturnTargetList: {
+            data: components["schemas"]["ReturnTarget"][];
+        };
+        Role: {
+            key: string;
+            retired: boolean;
+            /** Format: date-time */
+            created_at?: string | null;
+            /** Format: date-time */
+            retired_at?: string | null;
+        };
+        RoleList: {
+            data: components["schemas"]["Role"][];
+        };
+        RolesHeld: {
+            subject: string;
+            roles: string[];
+        };
+        RolesHeldPage: {
+            data: components["schemas"]["RolesHeld"][];
+            /** @description Pass as `cursor` for the next page. Absent on the last page. */
+            next_cursor?: string;
+        };
+        Seat: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            pool: string;
+            member: string;
+            label?: string | null;
+            /** Format: date-time */
+            granted_at: string;
+            passing: boolean;
+        };
+        SeatPool: {
+            /** Format: uuid */
+            id: string;
+            product?: string | null;
+            quantity: number;
+            scheduled: number;
+            ceiling: number;
+            occupied: number;
+            seats: components["schemas"]["Seat"][];
+        };
+        SeatPoolList: {
+            data: components["schemas"]["SeatPool"][];
+        };
+        StartBackendCheckoutSessionPayload: {
+            lines: {
+                product: string;
+                quantity: number;
+            }[];
+            promotion_code?: string | null;
+            success_url: string;
+            cancel_url: string;
+            subject: string;
+        };
+        StartMeCheckoutSessionPayload: {
+            lines: {
+                product: string;
+                quantity: number;
+            }[];
+            promotion_code?: string | null;
+            success_url: string;
+            cancel_url: string;
+        };
         StoreArticlePayload: {
             title: string;
-            slug?: string;
-            description?: string;
-            keywords?: string;
+            slug?: string | null;
+            description?: string | null;
+            keywords?: string | null;
             content: string;
-            cover?: string;
-            /** @enum {integer} */
-            status?: 0 | 1;
-            sort?: number;
+            cover?: string | null;
+            /** @enum {integer|null} */
+            status?: 0 | 1 | null;
+            sort?: number | null;
             /** Format: date-time */
-            published_at?: string;
+            published_at?: string | null;
             /** Format: date-time */
-            expired_at?: string;
-            categories?: number[];
+            expired_at?: string | null;
+            categories?: string[];
         };
         StoreBackendWebhookEndpointPayload: {
             url: string;
-            event_types: ("article.created" | "article.updated" | "article.deleted" | "page.created" | "page.updated" | "page.deleted" | "form.submitted" | "order.paid" | "order.completed" | "order.shipped" | "order.cancelled" | "order.status_updated" | "order.expired" | "order.revived" | "order.payment_arrived_late" | "subscription.started" | "subscription.renewed" | "subscription.payment_due" | "subscription.payment_failed" | "subscription.authentication_required" | "subscription.cancel_scheduled" | "subscription.resumed" | "subscription.ended" | "refund.requested" | "refund.processed" | "order.refunded" | "payment.refunded" | "payment.reversed" | "referral.reward_issued" | "product.created" | "product.updated" | "product.deleted" | "account.suspended" | "account.reinstated" | "account.erased" | "account.entitlements_changed" | "account.email_changed")[];
+            event_types: ("article.created" | "article.updated" | "article.deleted" | "page.created" | "page.updated" | "page.deleted" | "form.submitted" | "order.paid" | "order.completed" | "order.shipped" | "order.cancelled" | "order.status_updated" | "order.expired" | "order.revived" | "order.payment_arrived_late" | "subscription.started" | "subscription.renewed" | "subscription.payment_due" | "subscription.payment_failed" | "subscription.authentication_required" | "subscription.cancel_scheduled" | "subscription.resumed" | "subscription.ended" | "refund.requested" | "refund.processed" | "order.refunded" | "payment.refunded" | "payment.reversed" | "referral.reward_issued" | "role.assignment_changed" | "product.created" | "product.updated" | "product.deleted" | "account.suspended" | "account.reinstated" | "account.erased" | "account.entitlements_changed" | "account.email_changed")[];
+        };
+        StoreFeatureKeyPayload: {
+            key: string;
+            /** @enum {string} */
+            kind: "boolean" | "quantity" | "config";
         };
         StoreMeAddressPayload: {
             name: string;
-            mobile?: string;
+            mobile?: string | null;
             address: string;
-            address_extra?: string;
-            town?: string;
-            city?: string;
-            province?: string;
-            postcode?: string;
-            country?: string;
-            note?: string;
-            remark?: string;
-            sort?: number;
+            address_extra?: string | null;
+            town?: string | null;
+            city?: string | null;
+            province?: string | null;
+            postcode?: string | null;
+            country?: string | null;
+            note?: string | null;
+            remark?: string | null;
+            sort?: number | null;
         };
         StoreMePushDevicePayload: {
             token: string;
             /** @enum {string} */
             platform: "ios" | "android" | "web";
-            /** @enum {string} */
-            provider?: "apns" | "fcm";
-            app_identifier?: string;
-            installation_id?: string;
+            /** @enum {string|null} */
+            provider?: "apns" | "fcm" | null;
+            app_identifier?: string | null;
+            installation_id?: string | null;
             metadata?: {
                 [key: string]: unknown;
-            };
+            } | null;
+        };
+        StorePurchaseIntent: {
+            store: string;
+            store_product_id: string;
+            account_token: string;
+            replaces_purchase_token?: string | null;
+            may_still_bill: components["schemas"]["SubscriptionSource"][];
+        };
+        StorePurchaseTransaction: {
+            /** @enum {string} */
+            outcome: "recorded" | "unclaimed";
+            /** Format: uuid */
+            subscription_id: string | null;
+            status: string | null;
+            /** @enum {string|null} */
+            kind: "subscription" | "one_time" | "consumable" | null;
+            /** @enum {string|null} */
+            environment: "production" | "sandbox" | null;
+        };
+        StoreReturnTargetPayload: {
+            url: string;
+        };
+        StoreRolePayload: {
+            key: string;
+        };
+        StoreSeatPayload: {
+            pool: string;
+            payer: string;
+            member: string;
+            label?: string | null;
+        };
+        SubmitBackendStorePurchaseTransactionPayload: {
+            /** @enum {string} */
+            store: "app_store" | "google_play";
+            /** @enum {string} */
+            initiation: "member" | "automatic";
+            /** @description Required when `store` is `app_store`. */
+            signed_transaction?: string;
+            /** @description Required when `store` is `google_play`. */
+            package_name?: string;
+            /** @description Required when `store` is `google_play`. */
+            product_id?: string;
+            /** @description Required when `store` is `google_play`. */
+            purchase_token?: string;
+            subject: string;
+        };
+        SubmitMeStorePurchaseTransactionPayload: {
+            /** @enum {string} */
+            store: "app_store" | "google_play";
+            /** @enum {string} */
+            initiation: "member" | "automatic";
+            /** @description Required when `store` is `app_store`. */
+            signed_transaction?: string;
+            /** @description Required when `store` is `google_play`. */
+            package_name?: string;
+            /** @description Required when `store` is `google_play`. */
+            product_id?: string;
+            /** @description Required when `store` is `google_play`. */
+            purchase_token?: string;
+        };
+        SubscriptionSource: {
+            /** @enum {string} */
+            billed_by: "site" | "app_store" | "google_play";
+            manage_url: string | null;
+            /** Format: uuid */
+            subscription_id: string;
         };
         SyncPushPayload: {
             mutations: {
                 mutation_id: string;
                 /** @enum {string} */
                 op: "upsert" | "delete";
-                id?: string;
+                /** Format: uuid */
+                id?: string | null;
                 /** Format: date-time */
                 client_updated_at: string;
                 attributes?: {
@@ -1090,6 +2094,7 @@ export interface components {
         };
         SyncPushResult: {
             mutation_id: string;
+            /** Format: uuid */
             id?: string | null;
             applied: boolean;
             reason?: string | null;
@@ -1108,43 +2113,57 @@ export interface components {
             /** Format: date-time */
             deleted_at: string;
         };
+        TestClock: {
+            /** Format: uuid */
+            id: string;
+            status: string;
+            /** Format: date-time */
+            current_period_end?: string | null;
+            /** Format: date-time */
+            clock_now: string;
+        };
         UnregisterMePushDevicePayload: {
             token: string;
         };
         UpdateArticlePayload: {
             title?: string;
-            slug?: string;
-            description?: string;
-            keywords?: string;
-            content?: string;
-            cover?: string;
+            slug?: string | null;
+            description?: string | null;
+            keywords?: string | null;
+            content?: string | null;
+            cover?: string | null;
             /** @enum {integer} */
             status?: 0 | 1;
-            sort?: number;
+            sort?: number | null;
             /** Format: date-time */
-            published_at?: string;
+            published_at?: string | null;
             /** Format: date-time */
-            expired_at?: string;
-            categories?: number[];
+            expired_at?: string | null;
+            categories?: string[];
         };
         UpdateMeAddressPayload: {
             name?: string;
-            mobile?: string;
+            mobile?: string | null;
             address?: string;
-            address_extra?: string;
-            town?: string;
-            city?: string;
-            province?: string;
-            postcode?: string;
-            country?: string;
-            note?: string;
-            remark?: string;
-            sort?: number;
+            address_extra?: string | null;
+            town?: string | null;
+            city?: string | null;
+            province?: string | null;
+            postcode?: string | null;
+            country?: string | null;
+            note?: string | null;
+            remark?: string | null;
+            sort?: number | null;
         };
         UpdateMePayload: {
             name: string;
         };
+        UpdateProductFeatureValuePayload: {
+            /** @description Any JSON value; its type is named by the record it belongs to. */
+            value: unknown;
+        };
         UserAddress: {
+            /** Format: uuid */
             id: string;
             name?: string | null;
             mobile?: string | null;
@@ -1158,7 +2177,9 @@ export interface components {
             note?: string | null;
             remark?: string | null;
             sort?: number | null;
+            /** Format: date-time */
             created_at?: string | null;
+            /** Format: date-time */
             updated_at?: string | null;
         };
         UserAddressFeed: {
@@ -1178,6 +2199,84 @@ export interface components {
                 [key: string]: string[];
             };
         };
+        WebhookDelivery: {
+            /** @description The delivery's `webhook-id` header: deduplicate on it, and name it to ask for a redelivery. */
+            webhook_id: string;
+            type: string;
+            /** Format: date-time */
+            occurred_at: string;
+            status: string;
+            attempts: number;
+            last_response_status: number | null;
+            /** Format: date-time */
+            next_attempt_at: string | null;
+            /** Format: date-time */
+            delivered_at: string | null;
+            /** Format: date-time */
+            failed_at: string | null;
+        };
+        WebhookDeliveryPage: {
+            data: components["schemas"]["WebhookDelivery"][];
+            /** @description Pass as `cursor` for the next page. Absent on the last page. */
+            next_cursor?: string;
+        };
+        WebhookEndpoint: {
+            /** Format: uuid */
+            id: string;
+            url: string;
+            event_types: string[];
+            is_active: boolean;
+            rotation_state?: string | null;
+            /** Format: date-time */
+            rotation_started_at?: string | null;
+            /** Format: date-time */
+            last_delivered_at?: string | null;
+            /** Format: date-time */
+            last_failed_at?: string | null;
+            /** Format: date-time */
+            created_at?: string | null;
+        };
+        WebhookEndpointPage: {
+            data: components["schemas"]["WebhookEndpoint"][];
+            /** @description Pass as `cursor` for the next page. Absent on the last page. */
+            next_cursor?: string;
+        };
+        WebhookEndpointRotation: {
+            /** Format: uuid */
+            id: string;
+            url: string;
+            event_types: string[];
+            is_active: boolean;
+            rotation_state?: string | null;
+            /** Format: date-time */
+            rotation_started_at?: string | null;
+            /** Format: date-time */
+            last_delivered_at?: string | null;
+            /** Format: date-time */
+            last_failed_at?: string | null;
+            /** Format: date-time */
+            created_at?: string | null;
+            /** Format: uuid */
+            rotation_id: string;
+            secret: string;
+        };
+        WebhookEndpointWithSecret: {
+            /** Format: uuid */
+            id: string;
+            url: string;
+            event_types: string[];
+            is_active: boolean;
+            rotation_state?: string | null;
+            /** Format: date-time */
+            rotation_started_at?: string | null;
+            /** Format: date-time */
+            last_delivered_at?: string | null;
+            /** Format: date-time */
+            last_failed_at?: string | null;
+            /** Format: date-time */
+            created_at?: string | null;
+            secret: string;
+        };
     };
     responses: never;
     parameters: never;
@@ -1192,20 +2291,44 @@ export interface components {
     };
     pathItems: never;
 }
+export type AccountEntitlement = components['schemas']['AccountEntitlement'];
+export type AccountEntitlementList = components['schemas']['AccountEntitlementList'];
+export type AccountEntitlementTerm = components['schemas']['AccountEntitlementTerm'];
+export type AccountState = components['schemas']['AccountState'];
+export type AccountStateList = components['schemas']['AccountStateList'];
+export type AccountStatePage = components['schemas']['AccountStatePage'];
+export type AccountSubscription = components['schemas']['AccountSubscription'];
+export type AdvanceTestClockPayload = components['schemas']['AdvanceTestClockPayload'];
 export type ApiVersion = components['schemas']['ApiVersion'];
 export type Article = components['schemas']['Article'];
 export type ArticleCategorySummary = components['schemas']['ArticleCategorySummary'];
 export type ArticleFeed = components['schemas']['ArticleFeed'];
 export type ArticlePage = components['schemas']['ArticlePage'];
+export type AskBackendStorePurchaseIntentPayload = components['schemas']['AskBackendStorePurchaseIntentPayload'];
+export type AskMeStorePurchaseIntentPayload = components['schemas']['AskMeStorePurchaseIntentPayload'];
+export type BackendClient = components['schemas']['BackendClient'];
 export type BillingEntry = components['schemas']['BillingEntry'];
+export type ChangeMeSubscriptionPayload = components['schemas']['ChangeMeSubscriptionPayload'];
+export type CheckoutSession = components['schemas']['CheckoutSession'];
+export type CheckoutSessionLine = components['schemas']['CheckoutSessionLine'];
+export type CheckoutSessionOrder = components['schemas']['CheckoutSessionOrder'];
 export type ConfirmWebhookRotationPayload = components['schemas']['ConfirmWebhookRotationPayload'];
+export type EndpointWebhookDelivery = components['schemas']['EndpointWebhookDelivery'];
+export type EndpointWebhookDeliveryPage = components['schemas']['EndpointWebhookDeliveryPage'];
+export type FeatureKey = components['schemas']['FeatureKey'];
+export type FeatureKeyList = components['schemas']['FeatureKeyList'];
 export type FormEntry = components['schemas']['FormEntry'];
 export type FormEntryFeed = components['schemas']['FormEntryFeed'];
 export type FormEntryPage = components['schemas']['FormEntryPage'];
-export type List = components['schemas']['List'];
 export type MagicLinkPayload = components['schemas']['MagicLinkPayload'];
+export type MagicLinkToken = components['schemas']['MagicLinkToken'];
 export type MagicLinkTokenPayload = components['schemas']['MagicLinkTokenPayload'];
 export type Member = components['schemas']['Member'];
+export type MemberSubscription = components['schemas']['MemberSubscription'];
+export type MemberSubscriptionChange = components['schemas']['MemberSubscriptionChange'];
+export type MemberSubscriptionList = components['schemas']['MemberSubscriptionList'];
+export type OpenBackendPortalSessionPayload = components['schemas']['OpenBackendPortalSessionPayload'];
+export type OpenMePortalSessionPayload = components['schemas']['OpenMePortalSessionPayload'];
 export type Order = components['schemas']['Order'];
 export type OrderFeed = components['schemas']['OrderFeed'];
 export type OrderLineSummary = components['schemas']['OrderLineSummary'];
@@ -1213,27 +2336,67 @@ export type OrderPage = components['schemas']['OrderPage'];
 export type Page = components['schemas']['Page'];
 export type PageFeed = components['schemas']['PageFeed'];
 export type PagePage = components['schemas']['PagePage'];
+export type PortalSession = components['schemas']['PortalSession'];
 export type Problem = components['schemas']['Problem'];
 export type Product = components['schemas']['Product'];
+export type ProductFeatureValue = components['schemas']['ProductFeatureValue'];
+export type ProductFeatureValueList = components['schemas']['ProductFeatureValueList'];
 export type ProductFeed = components['schemas']['ProductFeed'];
 export type ProductPage = components['schemas']['ProductPage'];
 export type ProductPriceSummary = components['schemas']['ProductPriceSummary'];
+export type PushDevice = components['schemas']['PushDevice'];
+export type Redelivery = components['schemas']['Redelivery'];
+export type RedeliveryRefusal = components['schemas']['RedeliveryRefusal'];
+export type Referral = components['schemas']['Referral'];
+export type ReferralDiscount = components['schemas']['ReferralDiscount'];
+export type ReferralReward = components['schemas']['ReferralReward'];
+export type ReferralRewardPage = components['schemas']['ReferralRewardPage'];
+export type ReferralTerms = components['schemas']['ReferralTerms'];
+export type ResumeMeSubscriptionPayload = components['schemas']['ResumeMeSubscriptionPayload'];
+export type ReturnTarget = components['schemas']['ReturnTarget'];
+export type ReturnTargetList = components['schemas']['ReturnTargetList'];
+export type Role = components['schemas']['Role'];
+export type RoleList = components['schemas']['RoleList'];
+export type RolesHeld = components['schemas']['RolesHeld'];
+export type RolesHeldPage = components['schemas']['RolesHeldPage'];
+export type Seat = components['schemas']['Seat'];
+export type SeatPool = components['schemas']['SeatPool'];
+export type SeatPoolList = components['schemas']['SeatPoolList'];
+export type StartBackendCheckoutSessionPayload = components['schemas']['StartBackendCheckoutSessionPayload'];
+export type StartMeCheckoutSessionPayload = components['schemas']['StartMeCheckoutSessionPayload'];
 export type StoreArticlePayload = components['schemas']['StoreArticlePayload'];
 export type StoreBackendWebhookEndpointPayload = components['schemas']['StoreBackendWebhookEndpointPayload'];
+export type StoreFeatureKeyPayload = components['schemas']['StoreFeatureKeyPayload'];
 export type StoreMeAddressPayload = components['schemas']['StoreMeAddressPayload'];
 export type StoreMePushDevicePayload = components['schemas']['StoreMePushDevicePayload'];
+export type StorePurchaseIntent = components['schemas']['StorePurchaseIntent'];
+export type StorePurchaseTransaction = components['schemas']['StorePurchaseTransaction'];
+export type StoreReturnTargetPayload = components['schemas']['StoreReturnTargetPayload'];
+export type StoreRolePayload = components['schemas']['StoreRolePayload'];
+export type StoreSeatPayload = components['schemas']['StoreSeatPayload'];
+export type SubmitBackendStorePurchaseTransactionPayload = components['schemas']['SubmitBackendStorePurchaseTransactionPayload'];
+export type SubmitMeStorePurchaseTransactionPayload = components['schemas']['SubmitMeStorePurchaseTransactionPayload'];
+export type SubscriptionSource = components['schemas']['SubscriptionSource'];
 export type SyncPushPayload = components['schemas']['SyncPushPayload'];
 export type SyncPushResult = components['schemas']['SyncPushResult'];
 export type SyncPushResults = components['schemas']['SyncPushResults'];
 export type SyncTombstone = components['schemas']['SyncTombstone'];
+export type TestClock = components['schemas']['TestClock'];
 export type UnregisterMePushDevicePayload = components['schemas']['UnregisterMePushDevicePayload'];
 export type UpdateArticlePayload = components['schemas']['UpdateArticlePayload'];
 export type UpdateMeAddressPayload = components['schemas']['UpdateMeAddressPayload'];
 export type UpdateMePayload = components['schemas']['UpdateMePayload'];
+export type UpdateProductFeatureValuePayload = components['schemas']['UpdateProductFeatureValuePayload'];
 export type UserAddress = components['schemas']['UserAddress'];
 export type UserAddressFeed = components['schemas']['UserAddressFeed'];
 export type UserAddressPage = components['schemas']['UserAddressPage'];
 export type ValidationProblem = components['schemas']['ValidationProblem'];
+export type WebhookDelivery = components['schemas']['WebhookDelivery'];
+export type WebhookDeliveryPage = components['schemas']['WebhookDeliveryPage'];
+export type WebhookEndpoint = components['schemas']['WebhookEndpoint'];
+export type WebhookEndpointPage = components['schemas']['WebhookEndpointPage'];
+export type WebhookEndpointRotation = components['schemas']['WebhookEndpointRotation'];
+export type WebhookEndpointWithSecret = components['schemas']['WebhookEndpointWithSecret'];
 export type HeaderRateLimit = components['headers']['RateLimit'];
 export type HeaderRateLimitPolicy = components['headers']['RateLimit-Policy'];
 export type HeaderXRequestId = components['headers']['X-Request-Id'];
@@ -1301,7 +2464,7 @@ export interface operations {
     listAccountStates: {
         parameters: {
             query: {
-                subjects: string[];
+                "subjects[]": string[];
             };
             header?: never;
             path?: never;
@@ -1318,7 +2481,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["List"];
+                    "application/json": components["schemas"]["AccountStateList"];
                 };
             };
             /** @description Refused: `unauthenticated`, `invalid-token`. */
@@ -1341,6 +2504,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -1390,10 +2555,10 @@ export interface operations {
     listArticles: {
         parameters: {
             query?: {
-                limit?: number;
-                cursor?: string;
-                sort?: string;
-                order?: "asc" | "desc";
+                limit?: number | null;
+                cursor?: string | null;
+                sort?: "title" | "published_at" | "created_at" | "updated_at";
+                order?: "asc" | "desc" | null;
             };
             header?: never;
             path?: never;
@@ -1433,6 +2598,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -1483,7 +2650,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description A create a retry could repeat takes an `Idempotency-Key` header: a structured-field String or a bare token of 1 to 255 characters, chosen by the client per request. The same key with the same request answers the first outcome again, with `Idempotent-Replayed: true`; with a different request it is refused. A duplicate sent while the first is still running waits for it for up to 20 seconds, then is answered `409` `idempotency-key-in-use` with `Retry-After` and should be sent again, as is any request whose key could not be claimed in that time; a create whose own write waits on a lock longer than the database allows a statement is answered `503` `temporarily-unavailable` with `Retry-After` at once, without being run again. Neither spends the key. A key is honoured for 24 hours, then is a new key. */
+                /** @description A create a retry could repeat takes an `Idempotency-Key` header: a structured-field String or a bare token of 1 to 255 characters once unquoted, at most 512 on the wire (a String with every character escaped), chosen by the client per request. The same key with the same request answers the first outcome again, with `Idempotent-Replayed: true`; with a different request it is refused. A duplicate sent while the first is still running is answered `409` `idempotency-key-in-use` with `Retry-After` at once and should be sent again once the first has finished, as is a request whose key is free but could not be claimed within 20 seconds; a create whose own write waits on a lock longer than the database allows a statement is answered `503` `temporarily-unavailable` with `Retry-After` at once, without being run again. Neither spends the key. A key is honoured for 24 hours, then is a new key. */
                 "Idempotency-Key": string;
             };
             path?: never;
@@ -1546,6 +2713,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -1686,6 +2855,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -1794,6 +2965,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -1970,9 +3143,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
+                    "application/json": components["schemas"]["MagicLinkToken"];
                 };
             };
             /** @description Refused: `invalid-link`, `link-expired`. */
@@ -2073,22 +3244,52 @@ export interface operations {
             };
         };
     };
-    listDeliveries: {
+    createCheckoutSession: {
         parameters: {
-            query?: {
-                status?: "pending" | "succeeded" | "failed";
-                since?: string;
-                limit?: number;
-                cursor?: string;
+            query?: never;
+            header: {
+                /** @description A create a retry could repeat takes an `Idempotency-Key` header: a structured-field String or a bare token of 1 to 255 characters once unquoted, at most 512 on the wire (a String with every character escaped), chosen by the client per request. The same key with the same request answers the first outcome again, with `Idempotent-Replayed: true`; with a different request it is refused. A duplicate sent while the first is still running is answered `409` `idempotency-key-in-use` with `Retry-After` at once and should be sent again once the first has finished, as is a request whose key is free but could not be claimed within 20 seconds; a create whose own write waits on a lock longer than the database allows a statement is answered `503` `temporarily-unavailable` with `Retry-After` at once, without being run again. Neither spends the key. A key is honoured for 24 hours, then is a new key. */
+                "Idempotency-Key": string;
             };
-            header?: never;
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StartBackendCheckoutSessionPayload"];
+            };
+        };
         responses: {
             /** @description OK */
             200: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CheckoutSession"];
+                };
+            };
+            /** @description Created */
+            201: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CheckoutSession"];
+                };
+            };
+            /** @description Refused: `idempotency-key-required`, `idempotency-key-invalid`. */
+            400: {
                 headers: {
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
@@ -2096,7 +3297,10 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Page"];
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/idempotency-key-required" | "https://appsolutely.io/problems/idempotency-key-invalid";
+                    };
                 };
             };
             /** @description Refused: `unauthenticated`, `invalid-token`. */
@@ -2119,6 +3323,386 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope";
+                    };
+                };
+            };
+            /** @description Refused: `idempotency-key-in-use`, `purchases-unavailable`, `subscription-awaiting-payment`, `billed-elsewhere`. */
+            409: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    /** @description On `idempotency-key-in-use`: seconds to wait before sending the request again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/idempotency-key-in-use" | "https://appsolutely.io/problems/purchases-unavailable" | "https://appsolutely.io/problems/subscription-awaiting-payment" | "https://appsolutely.io/problems/billed-elsewhere";
+                        /** @description On `subscription-awaiting-payment`: the reference of the order waiting for its payment; the member pays it or cancels it from that order's page. */
+                        order?: string;
+                    };
+                };
+            };
+            /** @description Refused: `unsupported-media-type`. */
+            415: {
+                headers: {
+                    /** @description The media type a body is taken in. */
+                    Accept?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unsupported-media-type";
+                    };
+                };
+            };
+            /** @description Refused: `validation-failed`, `mode-from-credential`, `idempotency-key-reused`. */
+            422: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/validation-failed" | "https://appsolutely.io/problems/mode-from-credential" | "https://appsolutely.io/problems/idempotency-key-reused";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`, `temporarily-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable" | "https://appsolutely.io/problems/temporarily-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    getCheckoutSession: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CheckoutSession"];
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`. */
+            403: {
+                headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope";
+                    };
+                };
+            };
+            /** @description Refused: `not-found`. */
+            404: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/not-found";
+                    };
+                };
+            };
+            /** @description Refused: `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    getClient: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BackendClient"];
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`. */
+            403: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience";
+                    };
+                };
+            };
+            /** @description Refused: `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    listDeliveries: {
+        parameters: {
+            query?: {
+                status?: "pending" | "succeeded" | "failed";
+                since?: string;
+                limit?: number | null;
+                cursor?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EndpointWebhookDeliveryPage"];
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`. */
+            403: {
+                headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -2186,7 +3770,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description A create a retry could repeat takes an `Idempotency-Key` header: a structured-field String or a bare token of 1 to 255 characters, chosen by the client per request. The same key with the same request answers the first outcome again, with `Idempotent-Replayed: true`; with a different request it is refused. A duplicate sent while the first is still running waits for it for up to 20 seconds, then is answered `409` `idempotency-key-in-use` with `Retry-After` and should be sent again, as is any request whose key could not be claimed in that time; a create whose own write waits on a lock longer than the database allows a statement is answered `503` `temporarily-unavailable` with `Retry-After` at once, without being run again. Neither spends the key. A key is honoured for 24 hours, then is a new key. */
+                /** @description A create a retry could repeat takes an `Idempotency-Key` header: a structured-field String or a bare token of 1 to 255 characters once unquoted, at most 512 on the wire (a String with every character escaped), chosen by the client per request. The same key with the same request answers the first outcome again, with `Idempotent-Replayed: true`; with a different request it is refused. A duplicate sent while the first is still running is answered `409` `idempotency-key-in-use` with `Retry-After` at once and should be sent again once the first has finished, as is a request whose key is free but could not be claimed within 20 seconds; a create whose own write waits on a lock longer than the database allows a statement is answered `503` `temporarily-unavailable` with `Retry-After` at once, without being run again. Neither spends the key. A key is honoured for 24 hours, then is a new key. */
                 "Idempotency-Key": string;
             };
             path: {
@@ -2207,9 +3791,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
+                    "application/json": components["schemas"]["Redelivery"];
                 };
             };
             /** @description Refused: `idempotency-key-required`, `idempotency-key-invalid`. */
@@ -2247,6 +3829,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -2362,8 +3946,8 @@ export interface operations {
     listBackendEntitlements: {
         parameters: {
             query?: {
-                limit?: number;
-                cursor?: string;
+                limit?: number | null;
+                cursor?: string | null;
             };
             header?: never;
             path?: never;
@@ -2380,7 +3964,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Page"];
+                    "application/json": components["schemas"]["AccountStatePage"];
                 };
             };
             /** @description Refused: `unauthenticated`, `invalid-token`. */
@@ -2403,6 +3987,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -2486,9 +4072,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
+                    "application/json": components["schemas"]["AccountState"];
                 };
             };
             /** @description Refused: `unauthenticated`, `invalid-token`. */
@@ -2511,6 +4095,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -2589,13 +4175,413 @@ export interface operations {
             };
         };
     };
+    listFeatureKeys: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FeatureKeyList"];
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`. */
+            403: {
+                headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope";
+                    };
+                };
+            };
+            /** @description Refused: `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    createFeatureKey: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StoreFeatureKeyPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FeatureKey"];
+                };
+            };
+            /** @description Created */
+            201: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FeatureKey"];
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`, `forbidden`. */
+            403: {
+                headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope" | "https://appsolutely.io/problems/forbidden";
+                    };
+                };
+            };
+            /** @description Refused: `feature-key-declared`, `feature-key-kind-fixed`, `feature-key-retired`. */
+            409: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/feature-key-declared" | "https://appsolutely.io/problems/feature-key-kind-fixed" | "https://appsolutely.io/problems/feature-key-retired";
+                    };
+                };
+            };
+            /** @description Refused: `unsupported-media-type`. */
+            415: {
+                headers: {
+                    /** @description The media type a body is taken in. */
+                    Accept?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unsupported-media-type";
+                    };
+                };
+            };
+            /** @description Refused: `validation-failed`, `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/validation-failed" | "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    retireFeatureKey: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                key: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FeatureKey"];
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`, `forbidden`. */
+            403: {
+                headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope" | "https://appsolutely.io/problems/forbidden";
+                    };
+                };
+            };
+            /** @description Refused: `not-found`. */
+            404: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/not-found";
+                    };
+                };
+            };
+            /** @description Refused: `unsupported-media-type`. */
+            415: {
+                headers: {
+                    /** @description The media type a body is taken in. */
+                    Accept?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unsupported-media-type";
+                    };
+                };
+            };
+            /** @description Refused: `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
     listFormEntries: {
         parameters: {
             query?: {
-                limit?: number;
-                cursor?: string;
-                sort?: string;
-                order?: "asc" | "desc";
+                limit?: number | null;
+                cursor?: string | null;
+                sort?: "submitted_at" | "created_at" | "updated_at";
+                order?: "asc" | "desc" | null;
             };
             header?: never;
             path?: never;
@@ -2635,6 +4621,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -2724,6 +4712,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -2826,6 +4816,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`, `account-suspended`, `account-deletion-pending`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -2934,6 +4926,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`, `account-suspended`, `account-deletion-pending`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -3017,10 +5011,10 @@ export interface operations {
     listMeAddresses: {
         parameters: {
             query?: {
-                limit?: number;
-                cursor?: string;
-                sort?: string;
-                order?: "asc" | "desc";
+                limit?: number | null;
+                cursor?: string | null;
+                sort?: "created_at" | "updated_at";
+                order?: "asc" | "desc" | null;
             };
             header?: never;
             path?: never;
@@ -3060,6 +5054,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`, `account-suspended`, `account-deletion-pending`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -3127,7 +5123,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description A create a retry could repeat takes an `Idempotency-Key` header: a structured-field String or a bare token of 1 to 255 characters, chosen by the client per request. The same key with the same request answers the first outcome again, with `Idempotent-Replayed: true`; with a different request it is refused. A duplicate sent while the first is still running waits for it for up to 20 seconds, then is answered `409` `idempotency-key-in-use` with `Retry-After` and should be sent again, as is any request whose key could not be claimed in that time; a create whose own write waits on a lock longer than the database allows a statement is answered `503` `temporarily-unavailable` with `Retry-After` at once, without being run again. Neither spends the key. A key is honoured for 24 hours, then is a new key. */
+                /** @description A create a retry could repeat takes an `Idempotency-Key` header: a structured-field String or a bare token of 1 to 255 characters once unquoted, at most 512 on the wire (a String with every character escaped), chosen by the client per request. The same key with the same request answers the first outcome again, with `Idempotent-Replayed: true`; with a different request it is refused. A duplicate sent while the first is still running is answered `409` `idempotency-key-in-use` with `Retry-After` at once and should be sent again once the first has finished, as is a request whose key is free but could not be claimed within 20 seconds; a create whose own write waits on a lock longer than the database allows a statement is answered `503` `temporarily-unavailable` with `Retry-After` at once, without being run again. Neither spends the key. A key is honoured for 24 hours, then is a new key. */
                 "Idempotency-Key": string;
             };
             path?: never;
@@ -3188,6 +5184,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`, `account-suspended`, `account-deletion-pending`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -3326,6 +5324,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`, `account-suspended`, `account-deletion-pending`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -3451,6 +5451,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`, `account-suspended`, `account-deletion-pending`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -3550,10 +5552,10 @@ export interface operations {
         parameters: {
             query: {
                 store: "app_store" | "google_play" | "direct";
-                storefront?: string;
-                store_token?: string;
-                platform?: "ios" | "ipados" | "macos" | "tvos" | "visionos" | "watchos";
-                os_version?: string;
+                storefront?: string | null;
+                store_token?: string | null;
+                platform?: "ios" | "ipados" | "macos" | "tvos" | "visionos" | "watchos" | null;
+                os_version?: string | null;
             };
             header?: never;
             path?: never;
@@ -3593,6 +5595,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`, `account-suspended`, `account-deletion-pending`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -3656,17 +5660,52 @@ export interface operations {
             };
         };
     };
-    listMeEntitlements: {
+    createMeCheckoutSession: {
         parameters: {
             query?: never;
-            header?: never;
+            header: {
+                /** @description A create a retry could repeat takes an `Idempotency-Key` header: a structured-field String or a bare token of 1 to 255 characters once unquoted, at most 512 on the wire (a String with every character escaped), chosen by the client per request. The same key with the same request answers the first outcome again, with `Idempotent-Replayed: true`; with a different request it is refused. A duplicate sent while the first is still running is answered `409` `idempotency-key-in-use` with `Retry-After` at once and should be sent again once the first has finished, as is a request whose key is free but could not be claimed within 20 seconds; a create whose own write waits on a lock longer than the database allows a statement is answered `503` `temporarily-unavailable` with `Retry-After` at once, without being run again. Neither spends the key. A key is honoured for 24 hours, then is a new key. */
+                "Idempotency-Key": string;
+            };
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StartMeCheckoutSessionPayload"];
+            };
+        };
         responses: {
             /** @description OK */
             200: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CheckoutSession"];
+                };
+            };
+            /** @description Created */
+            201: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CheckoutSession"];
+                };
+            };
+            /** @description Refused: `idempotency-key-required`, `idempotency-key-invalid`. */
+            400: {
                 headers: {
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
@@ -3674,7 +5713,10 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["List"];
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/idempotency-key-required" | "https://appsolutely.io/problems/idempotency-key-invalid";
+                    };
                 };
             };
             /** @description Refused: `unauthenticated`, `invalid-token`. */
@@ -3697,6 +5739,277 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`, `account-suspended`, `account-deletion-pending`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope" | "https://appsolutely.io/problems/account-suspended" | "https://appsolutely.io/problems/account-deletion-pending";
+                    };
+                };
+            };
+            /** @description Refused: `idempotency-key-in-use`, `purchases-unavailable`, `subscription-awaiting-payment`, `billed-elsewhere`. */
+            409: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    /** @description On `idempotency-key-in-use`: seconds to wait before sending the request again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/idempotency-key-in-use" | "https://appsolutely.io/problems/purchases-unavailable" | "https://appsolutely.io/problems/subscription-awaiting-payment" | "https://appsolutely.io/problems/billed-elsewhere";
+                        /** @description On `subscription-awaiting-payment`: the reference of the order waiting for its payment; the member pays it or cancels it from that order's page. */
+                        order?: string;
+                    };
+                };
+            };
+            /** @description Refused: `unsupported-media-type`. */
+            415: {
+                headers: {
+                    /** @description The media type a body is taken in. */
+                    Accept?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unsupported-media-type";
+                    };
+                };
+            };
+            /** @description Refused: `validation-failed`, `mode-from-credential`, `idempotency-key-reused`. */
+            422: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/validation-failed" | "https://appsolutely.io/problems/mode-from-credential" | "https://appsolutely.io/problems/idempotency-key-reused";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`, `temporarily-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable" | "https://appsolutely.io/problems/temporarily-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    getMeCheckoutSession: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CheckoutSession"];
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`, `account-suspended`, `account-deletion-pending`. */
+            403: {
+                headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope" | "https://appsolutely.io/problems/account-suspended" | "https://appsolutely.io/problems/account-deletion-pending";
+                    };
+                };
+            };
+            /** @description Refused: `not-found`. */
+            404: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/not-found";
+                    };
+                };
+            };
+            /** @description Refused: `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    listMeEntitlements: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccountEntitlementList"];
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`, `account-suspended`, `account-deletion-pending`. */
+            403: {
+                headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -3763,10 +6076,10 @@ export interface operations {
     listMeOrders: {
         parameters: {
             query?: {
-                limit?: number;
-                cursor?: string;
-                sort?: string;
-                order?: "asc" | "desc";
+                limit?: number | null;
+                cursor?: string | null;
+                sort?: "reference" | "total_amount" | "created_at" | "updated_at";
+                order?: "asc" | "desc" | null;
             };
             header?: never;
             path?: never;
@@ -3806,6 +6119,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`, `account-suspended`, `account-deletion-pending`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -3912,6 +6227,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`, `account-suspended`, `account-deletion-pending`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -3990,21 +6307,52 @@ export interface operations {
             };
         };
     };
-    createMePushDevice: {
+    createMePortalSession: {
         parameters: {
             query?: never;
-            header?: never;
+            header: {
+                /** @description A create a retry could repeat takes an `Idempotency-Key` header: a structured-field String or a bare token of 1 to 255 characters once unquoted, at most 512 on the wire (a String with every character escaped), chosen by the client per request. The same key with the same request answers the first outcome again, with `Idempotent-Replayed: true`; with a different request it is refused. A duplicate sent while the first is still running is answered `409` `idempotency-key-in-use` with `Retry-After` at once and should be sent again once the first has finished, as is a request whose key is free but could not be claimed within 20 seconds; a create whose own write waits on a lock longer than the database allows a statement is answered `503` `temporarily-unavailable` with `Retry-After` at once, without being run again. Neither spends the key. A key is honoured for 24 hours, then is a new key. */
+                "Idempotency-Key": string;
+            };
             path?: never;
             cookie?: never;
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["StoreMePushDevicePayload"];
+                "application/json": components["schemas"]["OpenMePortalSessionPayload"];
             };
         };
         responses: {
             /** @description OK */
             200: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PortalSession"];
+                };
+            };
+            /** @description Created */
+            201: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PortalSession"];
+                };
+            };
+            /** @description Refused: `idempotency-key-required`, `idempotency-key-invalid`. */
+            400: {
                 headers: {
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
@@ -4012,8 +6360,9 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        [key: string]: unknown;
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/idempotency-key-required" | "https://appsolutely.io/problems/idempotency-key-invalid";
                     };
                 };
             };
@@ -4037,6 +6386,156 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`, `account-suspended`, `account-deletion-pending`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope" | "https://appsolutely.io/problems/account-suspended" | "https://appsolutely.io/problems/account-deletion-pending";
+                    };
+                };
+            };
+            /** @description Refused: `idempotency-key-in-use`, `billed-elsewhere`. */
+            409: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    /** @description On `idempotency-key-in-use`: seconds to wait before sending the request again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/idempotency-key-in-use" | "https://appsolutely.io/problems/billed-elsewhere";
+                    };
+                };
+            };
+            /** @description Refused: `unsupported-media-type`. */
+            415: {
+                headers: {
+                    /** @description The media type a body is taken in. */
+                    Accept?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unsupported-media-type";
+                    };
+                };
+            };
+            /** @description Refused: `validation-failed`, `mode-from-credential`, `idempotency-key-reused`. */
+            422: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/validation-failed" | "https://appsolutely.io/problems/mode-from-credential" | "https://appsolutely.io/problems/idempotency-key-reused";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`, `temporarily-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable" | "https://appsolutely.io/problems/temporarily-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    createMePushDevice: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StoreMePushDevicePayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PushDevice"];
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`, `account-suspended`, `account-deletion-pending`. */
+            403: {
+                headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -4160,6 +6659,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`, `account-suspended`, `account-deletion-pending`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -4258,9 +6759,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
+                    "application/json": components["schemas"]["Referral"];
                 };
             };
             /** @description Refused: `unauthenticated`, `invalid-token`. */
@@ -4283,6 +6782,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`, `account-suspended`, `account-deletion-pending`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -4364,8 +6865,8 @@ export interface operations {
     rewardsMeReferral: {
         parameters: {
             query?: {
-                limit?: number;
-                cursor?: string;
+                limit?: number | null;
+                cursor?: string | null;
             };
             header?: never;
             path?: never;
@@ -4382,7 +6883,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Page"];
+                    "application/json": components["schemas"]["ReferralRewardPage"];
                 };
             };
             /** @description Refused: `unauthenticated`, `invalid-token`. */
@@ -4405,6 +6906,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`, `account-suspended`, `account-deletion-pending`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -4483,6 +6986,978 @@ export interface operations {
             };
         };
     };
+    intentsMeStorePurchase: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AskMeStorePurchaseIntentPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StorePurchaseIntent"];
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`, `account-suspended`, `account-deletion-pending`. */
+            403: {
+                headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope" | "https://appsolutely.io/problems/account-suspended" | "https://appsolutely.io/problems/account-deletion-pending";
+                    };
+                };
+            };
+            /** @description Refused: `billed-elsewhere`, `subscription-recovering`, `subscription-awaiting-payment`. */
+            409: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/billed-elsewhere" | "https://appsolutely.io/problems/subscription-recovering" | "https://appsolutely.io/problems/subscription-awaiting-payment";
+                        /** @description On `subscription-awaiting-payment`: the reference of the order waiting for its payment; the member pays it or cancels it from that order's page. */
+                        order?: string;
+                    };
+                };
+            };
+            /** @description Refused: `unsupported-media-type`. */
+            415: {
+                headers: {
+                    /** @description The media type a body is taken in. */
+                    Accept?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unsupported-media-type";
+                    };
+                };
+            };
+            /** @description Refused: `validation-failed`, `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/validation-failed" | "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    transactionsMeStorePurchase: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubmitMeStorePurchaseTransactionPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StorePurchaseTransaction"];
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`, `account-suspended`, `account-deletion-pending`. */
+            403: {
+                headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope" | "https://appsolutely.io/problems/account-suspended" | "https://appsolutely.io/problems/account-deletion-pending";
+                    };
+                };
+            };
+            /** @description Refused: `belongs-to-another-account`. */
+            409: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/belongs-to-another-account";
+                    };
+                };
+            };
+            /** @description Refused: `unsupported-media-type`. */
+            415: {
+                headers: {
+                    /** @description The media type a body is taken in. */
+                    Accept?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unsupported-media-type";
+                    };
+                };
+            };
+            /** @description Refused: `validation-failed`, `mode-from-credential`, `store-purchase-rejected`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/validation-failed" | "https://appsolutely.io/problems/mode-from-credential" | "https://appsolutely.io/problems/store-purchase-rejected";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`, `store-purchase-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable" | "https://appsolutely.io/problems/store-purchase-unavailable";
+                        /**
+                         * @description On `store-purchase-unavailable`: why the site cannot record the purchase yet; submit it again once the cause is gone.
+                         * @enum {string}
+                         */
+                        reason?: "app_unregistered" | "product_unmapped" | "store_unreadable";
+                    };
+                };
+            };
+        };
+    };
+    listMeSubscriptions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MemberSubscriptionList"];
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`, `account-suspended`, `account-deletion-pending`. */
+            403: {
+                headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope" | "https://appsolutely.io/problems/account-suspended" | "https://appsolutely.io/problems/account-deletion-pending";
+                    };
+                };
+            };
+            /** @description Refused: `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    cancelMeSubscription: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description A create a retry could repeat takes an `Idempotency-Key` header: a structured-field String or a bare token of 1 to 255 characters once unquoted, at most 512 on the wire (a String with every character escaped), chosen by the client per request. The same key with the same request answers the first outcome again, with `Idempotent-Replayed: true`; with a different request it is refused. A duplicate sent while the first is still running is answered `409` `idempotency-key-in-use` with `Retry-After` at once and should be sent again once the first has finished, as is a request whose key is free but could not be claimed within 20 seconds; a create whose own write waits on a lock longer than the database allows a statement is answered `503` `temporarily-unavailable` with `Retry-After` at once, without being run again. Neither spends the key. A key is honoured for 24 hours, then is a new key. */
+                "Idempotency-Key": string;
+            };
+            path: {
+                subscription: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MemberSubscription"];
+                };
+            };
+            /** @description Refused: `idempotency-key-required`, `idempotency-key-invalid`. */
+            400: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/idempotency-key-required" | "https://appsolutely.io/problems/idempotency-key-invalid";
+                    };
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`, `account-suspended`, `account-deletion-pending`, `forbidden`. */
+            403: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope" | "https://appsolutely.io/problems/account-suspended" | "https://appsolutely.io/problems/account-deletion-pending" | "https://appsolutely.io/problems/forbidden";
+                    };
+                };
+            };
+            /** @description Refused: `not-found`. */
+            404: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/not-found";
+                    };
+                };
+            };
+            /** @description Refused: `idempotency-key-in-use`, `billed-elsewhere`, `subscription-change-refused`. */
+            409: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    /** @description On `idempotency-key-in-use`: seconds to wait before sending the request again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/idempotency-key-in-use" | "https://appsolutely.io/problems/billed-elsewhere" | "https://appsolutely.io/problems/subscription-change-refused";
+                    };
+                };
+            };
+            /** @description Refused: `unsupported-media-type`. */
+            415: {
+                headers: {
+                    /** @description The media type a body is taken in. */
+                    Accept?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unsupported-media-type";
+                    };
+                };
+            };
+            /** @description Refused: `mode-from-credential`, `idempotency-key-reused`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/mode-from-credential" | "https://appsolutely.io/problems/idempotency-key-reused";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`, `temporarily-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable" | "https://appsolutely.io/problems/temporarily-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    changeMeSubscription: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description A create a retry could repeat takes an `Idempotency-Key` header: a structured-field String or a bare token of 1 to 255 characters once unquoted, at most 512 on the wire (a String with every character escaped), chosen by the client per request. The same key with the same request answers the first outcome again, with `Idempotent-Replayed: true`; with a different request it is refused. A duplicate sent while the first is still running is answered `409` `idempotency-key-in-use` with `Retry-After` at once and should be sent again once the first has finished, as is a request whose key is free but could not be claimed within 20 seconds; a create whose own write waits on a lock longer than the database allows a statement is answered `503` `temporarily-unavailable` with `Retry-After` at once, without being run again. Neither spends the key. A key is honoured for 24 hours, then is a new key. */
+                "Idempotency-Key": string;
+            };
+            path: {
+                subscription: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChangeMeSubscriptionPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MemberSubscriptionChange"];
+                };
+            };
+            /** @description Accepted */
+            202: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MemberSubscriptionChange"];
+                };
+            };
+            /** @description Refused: `idempotency-key-required`, `idempotency-key-invalid`. */
+            400: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/idempotency-key-required" | "https://appsolutely.io/problems/idempotency-key-invalid";
+                    };
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`, `account-suspended`, `account-deletion-pending`, `forbidden`. */
+            403: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope" | "https://appsolutely.io/problems/account-suspended" | "https://appsolutely.io/problems/account-deletion-pending" | "https://appsolutely.io/problems/forbidden";
+                    };
+                };
+            };
+            /** @description Refused: `not-found`. */
+            404: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/not-found";
+                    };
+                };
+            };
+            /** @description Refused: `idempotency-key-in-use`, `billed-elsewhere`, `subscription-change-refused`. */
+            409: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    /** @description On `idempotency-key-in-use`: seconds to wait before sending the request again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/idempotency-key-in-use" | "https://appsolutely.io/problems/billed-elsewhere" | "https://appsolutely.io/problems/subscription-change-refused";
+                    };
+                };
+            };
+            /** @description Refused: `unsupported-media-type`. */
+            415: {
+                headers: {
+                    /** @description The media type a body is taken in. */
+                    Accept?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unsupported-media-type";
+                    };
+                };
+            };
+            /** @description Refused: `validation-failed`, `mode-from-credential`, `idempotency-key-reused`. */
+            422: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/validation-failed" | "https://appsolutely.io/problems/mode-from-credential" | "https://appsolutely.io/problems/idempotency-key-reused";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`, `temporarily-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable" | "https://appsolutely.io/problems/temporarily-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    resumeMeSubscription: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description A create a retry could repeat takes an `Idempotency-Key` header: a structured-field String or a bare token of 1 to 255 characters once unquoted, at most 512 on the wire (a String with every character escaped), chosen by the client per request. The same key with the same request answers the first outcome again, with `Idempotent-Replayed: true`; with a different request it is refused. A duplicate sent while the first is still running is answered `409` `idempotency-key-in-use` with `Retry-After` at once and should be sent again once the first has finished, as is a request whose key is free but could not be claimed within 20 seconds; a create whose own write waits on a lock longer than the database allows a statement is answered `503` `temporarily-unavailable` with `Retry-After` at once, without being run again. Neither spends the key. A key is honoured for 24 hours, then is a new key. */
+                "Idempotency-Key": string;
+            };
+            path: {
+                subscription: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResumeMeSubscriptionPayload"];
+            };
+        };
+        responses: {
+            /** @description Accepted */
+            202: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MemberSubscriptionChange"];
+                };
+            };
+            /** @description Refused: `idempotency-key-required`, `idempotency-key-invalid`. */
+            400: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/idempotency-key-required" | "https://appsolutely.io/problems/idempotency-key-invalid";
+                    };
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`, `account-suspended`, `account-deletion-pending`, `forbidden`. */
+            403: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope" | "https://appsolutely.io/problems/account-suspended" | "https://appsolutely.io/problems/account-deletion-pending" | "https://appsolutely.io/problems/forbidden";
+                    };
+                };
+            };
+            /** @description Refused: `not-found`. */
+            404: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/not-found";
+                    };
+                };
+            };
+            /** @description Refused: `idempotency-key-in-use`, `billed-elsewhere`. */
+            409: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    /** @description On `idempotency-key-in-use`: seconds to wait before sending the request again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/idempotency-key-in-use" | "https://appsolutely.io/problems/billed-elsewhere";
+                    };
+                };
+            };
+            /** @description Refused: `unsupported-media-type`. */
+            415: {
+                headers: {
+                    /** @description The media type a body is taken in. */
+                    Accept?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unsupported-media-type";
+                    };
+                };
+            };
+            /** @description Refused: `validation-failed`, `mode-from-credential`, `idempotency-key-reused`. */
+            422: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/validation-failed" | "https://appsolutely.io/problems/mode-from-credential" | "https://appsolutely.io/problems/idempotency-key-reused";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`, `temporarily-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable" | "https://appsolutely.io/problems/temporarily-unavailable";
+                    };
+                };
+            };
+        };
+    };
     getOpenApiDocument: {
         parameters: {
             query?: never;
@@ -4508,10 +7983,10 @@ export interface operations {
     listOrders: {
         parameters: {
             query?: {
-                limit?: number;
-                cursor?: string;
-                sort?: string;
-                order?: "asc" | "desc";
+                limit?: number | null;
+                cursor?: string | null;
+                sort?: "reference" | "total_amount" | "created_at" | "updated_at";
+                order?: "asc" | "desc" | null;
             };
             header?: never;
             path?: never;
@@ -4551,6 +8026,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -4640,6 +8117,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -4704,10 +8183,10 @@ export interface operations {
     listPages: {
         parameters: {
             query?: {
-                limit?: number;
-                cursor?: string;
-                sort?: string;
-                order?: "asc" | "desc";
+                limit?: number | null;
+                cursor?: string | null;
+                sort?: "published_at" | "created_at" | "updated_at";
+                order?: "asc" | "desc" | null;
             };
             header?: never;
             path?: never;
@@ -4747,6 +8226,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -4836,6 +8317,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -4897,13 +8380,195 @@ export interface operations {
             };
         };
     };
+    createPortalSession: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description A create a retry could repeat takes an `Idempotency-Key` header: a structured-field String or a bare token of 1 to 255 characters once unquoted, at most 512 on the wire (a String with every character escaped), chosen by the client per request. The same key with the same request answers the first outcome again, with `Idempotent-Replayed: true`; with a different request it is refused. A duplicate sent while the first is still running is answered `409` `idempotency-key-in-use` with `Retry-After` at once and should be sent again once the first has finished, as is a request whose key is free but could not be claimed within 20 seconds; a create whose own write waits on a lock longer than the database allows a statement is answered `503` `temporarily-unavailable` with `Retry-After` at once, without being run again. Neither spends the key. A key is honoured for 24 hours, then is a new key. */
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OpenBackendPortalSessionPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PortalSession"];
+                };
+            };
+            /** @description Created */
+            201: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PortalSession"];
+                };
+            };
+            /** @description Refused: `idempotency-key-required`, `idempotency-key-invalid`. */
+            400: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/idempotency-key-required" | "https://appsolutely.io/problems/idempotency-key-invalid";
+                    };
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`. */
+            403: {
+                headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope";
+                    };
+                };
+            };
+            /** @description Refused: `idempotency-key-in-use`, `billed-elsewhere`. */
+            409: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    /** @description On `idempotency-key-in-use`: seconds to wait before sending the request again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/idempotency-key-in-use" | "https://appsolutely.io/problems/billed-elsewhere";
+                    };
+                };
+            };
+            /** @description Refused: `unsupported-media-type`. */
+            415: {
+                headers: {
+                    /** @description The media type a body is taken in. */
+                    Accept?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unsupported-media-type";
+                    };
+                };
+            };
+            /** @description Refused: `validation-failed`, `mode-from-credential`, `idempotency-key-reused`. */
+            422: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/validation-failed" | "https://appsolutely.io/problems/mode-from-credential" | "https://appsolutely.io/problems/idempotency-key-reused";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`, `temporarily-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable" | "https://appsolutely.io/problems/temporarily-unavailable";
+                    };
+                };
+            };
+        };
+    };
     listProducts: {
         parameters: {
             query?: {
-                limit?: number;
-                cursor?: string;
-                sort?: string;
-                order?: "asc" | "desc";
+                limit?: number | null;
+                cursor?: string | null;
+                sort?: "title" | "slug" | "published_at" | "created_at" | "updated_at";
+                order?: "asc" | "desc" | null;
             };
             header?: never;
             path?: never;
@@ -4943,6 +8608,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -5032,6 +8699,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -5093,10 +8762,2756 @@ export interface operations {
             };
         };
     };
+    listProductFeatureValues: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                product: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProductFeatureValueList"];
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`. */
+            403: {
+                headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope";
+                    };
+                };
+            };
+            /** @description Refused: `not-found`. */
+            404: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/not-found";
+                    };
+                };
+            };
+            /** @description Refused: `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    updateProductFeatureValue: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                product: string;
+                key: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateProductFeatureValuePayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProductFeatureValue"];
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`, `forbidden`. */
+            403: {
+                headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope" | "https://appsolutely.io/problems/forbidden";
+                    };
+                };
+            };
+            /** @description Refused: `not-found`. */
+            404: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/not-found";
+                    };
+                };
+            };
+            /** @description Refused: `feature-key-retired`. */
+            409: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/feature-key-retired";
+                    };
+                };
+            };
+            /** @description Refused: `unsupported-media-type`. */
+            415: {
+                headers: {
+                    /** @description The media type a body is taken in. */
+                    Accept?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unsupported-media-type";
+                    };
+                };
+            };
+            /** @description Refused: `validation-failed`, `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/validation-failed" | "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    deleteProductFeatureValue: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                product: string;
+                key: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`, `forbidden`. */
+            403: {
+                headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope" | "https://appsolutely.io/problems/forbidden";
+                    };
+                };
+            };
+            /** @description Refused: `not-found`. */
+            404: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/not-found";
+                    };
+                };
+            };
+            /** @description Refused: `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    listReturnTargets: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReturnTargetList"];
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`. */
+            403: {
+                headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope";
+                    };
+                };
+            };
+            /** @description Refused: `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    createReturnTarget: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StoreReturnTargetPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReturnTarget"];
+                };
+            };
+            /** @description Created */
+            201: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReturnTarget"];
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`. */
+            403: {
+                headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope";
+                    };
+                };
+            };
+            /** @description Refused: `unsupported-media-type`. */
+            415: {
+                headers: {
+                    /** @description The media type a body is taken in. */
+                    Accept?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unsupported-media-type";
+                    };
+                };
+            };
+            /** @description Refused: `validation-failed`, `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/validation-failed" | "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`, `temporarily-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable" | "https://appsolutely.io/problems/temporarily-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    deleteReturnTarget: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                target: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`. */
+            403: {
+                headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope";
+                    };
+                };
+            };
+            /** @description Refused: `not-found`. */
+            404: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/not-found";
+                    };
+                };
+            };
+            /** @description Refused: `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    listRoleAssignments: {
+        parameters: {
+            query?: {
+                role?: string | null;
+                limit?: number | null;
+                cursor?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RolesHeldPage"];
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`. */
+            403: {
+                headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope";
+                    };
+                };
+            };
+            /** @description Refused: `validation-failed`, `invalid-cursor`, `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/validation-failed" | "https://appsolutely.io/problems/invalid-cursor" | "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    getRoleAssignment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sub: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RolesHeld"];
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`. */
+            403: {
+                headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope";
+                    };
+                };
+            };
+            /** @description Refused: `not-found`. */
+            404: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/not-found";
+                    };
+                };
+            };
+            /** @description Refused: `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    assignRoleAssignment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sub: string;
+                key: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RolesHeld"];
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`, `forbidden`. */
+            403: {
+                headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope" | "https://appsolutely.io/problems/forbidden";
+                    };
+                };
+            };
+            /** @description Refused: `not-found`. */
+            404: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/not-found";
+                    };
+                };
+            };
+            /** @description Refused: `role-retired`. */
+            409: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/role-retired";
+                    };
+                };
+            };
+            /** @description Refused: `unsupported-media-type`. */
+            415: {
+                headers: {
+                    /** @description The media type a body is taken in. */
+                    Accept?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unsupported-media-type";
+                    };
+                };
+            };
+            /** @description Refused: `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    revokeRoleAssignment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sub: string;
+                key: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`, `forbidden`. */
+            403: {
+                headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope" | "https://appsolutely.io/problems/forbidden";
+                    };
+                };
+            };
+            /** @description Refused: `not-found`. */
+            404: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/not-found";
+                    };
+                };
+            };
+            /** @description Refused: `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    listRoles: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoleList"];
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`. */
+            403: {
+                headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope";
+                    };
+                };
+            };
+            /** @description Refused: `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    createRole: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StoreRolePayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Role"];
+                };
+            };
+            /** @description Created */
+            201: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Role"];
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`, `forbidden`. */
+            403: {
+                headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope" | "https://appsolutely.io/problems/forbidden";
+                    };
+                };
+            };
+            /** @description Refused: `role-limit-reached`, `role-retired`. */
+            409: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/role-limit-reached" | "https://appsolutely.io/problems/role-retired";
+                    };
+                };
+            };
+            /** @description Refused: `unsupported-media-type`. */
+            415: {
+                headers: {
+                    /** @description The media type a body is taken in. */
+                    Accept?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unsupported-media-type";
+                    };
+                };
+            };
+            /** @description Refused: `validation-failed`, `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/validation-failed" | "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    retireRole: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                key: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Role"];
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`, `forbidden`. */
+            403: {
+                headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope" | "https://appsolutely.io/problems/forbidden";
+                    };
+                };
+            };
+            /** @description Refused: `not-found`. */
+            404: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/not-found";
+                    };
+                };
+            };
+            /** @description Refused: `unsupported-media-type`. */
+            415: {
+                headers: {
+                    /** @description The media type a body is taken in. */
+                    Accept?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unsupported-media-type";
+                    };
+                };
+            };
+            /** @description Refused: `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    listSeatPools: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                payer: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SeatPoolList"];
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`. */
+            403: {
+                headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope";
+                    };
+                };
+            };
+            /** @description Refused: `not-found`. */
+            404: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/not-found";
+                    };
+                };
+            };
+            /** @description Refused: `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    createSeat: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StoreSeatPayload"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Seat"];
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`, `forbidden`. */
+            403: {
+                headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope" | "https://appsolutely.io/problems/forbidden";
+                    };
+                };
+            };
+            /** @description Refused: `not-found`. */
+            404: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/not-found";
+                    };
+                };
+            };
+            /** @description Refused: `seat-payer-changed`, `seat-account-unavailable`, `seat-pool-inactive`, `seat-pool-continues`, `already-seated`, `no-seat-available`. */
+            409: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/seat-payer-changed" | "https://appsolutely.io/problems/seat-account-unavailable" | "https://appsolutely.io/problems/seat-pool-inactive" | "https://appsolutely.io/problems/seat-pool-continues" | "https://appsolutely.io/problems/already-seated" | "https://appsolutely.io/problems/no-seat-available";
+                    };
+                };
+            };
+            /** @description Refused: `unsupported-media-type`. */
+            415: {
+                headers: {
+                    /** @description The media type a body is taken in. */
+                    Accept?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unsupported-media-type";
+                    };
+                };
+            };
+            /** @description Refused: `validation-failed`, `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/validation-failed" | "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    deleteSeat: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sub: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`, `forbidden`. */
+            403: {
+                headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope" | "https://appsolutely.io/problems/forbidden";
+                    };
+                };
+            };
+            /** @description Refused: `not-found`. */
+            404: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/not-found";
+                    };
+                };
+            };
+            /** @description Refused: `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    intentsStorePurchase: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AskBackendStorePurchaseIntentPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StorePurchaseIntent"];
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`. */
+            403: {
+                headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope";
+                    };
+                };
+            };
+            /** @description Refused: `billed-elsewhere`, `subscription-recovering`, `subscription-awaiting-payment`. */
+            409: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/billed-elsewhere" | "https://appsolutely.io/problems/subscription-recovering" | "https://appsolutely.io/problems/subscription-awaiting-payment";
+                        /** @description On `subscription-awaiting-payment`: the reference of the order waiting for its payment; the member pays it or cancels it from that order's page. */
+                        order?: string;
+                    };
+                };
+            };
+            /** @description Refused: `unsupported-media-type`. */
+            415: {
+                headers: {
+                    /** @description The media type a body is taken in. */
+                    Accept?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unsupported-media-type";
+                    };
+                };
+            };
+            /** @description Refused: `validation-failed`, `mode-from-credential`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/validation-failed" | "https://appsolutely.io/problems/mode-from-credential";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    transactionsStorePurchase: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubmitBackendStorePurchaseTransactionPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StorePurchaseTransaction"];
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`. */
+            403: {
+                headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope";
+                    };
+                };
+            };
+            /** @description Refused: `belongs-to-another-account`. */
+            409: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/belongs-to-another-account";
+                    };
+                };
+            };
+            /** @description Refused: `unsupported-media-type`. */
+            415: {
+                headers: {
+                    /** @description The media type a body is taken in. */
+                    Accept?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unsupported-media-type";
+                    };
+                };
+            };
+            /** @description Refused: `validation-failed`, `mode-from-credential`, `store-purchase-rejected`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/validation-failed" | "https://appsolutely.io/problems/mode-from-credential" | "https://appsolutely.io/problems/store-purchase-rejected";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`, `store-purchase-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable" | "https://appsolutely.io/problems/store-purchase-unavailable";
+                        /**
+                         * @description On `store-purchase-unavailable`: why the site cannot record the purchase yet; submit it again once the cause is gone.
+                         * @enum {string}
+                         */
+                        reason?: "app_unregistered" | "product_unmapped" | "store_unreadable";
+                    };
+                };
+            };
+        };
+    };
+    attachTestClock: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description A create a retry could repeat takes an `Idempotency-Key` header: a structured-field String or a bare token of 1 to 255 characters once unquoted, at most 512 on the wire (a String with every character escaped), chosen by the client per request. The same key with the same request answers the first outcome again, with `Idempotent-Replayed: true`; with a different request it is refused. A duplicate sent while the first is still running is answered `409` `idempotency-key-in-use` with `Retry-After` at once and should be sent again once the first has finished, as is a request whose key is free but could not be claimed within 20 seconds; a create whose own write waits on a lock longer than the database allows a statement is answered `503` `temporarily-unavailable` with `Retry-After` at once, without being run again. Neither spends the key. A key is honoured for 24 hours, then is a new key. */
+                "Idempotency-Key": string;
+            };
+            path: {
+                subscription: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TestClock"];
+                };
+            };
+            /** @description Refused: `idempotency-key-required`, `idempotency-key-invalid`. */
+            400: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/idempotency-key-required" | "https://appsolutely.io/problems/idempotency-key-invalid";
+                    };
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`, `forbidden`. */
+            403: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope" | "https://appsolutely.io/problems/forbidden";
+                    };
+                };
+            };
+            /** @description Refused: `not-found`. */
+            404: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/not-found";
+                    };
+                };
+            };
+            /** @description Refused: `idempotency-key-in-use`, `subscription-change-refused`. */
+            409: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    /** @description On `idempotency-key-in-use`: seconds to wait before sending the request again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/idempotency-key-in-use" | "https://appsolutely.io/problems/subscription-change-refused";
+                    };
+                };
+            };
+            /** @description Refused: `unsupported-media-type`. */
+            415: {
+                headers: {
+                    /** @description The media type a body is taken in. */
+                    Accept?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unsupported-media-type";
+                    };
+                };
+            };
+            /** @description Refused: `mode-from-credential`, `idempotency-key-reused`. */
+            422: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/mode-from-credential" | "https://appsolutely.io/problems/idempotency-key-reused";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`, `temporarily-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable" | "https://appsolutely.io/problems/temporarily-unavailable";
+                    };
+                };
+            };
+        };
+    };
+    advanceTestClock: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description A create a retry could repeat takes an `Idempotency-Key` header: a structured-field String or a bare token of 1 to 255 characters once unquoted, at most 512 on the wire (a String with every character escaped), chosen by the client per request. The same key with the same request answers the first outcome again, with `Idempotent-Replayed: true`; with a different request it is refused. A duplicate sent while the first is still running is answered `409` `idempotency-key-in-use` with `Retry-After` at once and should be sent again once the first has finished, as is a request whose key is free but could not be claimed within 20 seconds; a create whose own write waits on a lock longer than the database allows a statement is answered `503` `temporarily-unavailable` with `Retry-After` at once, without being run again. Neither spends the key. A key is honoured for 24 hours, then is a new key. */
+                "Idempotency-Key": string;
+            };
+            path: {
+                subscription: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdvanceTestClockPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TestClock"];
+                };
+            };
+            /** @description Refused: `idempotency-key-required`, `idempotency-key-invalid`. */
+            400: {
+                headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/idempotency-key-required" | "https://appsolutely.io/problems/idempotency-key-invalid";
+                    };
+                };
+            };
+            /** @description Refused: `unauthenticated`, `invalid-token`. */
+            401: {
+                headers: {
+                    /** @description The Bearer challenge for this API's realm. */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unauthenticated" | "https://appsolutely.io/problems/invalid-token";
+                    };
+                };
+            };
+            /** @description Refused: `wrong-audience`, `insufficient-scope`, `forbidden`. */
+            403: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/wrong-audience" | "https://appsolutely.io/problems/insufficient-scope" | "https://appsolutely.io/problems/forbidden";
+                    };
+                };
+            };
+            /** @description Refused: `not-found`. */
+            404: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/not-found";
+                    };
+                };
+            };
+            /** @description Refused: `idempotency-key-in-use`, `subscription-change-refused`. */
+            409: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    /** @description On `idempotency-key-in-use`: seconds to wait before sending the request again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/idempotency-key-in-use" | "https://appsolutely.io/problems/subscription-change-refused";
+                    };
+                };
+            };
+            /** @description Refused: `unsupported-media-type`. */
+            415: {
+                headers: {
+                    /** @description The media type a body is taken in. */
+                    Accept?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/unsupported-media-type";
+                    };
+                };
+            };
+            /** @description Refused: `validation-failed`, `mode-from-credential`, `idempotency-key-reused`. */
+            422: {
+                headers: {
+                    /** @description `true` on an answer repeated for a request sent again under the same key. */
+                    "Idempotent-Replayed"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ValidationProblem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/validation-failed" | "https://appsolutely.io/problems/mode-from-credential" | "https://appsolutely.io/problems/idempotency-key-reused";
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`, `temporarily-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable" | "https://appsolutely.io/problems/temporarily-unavailable";
+                    };
+                };
+            };
+        };
+    };
     "pullSync.article": {
         parameters: {
             query?: {
-                cursor?: string;
+                cursor?: string | null;
                 limit?: number;
             };
             header?: never;
@@ -5137,6 +11552,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -5243,6 +11660,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -5309,7 +11728,7 @@ export interface operations {
     "pullSync.formEntry": {
         parameters: {
             query?: {
-                cursor?: string;
+                cursor?: string | null;
                 limit?: number;
             };
             header?: never;
@@ -5350,6 +11769,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -5414,7 +11835,7 @@ export interface operations {
     "pullSync.meAddress": {
         parameters: {
             query?: {
-                cursor?: string;
+                cursor?: string | null;
                 limit?: number;
             };
             header?: never;
@@ -5455,6 +11876,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`, `account-suspended`, `account-deletion-pending`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -5578,6 +12001,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`, `account-suspended`, `account-deletion-pending`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -5661,7 +12086,7 @@ export interface operations {
     "pullSync.meOrder": {
         parameters: {
             query?: {
-                cursor?: string;
+                cursor?: string | null;
                 limit?: number;
             };
             header?: never;
@@ -5702,6 +12127,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`, `account-suspended`, `account-deletion-pending`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -5783,7 +12210,7 @@ export interface operations {
     "pullSync.order": {
         parameters: {
             query?: {
-                cursor?: string;
+                cursor?: string | null;
                 limit?: number;
             };
             header?: never;
@@ -5824,6 +12251,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -5888,7 +12317,7 @@ export interface operations {
     "pullSync.page": {
         parameters: {
             query?: {
-                cursor?: string;
+                cursor?: string | null;
                 limit?: number;
             };
             header?: never;
@@ -5929,6 +12358,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -5993,7 +12424,7 @@ export interface operations {
     "pullSync.product": {
         parameters: {
             query?: {
-                cursor?: string;
+                cursor?: string | null;
                 limit?: number;
             };
             header?: never;
@@ -6034,6 +12465,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -6098,8 +12531,8 @@ export interface operations {
     listWebhookEndpoints: {
         parameters: {
             query?: {
-                limit?: number;
-                cursor?: string;
+                limit?: number | null;
+                cursor?: string | null;
             };
             header?: never;
             path?: never;
@@ -6116,7 +12549,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Page"];
+                    "application/json": components["schemas"]["WebhookEndpointPage"];
                 };
             };
             /** @description Refused: `unauthenticated`, `invalid-token`. */
@@ -6139,6 +12572,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -6206,7 +12641,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description A create a retry could repeat takes an `Idempotency-Key` header: a structured-field String or a bare token of 1 to 255 characters, chosen by the client per request. The same key with the same request answers the first outcome again, with `Idempotent-Replayed: true`; with a different request it is refused. A duplicate sent while the first is still running waits for it for up to 20 seconds, then is answered `409` `idempotency-key-in-use` with `Retry-After` and should be sent again, as is any request whose key could not be claimed in that time; a create whose own write waits on a lock longer than the database allows a statement is answered `503` `temporarily-unavailable` with `Retry-After` at once, without being run again. Neither spends the key. A key is honoured for 24 hours, then is a new key. */
+                /** @description A create a retry could repeat takes an `Idempotency-Key` header: a structured-field String or a bare token of 1 to 255 characters once unquoted, at most 512 on the wire (a String with every character escaped), chosen by the client per request. The same key with the same request answers the first outcome again, with `Idempotent-Replayed: true`; with a different request it is refused. A duplicate sent while the first is still running is answered `409` `idempotency-key-in-use` with `Retry-After` at once and should be sent again once the first has finished, as is a request whose key is free but could not be claimed within 20 seconds; a create whose own write waits on a lock longer than the database allows a statement is answered `503` `temporarily-unavailable` with `Retry-After` at once, without being run again. Neither spends the key. A key is honoured for 24 hours, then is a new key. */
                 "Idempotency-Key": string;
             };
             path?: never;
@@ -6229,9 +12664,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
+                    "application/json": components["schemas"]["WebhookEndpointWithSecret"];
                 };
             };
             /** @description Refused: `idempotency-key-required`, `idempotency-key-invalid`. */
@@ -6269,6 +12702,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -6388,9 +12823,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
+                    "application/json": components["schemas"]["WebhookEndpoint"];
                 };
             };
             /** @description Refused: `unauthenticated`, `invalid-token`. */
@@ -6413,6 +12846,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`, `forbidden`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -6528,9 +12963,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
+                    "application/json": components["schemas"]["WebhookEndpoint"];
                 };
             };
             /** @description Refused: `unauthenticated`, `invalid-token`. */
@@ -6553,6 +12986,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`, `forbidden`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -6652,7 +13087,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description A create a retry could repeat takes an `Idempotency-Key` header: a structured-field String or a bare token of 1 to 255 characters, chosen by the client per request. The same key with the same request answers the first outcome again, with `Idempotent-Replayed: true`; with a different request it is refused. A duplicate sent while the first is still running waits for it for up to 20 seconds, then is answered `409` `idempotency-key-in-use` with `Retry-After` and should be sent again, as is any request whose key could not be claimed in that time; a create whose own write waits on a lock longer than the database allows a statement is answered `503` `temporarily-unavailable` with `Retry-After` at once, without being run again. Neither spends the key. A key is honoured for 24 hours, then is a new key. */
+                /** @description A create a retry could repeat takes an `Idempotency-Key` header: a structured-field String or a bare token of 1 to 255 characters once unquoted, at most 512 on the wire (a String with every character escaped), chosen by the client per request. The same key with the same request answers the first outcome again, with `Idempotent-Replayed: true`; with a different request it is refused. A duplicate sent while the first is still running is answered `409` `idempotency-key-in-use` with `Retry-After` at once and should be sent again once the first has finished, as is a request whose key is free but could not be claimed within 20 seconds; a create whose own write waits on a lock longer than the database allows a statement is answered `503` `temporarily-unavailable` with `Retry-After` at once, without being run again. Neither spends the key. A key is honoured for 24 hours, then is a new key. */
                 "Idempotency-Key": string;
             };
             path: {
@@ -6673,9 +13108,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
+                    "application/json": components["schemas"]["WebhookEndpointRotation"];
                 };
             };
             /** @description Refused: `idempotency-key-required`, `idempotency-key-invalid`. */
@@ -6715,6 +13148,8 @@ export interface operations {
                 headers: {
                     /** @description `true` on an answer repeated for a request sent again under the same key. */
                     "Idempotent-Replayed"?: string;
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -6853,9 +13288,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
+                    "application/json": components["schemas"]["WebhookEndpoint"];
                 };
             };
             /** @description Refused: `unauthenticated`, `invalid-token`. */
@@ -6878,6 +13311,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`, `forbidden`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -7012,9 +13447,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
+                    "application/json": components["schemas"]["WebhookEndpoint"];
                 };
             };
             /** @description Refused: `unauthenticated`, `invalid-token`. */
@@ -7037,6 +13470,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`, `forbidden`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -7188,6 +13623,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`, `forbidden`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -7303,8 +13740,8 @@ export interface operations {
             query?: {
                 status?: "pending" | "succeeded" | "failed";
                 since?: string;
-                limit?: number;
-                cursor?: string;
+                limit?: number | null;
+                cursor?: string | null;
             };
             header?: never;
             path: {
@@ -7323,7 +13760,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Page"];
+                    "application/json": components["schemas"]["WebhookDeliveryPage"];
                 };
             };
             /** @description Refused: `unauthenticated`, `invalid-token`. */
@@ -7346,6 +13783,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];
@@ -7411,7 +13850,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description A create a retry could repeat takes an `Idempotency-Key` header: a structured-field String or a bare token of 1 to 255 characters, chosen by the client per request. The same key with the same request answers the first outcome again, with `Idempotent-Replayed: true`; with a different request it is refused. A duplicate sent while the first is still running waits for it for up to 20 seconds, then is answered `409` `idempotency-key-in-use` with `Retry-After` and should be sent again, as is any request whose key could not be claimed in that time; a create whose own write waits on a lock longer than the database allows a statement is answered `503` `temporarily-unavailable` with `Retry-After` at once, without being run again. Neither spends the key. A key is honoured for 24 hours, then is a new key. */
+                /** @description A create a retry could repeat takes an `Idempotency-Key` header: a structured-field String or a bare token of 1 to 255 characters once unquoted, at most 512 on the wire (a String with every character escaped), chosen by the client per request. The same key with the same request answers the first outcome again, with `Idempotent-Replayed: true`; with a different request it is refused. A duplicate sent while the first is still running is answered `409` `idempotency-key-in-use` with `Retry-After` at once and should be sent again once the first has finished, as is a request whose key is free but could not be claimed within 20 seconds; a create whose own write waits on a lock longer than the database allows a statement is answered `503` `temporarily-unavailable` with `Retry-After` at once, without being run again. Neither spends the key. A key is honoured for 24 hours, then is a new key. */
                 "Idempotency-Key": string;
             };
             path: {
@@ -7433,9 +13872,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
+                    "application/json": components["schemas"]["WebhookDelivery"];
                 };
             };
             /** @description Refused: `idempotency-key-required`, `idempotency-key-invalid`. */
@@ -7473,6 +13910,8 @@ export interface operations {
             /** @description Refused: `wrong-audience`, `insufficient-scope`. */
             403: {
                 headers: {
+                    /** @description Present only on `insufficient-scope`: the Bearer challenge naming the scope the token lacks (`error="insufficient_scope", scope="…"`, RFC 6750 section 3.1). */
+                    "WWW-Authenticate"?: string;
                     RateLimit: components["headers"]["RateLimit"];
                     "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
                     "X-Request-Id": components["headers"]["X-Request-Id"];

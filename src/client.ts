@@ -44,8 +44,17 @@ type KeyedOperation = {
 // Typed against the document, so a keyed create added or removed there fails the typecheck until listed here.
 const KEYED_OPERATIONS: Record<KeyedOperation, true> = {
   'POST /api/v1/articles': true,
+  'POST /api/v1/checkout-sessions': true,
   'POST /api/v1/deliveries/{event}/redeliveries': true,
   'POST /api/v1/me/addresses': true,
+  'POST /api/v1/me/checkout-sessions': true,
+  'POST /api/v1/me/portal-sessions': true,
+  'POST /api/v1/me/subscriptions/{subscription}/cancellation': true,
+  'POST /api/v1/me/subscriptions/{subscription}/changes': true,
+  'POST /api/v1/me/subscriptions/{subscription}/resumption': true,
+  'POST /api/v1/portal-sessions': true,
+  'POST /api/v1/subscriptions/{subscription}/test-clock': true,
+  'POST /api/v1/subscriptions/{subscription}/test-clock/advance': true,
   'POST /api/v1/webhook-endpoints': true,
   'POST /api/v1/webhook-endpoints/{endpoint}/secret-rotations': true,
   'POST /api/v1/webhook-subscriptions/{subscription}/deliveries/{event}/redeliver': true,
