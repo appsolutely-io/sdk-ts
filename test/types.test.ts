@@ -5,11 +5,14 @@ import {
   createClient,
   type Article,
   type ArticlePage,
+  type BackendClient,
   type FormEntry,
+  type ListedAccountStatePage,
   type Order,
   type Page,
   type Problem,
   type Product,
+  type ProductSkuPrice,
 } from '../src/index.ts';
 import type { IsAny } from './support/types.ts';
 
@@ -44,6 +47,30 @@ export type Checks = [
   // Narrowed to the documented type URIs, so a branch on a misspelt one is a compile error.
   Assert<string extends Refusal['type'] ? false : true>,
   Assert<'https://appsolutely.io/problems/unauthenticated' extends Refusal['type'] ? true : false>,
+];
+
+// The catalogue a backend reads: each sku's price, the store currency, entitlements walked by change time.
+const listEntitlements = () =>
+  client.GET('/api/v1/entitlements', { params: { query: { changed_since: '2026-10-01T00:00:00Z' } } });
+const backendCheckout = () =>
+  client.POST('/api/v1/checkout-sessions', {
+    body: {
+      subject: 'm',
+      lines: [{ product: 'p', quantity: 1, sku: 's' }],
+      success_url: 'https://example.com/ok',
+      cancel_url: 'https://example.com/no',
+    },
+  });
+type CheckoutRefusal = NonNullable<Awaited<ReturnType<typeof backendCheckout>>['error']>;
+
+export type CatalogueChecks = [
+  Assert<Equal<Product['sku_prices'], ProductSkuPrice[]>>,
+  Assert<Equal<ProductSkuPrice['interval'], 'month' | 'year' | null>>,
+  Assert<Equal<BackendClient['store_currency'], string>>,
+  Assert<Equal<Data<typeof listEntitlements>, ListedAccountStatePage>>,
+  Assert<Equal<ListedAccountStatePage['next_changed_since'], string>>,
+  // The 409 for an order still waiting on its payment says where the member finishes paying it.
+  Assert<Equal<Extract<CheckoutRefusal, { order?: string }>['payment_url'], string | null | undefined>>,
 ];
 
 // The client fills the Idempotency-Key of a keyed create, so the caller may leave it out or pass one.
