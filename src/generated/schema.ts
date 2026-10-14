@@ -114,7 +114,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Create one of checkout sessions */
+        /**
+         * Create one of checkout sessions
+         * @description Each line names a product, and may name the sku to buy as `sku`, by the identifier the product lists it under in `sku_prices`: the sku has to be one of the product's active skus, in stock and priced in the store currency, or the line is refused on its `sku` as a validation problem. A line naming no sku buys a product sold as exactly one active sku; a product sold as several is refused on the line's `product`.
+         */
         post: operations["createCheckoutSession"];
         delete?: never;
         options?: never;
@@ -200,7 +203,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** List backend entitlements */
+        /**
+         * List backend entitlements
+         * @description Every name this site has handed out, ordered by `entitlements_changed_at` and then by `subject`. With `changed_since` (RFC 3339 to the second, with `Z` or an offset), only the members whose entitlements changed at or after that moment; a value in another form is refused as a validation problem. Reconcile by walks: page to the end, then start the next walk from the page's `next_changed_since`. A change made while a walk runs may or may not be met by that walk, and is listed by the next one. One change can be missed until the member next changes: one whose writer stopped between committing it and stamping it again after the commit; run a full walk without `changed_since` periodically (for example daily), which lists everyone. An erased member stays listed, as `erased`, from the moment of its erasure.
+         */
         get: operations["listBackendEntitlements"];
         put?: never;
         post?: never;
@@ -376,7 +382,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Create one of me checkout sessions */
+        /**
+         * Create one of me checkout sessions
+         * @description Each line names a product, and may name the sku to buy as `sku`, by the identifier the product lists it under in `sku_prices`: the sku has to be one of the product's active skus, in stock and priced in the store currency, or the line is refused on its `sku` as a validation problem. A line naming no sku buys a product sold as exactly one active sku; a product sold as several is refused on the line's `product`.
+         */
         post: operations["createMeCheckoutSession"];
         delete?: never;
         options?: never;
@@ -748,7 +757,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** List products */
+        /**
+         * List products
+         * @description Answers an administrator's token holding `products:read`, or the site backend's client-credentials token holding `catalogue:read`; each is refused as the routes of its own kind refuse it.
+         */
         get: operations["listProducts"];
         put?: never;
         post?: never;
@@ -765,7 +777,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Read one of products */
+        /**
+         * Read one of products
+         * @description Answers an administrator's token holding `products:read`, or the site backend's client-credentials token holding `catalogue:read`; each is refused as the routes of its own kind refuse it.
+         */
         get: operations["getProduct"];
         put?: never;
         post?: never;
@@ -1381,11 +1396,6 @@ export interface components {
         AccountStateList: {
             data: components["schemas"]["AccountState"][];
         };
-        AccountStatePage: {
-            data: components["schemas"]["AccountState"][];
-            /** @description Pass as `cursor` for the next page. Absent on the last page. */
-            next_cursor?: string;
-        };
         AccountSubscription: {
             /** Format: uuid */
             id: string;
@@ -1495,6 +1505,8 @@ export interface components {
             site: string;
             /** @description The scopes this token holds, sorted. */
             scopes: string[];
+            /** @description The currency every checkout on this site charges in, as an ISO 4217 code: what a purchase this backend starts is priced and paid in. */
+            store_currency: string;
         };
         BillingEntry: {
             available: boolean;
@@ -1529,6 +1541,8 @@ export interface components {
         CheckoutSessionLine: {
             product: string;
             quantity: number;
+            /** @description The sku the line named, by the identifier the product lists it under in `sku_prices`; absent when the line named none. */
+            sku?: string;
         };
         CheckoutSessionOrder: {
             reference: string;
@@ -1600,6 +1614,34 @@ export interface components {
             data: components["schemas"]["FormEntry"][];
             /** @description Pass as `cursor` for the next page. Absent on the last page. */
             next_cursor?: string;
+        };
+        ListedAccountState: {
+            subject: string;
+            sequence: number;
+            /** @enum {string} */
+            status: "active" | "suspended" | "erased" | "unknown";
+            email?: string | null;
+            email_verified: boolean;
+            entitlements: components["schemas"]["AccountEntitlement"][];
+            totals: {
+                [key: string]: unknown;
+            };
+            subscriptions: components["schemas"]["AccountSubscription"][];
+            /**
+             * Format: date-time
+             * @description When what this member's entitlements read returns last changed, to the second: a grant, a subscription, a seat, a purchase or a refund, a value on a product they hold, a window or grant reached by the clock, a tester's mark or an erasure. A name first handed out is changed then; a name recorded before this field existed carries the moment it was added. For display and ordering; start the next walk from `next_changed_since`, not from this.
+             */
+            entitlements_changed_at: string;
+        };
+        ListedAccountStatePage: {
+            data: components["schemas"]["ListedAccountState"][];
+            /** @description Pass as `cursor` for the next page of this walk. Absent on the last page. */
+            next_cursor?: string;
+            /**
+             * Format: date-time
+             * @description Where to start the next walk: pass it as `changed_since`. The same on every page of a walk, read off the database's clock when the walk's first page was served, less a few seconds, to the second: a change committed as the walk began is listed again rather than missed, so clients may see a few members listed twice across walks. Every change committed after that moment is listed by a walk from it, whether or not this walk met it.
+             */
+            next_changed_since: string;
         };
         MagicLinkPayload: {
             email: string;
@@ -1787,7 +1829,10 @@ export interface components {
             price?: number | null;
             original_price?: number | null;
             currency?: string | null;
+            /** @description The lowest price in force per currency across the active skus, ordered by currency: a "from" price to display. `sku_prices` tells the skus apart. */
             prices: components["schemas"]["ProductPriceSummary"][];
+            /** @description Every active sku's price in force: one entry per sku and currency, in the order the product lists its skus and then by currency. `sku` is the identifier a subscription's `sku` and a plan change name the sku by. `interval` (`month` or `year`) and `interval_count` (`3` with `month` is quarterly) are the period a subscription sku renews in, and both are null for a sku sold once. */
+            sku_prices: components["schemas"]["ProductSkuPrice"][];
             status: number;
             sort?: number | null;
             /** Format: date-time */
@@ -1825,6 +1870,15 @@ export interface components {
             currency: string;
             price: number;
             original_price?: number | null;
+        };
+        ProductSkuPrice: {
+            sku: string;
+            currency: string;
+            price: number;
+            original_price: number | null;
+            /** @enum {string|null} */
+            interval: "month" | "year" | null;
+            interval_count: number | null;
         };
         PushDevice: {
             token: string;
@@ -1946,6 +2000,7 @@ export interface components {
             lines: {
                 product: string;
                 quantity: number;
+                sku?: string;
             }[];
             promotion_code?: string | null;
             success_url: string;
@@ -1956,6 +2011,7 @@ export interface components {
             lines: {
                 product: string;
                 quantity: number;
+                sku?: string;
             }[];
             promotion_code?: string | null;
             success_url: string;
@@ -2296,7 +2352,6 @@ export type AccountEntitlementList = components['schemas']['AccountEntitlementLi
 export type AccountEntitlementTerm = components['schemas']['AccountEntitlementTerm'];
 export type AccountState = components['schemas']['AccountState'];
 export type AccountStateList = components['schemas']['AccountStateList'];
-export type AccountStatePage = components['schemas']['AccountStatePage'];
 export type AccountSubscription = components['schemas']['AccountSubscription'];
 export type AdvanceTestClockPayload = components['schemas']['AdvanceTestClockPayload'];
 export type ApiVersion = components['schemas']['ApiVersion'];
@@ -2320,6 +2375,8 @@ export type FeatureKeyList = components['schemas']['FeatureKeyList'];
 export type FormEntry = components['schemas']['FormEntry'];
 export type FormEntryFeed = components['schemas']['FormEntryFeed'];
 export type FormEntryPage = components['schemas']['FormEntryPage'];
+export type ListedAccountState = components['schemas']['ListedAccountState'];
+export type ListedAccountStatePage = components['schemas']['ListedAccountStatePage'];
 export type MagicLinkPayload = components['schemas']['MagicLinkPayload'];
 export type MagicLinkToken = components['schemas']['MagicLinkToken'];
 export type MagicLinkTokenPayload = components['schemas']['MagicLinkTokenPayload'];
@@ -2344,6 +2401,7 @@ export type ProductFeatureValueList = components['schemas']['ProductFeatureValue
 export type ProductFeed = components['schemas']['ProductFeed'];
 export type ProductPage = components['schemas']['ProductPage'];
 export type ProductPriceSummary = components['schemas']['ProductPriceSummary'];
+export type ProductSkuPrice = components['schemas']['ProductSkuPrice'];
 export type PushDevice = components['schemas']['PushDevice'];
 export type Redelivery = components['schemas']['Redelivery'];
 export type RedeliveryRefusal = components['schemas']['RedeliveryRefusal'];
@@ -3355,6 +3413,8 @@ export interface operations {
                         type?: "https://appsolutely.io/problems/idempotency-key-in-use" | "https://appsolutely.io/problems/purchases-unavailable" | "https://appsolutely.io/problems/subscription-awaiting-payment" | "https://appsolutely.io/problems/billed-elsewhere";
                         /** @description On `subscription-awaiting-payment`: the reference of the order waiting for its payment; the member pays it or cancels it from that order's page. */
                         order?: string;
+                        /** @description On `subscription-awaiting-payment`: where to send the signed-in member to finish paying that order, on the site's own address, by the rule the order's own `payment_url` follows; null when there is nothing to pay on a page (no payment in flight on an open provider page). */
+                        payment_url?: string | null;
                     };
                 };
             };
@@ -3946,6 +4006,7 @@ export interface operations {
     listBackendEntitlements: {
         parameters: {
             query?: {
+                changed_since?: string | null;
                 limit?: number | null;
                 cursor?: string | null;
             };
@@ -3964,7 +4025,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AccountStatePage"];
+                    "application/json": components["schemas"]["ListedAccountStatePage"];
                 };
             };
             /** @description Refused: `unauthenticated`, `invalid-token`. */
@@ -4001,7 +4062,7 @@ export interface operations {
                     };
                 };
             };
-            /** @description Refused: `validation-failed`, `invalid-cursor`, `mode-from-credential`. */
+            /** @description Refused: `validation-failed`, `mode-from-credential`, `invalid-cursor`. */
             422: {
                 headers: {
                     RateLimit: components["headers"]["RateLimit"];
@@ -4012,7 +4073,7 @@ export interface operations {
                 content: {
                     "application/problem+json": components["schemas"]["ValidationProblem"] & {
                         /** @enum {unknown} */
-                        type?: "https://appsolutely.io/problems/validation-failed" | "https://appsolutely.io/problems/invalid-cursor" | "https://appsolutely.io/problems/mode-from-credential";
+                        type?: "https://appsolutely.io/problems/validation-failed" | "https://appsolutely.io/problems/mode-from-credential" | "https://appsolutely.io/problems/invalid-cursor";
                     };
                 };
             };
@@ -5771,6 +5832,8 @@ export interface operations {
                         type?: "https://appsolutely.io/problems/idempotency-key-in-use" | "https://appsolutely.io/problems/purchases-unavailable" | "https://appsolutely.io/problems/subscription-awaiting-payment" | "https://appsolutely.io/problems/billed-elsewhere";
                         /** @description On `subscription-awaiting-payment`: the reference of the order waiting for its payment; the member pays it or cancels it from that order's page. */
                         order?: string;
+                        /** @description On `subscription-awaiting-payment`: where to send the signed-in member to finish paying that order, on the site's own address, by the rule the order's own `payment_url` follows; null when there is nothing to pay on a page (no payment in flight on an open provider page). */
+                        payment_url?: string | null;
                     };
                 };
             };
@@ -7059,6 +7122,8 @@ export interface operations {
                         type?: "https://appsolutely.io/problems/billed-elsewhere" | "https://appsolutely.io/problems/subscription-recovering" | "https://appsolutely.io/problems/subscription-awaiting-payment";
                         /** @description On `subscription-awaiting-payment`: the reference of the order waiting for its payment; the member pays it or cancels it from that order's page. */
                         order?: string;
+                        /** @description On `subscription-awaiting-payment`: where to send the signed-in member to finish paying that order, on the site's own address, by the rule the order's own `payment_url` follows; null when there is nothing to pay on a page (no payment in flight on an open provider page). */
+                        payment_url?: string | null;
                     };
                 };
             };
@@ -8654,6 +8719,23 @@ export interface operations {
                     };
                 };
             };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
+                    };
+                };
+            };
         };
     };
     getProduct: {
@@ -8757,6 +8839,23 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"] & {
                         /** @enum {unknown} */
                         type?: "https://appsolutely.io/problems/rate-limited";
+                    };
+                };
+            };
+            /** @description Refused: `standing-unavailable`. */
+            503: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/standing-unavailable";
                     };
                 };
             };
@@ -10918,6 +11017,8 @@ export interface operations {
                         type?: "https://appsolutely.io/problems/billed-elsewhere" | "https://appsolutely.io/problems/subscription-recovering" | "https://appsolutely.io/problems/subscription-awaiting-payment";
                         /** @description On `subscription-awaiting-payment`: the reference of the order waiting for its payment; the member pays it or cancels it from that order's page. */
                         order?: string;
+                        /** @description On `subscription-awaiting-payment`: where to send the signed-in member to finish paying that order, on the site's own address, by the rule the order's own `payment_url` follows; null when there is nothing to pay on a page (no payment in flight on an open provider page). */
+                        payment_url?: string | null;
                     };
                 };
             };
