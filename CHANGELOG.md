@@ -7,6 +7,10 @@ and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-16
+
+The first release. It describes the API of aio v0.30.0 and needs an install at least that new.
+
 ### Changed
 
 - The client is generated from aio v0.30.0's document. A member carries `terms` (`MemberTerms`: the site's `current` terms version, null when it asks for no acceptance, and whether the member has `accepted` it), and an account state's `totals` are integers by entitlement key. `ListedAccountState` is declared as `AccountState` with `entitlements_changed_at`, so it reads as that intersection.
