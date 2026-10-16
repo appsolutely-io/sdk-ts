@@ -7,6 +7,19 @@ and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- This release requires aio v0.32.0 or later. `POST /api/v1/fulfilments` returns `404` on aio 0.30 and 0.31.
+- Generated from the released aio v0.32.0 document, including `subscription-change-refused` when resuming a member subscription.
+
+- **BREAKING** — the install no longer answers an administrator on this API, so the client no longer describes the administrator's operations: `/api/v1/pages`, `/api/v1/articles`, `/api/v1/orders`, `/api/v1/form-entries`, `/api/v1/account-states`, the webhook subscription deliveries and their redelivery, and the administrator sync feeds (`/api/v1/sync/articles`, `pages`, `products`, `orders` and `form-entries`). Their schemas that nothing else answers (`ArticlePage`, `PagePage`, `FormEntryPage`, `AccountStateList`, `WebhookDelivery`, `WebhookDeliveryPage`, the feeds and the article payloads) are no longer exported. An administrator's work is done through the install's Administrator API (`/api/admin/v1`).
+- **BREAKING** — `/api/v1/products` answers the site backend alone, with a token holding `catalogue:read`.
+- `token` is described as what it now is: a signed-in member's access token, or the token the site backend's machine client is granted.
+
+### Added
+
+- `POST /api/v1/fulfilments`, the backend fulfilling a pending digital delivery with `fulfilments:write` (`FulfillDeliveryPayload`, answered as `Fulfilment`). It is keyed, so it is sent a generated `Idempotency-Key` when the caller passes none.
+
 ## [0.2.0] - 2026-10-16
 
 The first release. It describes the API of aio v0.30.0 and needs an install at least that new.
