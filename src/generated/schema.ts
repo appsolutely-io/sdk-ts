@@ -8024,7 +8024,7 @@ export interface operations {
                     };
                 };
             };
-            /** @description Refused: `idempotency-key-in-use`, `billed-elsewhere`. */
+            /** @description Refused: `idempotency-key-in-use`, `billed-elsewhere`, `subscription-change-refused`. */
             409: {
                 headers: {
                     /** @description `true` on an answer repeated for a request sent again under the same key. */
@@ -8039,7 +8039,7 @@ export interface operations {
                 content: {
                     "application/problem+json": components["schemas"]["Problem"] & {
                         /** @enum {unknown} */
-                        type?: "https://appsolutely.io/problems/idempotency-key-in-use" | "https://appsolutely.io/problems/billed-elsewhere";
+                        type?: "https://appsolutely.io/problems/idempotency-key-in-use" | "https://appsolutely.io/problems/billed-elsewhere" | "https://appsolutely.io/problems/subscription-change-refused";
                     };
                 };
             };

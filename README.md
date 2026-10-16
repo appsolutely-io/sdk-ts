@@ -56,14 +56,14 @@ The client is [openapi-fetch](https://openapi-ts.dev/openapi-fetch/), whose docu
 "appsolutely": {
   "spec": {
     "path": "docs/api/openapi.yaml",
-    "tag": "v0.7.0",
-    "commit": "…",
-    "sha256": "…"
+    "tag": "v0.32.0",
+    "commit": "283d65c57fbf03d8a8a0cce0f1cd4c888afaedb2",
+    "sha256": "04021d5837ae0a679c847be0b342c068f2cb0f2f7a8ffb596e3e0defed55e328"
   }
 }
 ```
 
-An install running that aio release, or a newer one with the same API major version, serves everything this client describes: within a major version, fields are added and never removed or retyped. The package's own version follows its own semver; the aio tag, not the package version, names the release it matches.
+This client describes aio v0.32.0. While aio is below 1.0.0, minor releases may remove operations or change their shapes, even when the API path stays at v1. Check the release's breaking changes before upgrading an install. The package's own version follows its own semver; the aio tag, not the package version, names the release it matches.
 
 ## Develop
 

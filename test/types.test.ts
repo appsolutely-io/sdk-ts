@@ -3,6 +3,7 @@
 import { test } from 'node:test';
 import {
   createClient,
+  type operations,
   type AccountState,
   type BackendClient,
   type Fulfilment,
@@ -111,3 +112,16 @@ export const wrongId = () => client.GET('/api/v1/products/{id}', { params: { pat
 export const pageNumber = () => client.GET('/api/v1/products', { params: { query: { per_page: 5 } } });
 
 test('the type assertions in this file compile', () => {});
+
+export type ResumptionRefusalCheck = Assert<
+  'https://appsolutely.io/problems/subscription-change-refused' extends NonNullable<
+    operations['resumeMeSubscription']['responses'][409]['content']['application/problem+json']['type']
+  >
+    ? true
+    : false
+>;
+
+// @ts-expect-error administrator pages are served by the Administrator API
+export const retiredPages = () => client.GET('/api/v1/pages');
+// @ts-expect-error administrator article writes are served by the Administrator API
+export const retiredArticle = () => client.POST('/api/v1/articles', { body: {} });

@@ -4621,7 +4621,7 @@ paths:
             application/problem+json:
               schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/not-found'] } } }] }
         409:
-          description: 'Refused: `idempotency-key-in-use`, `billed-elsewhere`.'
+          description: 'Refused: `idempotency-key-in-use`, `billed-elsewhere`, `subscription-change-refused`.'
           headers:
             Idempotent-Replayed:
               description: '`true` on an answer repeated for a request sent again under the same key.'
@@ -4637,7 +4637,7 @@ paths:
               $ref: '#/components/headers/X-Request-Id'
           content:
             application/problem+json:
-              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/idempotency-key-in-use', 'https://appsolutely.io/problems/billed-elsewhere'] } } }] }
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/idempotency-key-in-use', 'https://appsolutely.io/problems/billed-elsewhere', 'https://appsolutely.io/problems/subscription-change-refused'] } } }] }
         415:
           description: 'Refused: `unsupported-media-type`.'
           headers:

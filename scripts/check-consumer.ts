@@ -14,23 +14,23 @@ import { readPin } from './lib/spec.ts';
 const { values } = parseArgs({ options: { typescript: { type: 'string', default: '5.9.3' } } });
 const versions = values.typescript.split(',');
 
-const consumerSource = `import { createClient, type Article, type Page } from '@appsolutely/sdk';
+const consumerSource = `import { createClient, type Product } from '@appsolutely/sdk';
 
 type IsAny<T> = 0 extends 1 & T ? true : false;
 type Assert<T extends false> = T;
 
 const client = createClient({ baseUrl: 'https://example.com', token: 'token' });
 
-export async function read(): Promise<[Article, Page[]]> {
-  const article = await client.GET('/api/v1/articles/{id}', { params: { path: { id: '1' } } });
-  const pages = await client.GET('/api/v1/pages');
-  if (article.data === undefined || pages.data === undefined) {
-    throw new Error(article.error?.type ?? pages.error?.type);
+export async function read(): Promise<[Product, Product[]]> {
+  const product = await client.GET('/api/v1/products/{id}', { params: { path: { id: '1' } } });
+  const products = await client.GET('/api/v1/products');
+  if (product.data === undefined || products.data === undefined) {
+    throw new Error(product.error?.type ?? products.error?.type);
   }
-  type Checks = [Assert<IsAny<typeof article.data>>, Assert<IsAny<typeof pages.data.data>>];
+  type Checks = [Assert<IsAny<typeof product.data>>, Assert<IsAny<typeof products.data.data>>];
   const checks: Checks | undefined = undefined;
   void checks;
-  return [article.data, pages.data.data];
+  return [product.data, products.data.data];
 }
 `;
 
@@ -41,8 +41,8 @@ const fetch = async (request) => {
   seen.push([request.url, request.headers.get('Authorization')]);
   return Response.json({ data: [] });
 };
-const { data } = await createClient({ baseUrl: 'https://example.com', token: 't', fetch }).GET('/api/v1/pages');
-if (JSON.stringify(seen) !== JSON.stringify([['https://example.com/api/v1/pages', 'Bearer t']]) || !Array.isArray(data?.data)) {
+const { data } = await createClient({ baseUrl: 'https://example.com', token: 't', fetch }).GET('/api/v1/products');
+if (JSON.stringify(seen) !== JSON.stringify([['https://example.com/api/v1/products', 'Bearer t']]) || !Array.isArray(data?.data)) {
   throw new Error('The installed client did not send the expected request: ' + JSON.stringify(seen));
 }
 `;
