@@ -5,9 +5,13 @@ import {
   createClient,
   type Article,
   type ArticlePage,
+  type AccountState,
   type BackendClient,
   type FormEntry,
+  type ListedAccountState,
   type ListedAccountStatePage,
+  type Member,
+  type MemberTerms,
   type Order,
   type Page,
   type Problem,
@@ -18,6 +22,8 @@ import type { IsAny } from './support/types.ts';
 
 type Equal<A, B> = (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B ? 1 : 2 ? true : false;
 type Assert<T extends true> = T;
+// Flattens an intersection, so an `allOf` schema compares equal to the same shape written out.
+type Flat<T> = { [K in keyof T]: T[K] };
 
 const client = createClient({ baseUrl: 'https://example.com', token: 't' });
 type Data<T extends (...args: never[]) => Promise<{ data?: unknown }>> = NonNullable<Awaited<ReturnType<T>>['data']>;
@@ -67,11 +73,33 @@ export type CatalogueChecks = [
   Assert<Equal<Product['sku_prices'], ProductSkuPrice[]>>,
   Assert<Equal<ProductSkuPrice['interval'], 'month' | 'year' | null>>,
   Assert<Equal<BackendClient['store_currency'], string>>,
-  Assert<Equal<Data<typeof listEntitlements>, ListedAccountStatePage>>,
+  Assert<Equal<Flat<Data<typeof listEntitlements>['data'][number]>, Flat<ListedAccountState>>>,
+  Assert<Equal<Omit<Data<typeof listEntitlements>, 'data'>, Omit<ListedAccountStatePage, 'data'>>>,
   Assert<Equal<ListedAccountStatePage['next_changed_since'], string>>,
   // The 409 for an order still waiting on its payment says where the member finishes paying it.
   Assert<Equal<Extract<CheckoutRefusal, { order?: string }>['payment_url'], string | null | undefined>>,
 ];
+
+// A member's terms acceptance, integer entitlement totals, and the refusals aio 0.27.0 changed.
+const exchangeMagicLink = async () =>
+  (await client.POST('/api/v1/auth/magic-link/token', { body: { link: 'l', code_verifier: 'v' } })).error;
+type MagicLinkRefusal = NonNullable<Awaited<ReturnType<typeof exchangeMagicLink>>>;
+
+export type CurrentChecks = [
+  Assert<Equal<Member['terms'], MemberTerms>>,
+  Assert<Equal<MemberTerms['accepted'], boolean>>,
+  Assert<Equal<AccountState['totals'], Record<string, number>>>,
+  Assert<Equal<Flat<ListedAccountState>['entitlements_changed_at'], string>>,
+  Assert<'https://appsolutely.io/problems/second-factor-required' extends MagicLinkRefusal['type'] ? true : false>,
+  Assert<'https://appsolutely.io/problems/rate-limited' extends MagicLinkRefusal['type'] ? true : false>,
+];
+
+export const changeWithoutReturnUrl = () =>
+  client.POST('/api/v1/me/subscriptions/{subscription}/changes', {
+    params: { path: { subscription: 's' } },
+    // @ts-expect-error a subscription change names the address the member returns to after confirming it
+    body: { sku: 'team' },
+  });
 
 // The client fills the Idempotency-Key of a keyed create, so the caller may leave it out or pass one.
 export const keyed = () => client.POST('/api/v1/articles', { body: { title: 't', content: 'c' } });

@@ -157,7 +157,7 @@ test('a purchase and a subscription change are sent a generated Idempotency-Key'
   });
   await client.POST('/api/v1/me/subscriptions/{subscription}/changes', {
     params: { path: { subscription: '0f6c1c36-0d3a-4e8e-9a4b-3f1f2a0b5c6d' } },
-    body: { sku: 'team' },
+    body: { sku: 'team', return_url: 'https://app.example/billing' },
   });
 
   for (const call of calls) {
