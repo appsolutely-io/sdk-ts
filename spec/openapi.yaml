@@ -2,7 +2,7 @@ openapi: 3.1.0
 info:
   title: 'Laravel public API'
   version: v1
-  description: "The public developer API of this install, major version v1 (current). Every path here is stable for the life of the version: fields are added, never removed or retyped, and a breaking change arrives as a new version while this one keeps serving. A create a retry could repeat takes an `Idempotency-Key` header: a structured-field String or a bare token of 1 to 255 characters once unquoted, at most 512 on the wire (a String with every character escaped), chosen by the client per request. The same key with the same request answers the first outcome again, with `Idempotent-Replayed: true`; with a different request it is refused. A duplicate sent while the first is still running is answered `409` `idempotency-key-in-use` with `Retry-After` at once and should be sent again once the first has finished, as is a request whose key is free but could not be claimed within 20 seconds; a create whose own write waits on a lock longer than the database allows a statement is answered `503` `temporarily-unavailable` with `Retry-After` at once, without being run again. Neither spends the key. A key is honoured for 24 hours, then is a new key. A machine holds only the secret of an endpoint it owns: the site's backend receives the signing secret of a webhook endpoint it registers and alone changes that endpoint, and an administrator credential never creates an endpoint or receives a secret."
+  description: "The public developer API of this install, major version v1 (current). While the package serving it is below 1.0.0, a minor release may change a path in a breaking way; the changelog opens each such entry with `BREAKING` and says what a caller changes. Otherwise fields are added, never removed or retyped. From 1.0.0 a breaking change is announced as deprecated a release ahead and arrives in a new major release. A create a retry could repeat takes an `Idempotency-Key` header: a structured-field String or a bare token of 1 to 255 characters once unquoted, at most 512 on the wire (a String with every character escaped), chosen by the client per request. The same key with the same request answers the first outcome again, with `Idempotent-Replayed: true`; with a different request it is refused. A duplicate sent while the first is still running is answered `409` `idempotency-key-in-use` with `Retry-After` at once and should be sent again once the first has finished, as is a request whose key is free but could not be claimed within 20 seconds; a create whose own write waits on a lock longer than the database allows a statement is answered `503` `temporarily-unavailable` with `Retry-After` at once, without being run again. Neither spends the key. A key is honoured for 24 hours, then is a new key. A machine holds only the secret of an endpoint it owns: the site's backend receives the signing secret of a webhook endpoint it registers and alone changes that endpoint, and an administrator credential never creates an endpoint or receives a secret."
 servers:
   - url: /
 tags:
@@ -777,26 +777,11 @@ paths:
               $ref: '#/components/headers/RateLimit-Policy'
             X-Request-Id:
               $ref: '#/components/headers/X-Request-Id'
-        401:
-          description: 'Refused: `second-factor-required`.'
-          headers:
-            WWW-Authenticate:
-              description: "The Bearer challenge for this API's realm."
-              schema: { type: string }
-            RateLimit:
-              $ref: '#/components/headers/RateLimit'
-            RateLimit-Policy:
-              $ref: '#/components/headers/RateLimit-Policy'
-            X-Request-Id:
-              $ref: '#/components/headers/X-Request-Id'
-          content:
-            application/problem+json:
-              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/second-factor-required'] } } }] }
         403:
-          description: 'Refused: `account-suspended`, `account-deletion-pending`.'
+          description: 'Refused: `second-factor-required`, `account-suspended`, `account-deletion-pending`.'
           content:
             application/problem+json:
-              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/account-suspended', 'https://appsolutely.io/problems/account-deletion-pending'] } } }] }
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/second-factor-required', 'https://appsolutely.io/problems/account-suspended', 'https://appsolutely.io/problems/account-deletion-pending'] } } }] }
           headers:
             RateLimit:
               $ref: '#/components/headers/RateLimit'
@@ -5360,6 +5345,28 @@ paths:
           content:
             application/json:
               schema: { type: object, additionalProperties: true }
+          headers:
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        429:
+          description: 'Refused: `rate-limited`.'
+          headers:
+            Retry-After:
+              description: 'Seconds to wait before asking again.'
+              schema: { type: string }
+            RateLimit:
+              $ref: '#/components/headers/RateLimit'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/problem+json:
+              schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/rate-limited'] } } }] }
   /api/v1/orders:
     get:
       operationId: listOrders
@@ -7775,6 +7782,7 @@ paths:
         - name: payer
           in: path
           required: true
+          description: "The paying member's account subject: the OIDC `sub` the app already knows them by."
           schema:
             type: string
       responses:
@@ -8759,6 +8767,7 @@ paths:
           schema:
             type: integer
             minimum: 1
+            maximum: 500
       responses:
         200:
           description: OK
@@ -8962,6 +8971,7 @@ paths:
           schema:
             type: integer
             minimum: 1
+            maximum: 500
       responses:
         200:
           description: OK
@@ -9067,6 +9077,7 @@ paths:
           schema:
             type: integer
             minimum: 1
+            maximum: 500
       responses:
         200:
           description: OK
@@ -9300,6 +9311,7 @@ paths:
           schema:
             type: integer
             minimum: 1
+            maximum: 500
       responses:
         200:
           description: OK
@@ -9420,6 +9432,7 @@ paths:
           schema:
             type: integer
             minimum: 1
+            maximum: 500
       responses:
         200:
           description: OK
@@ -9525,6 +9538,7 @@ paths:
           schema:
             type: integer
             minimum: 1
+            maximum: 500
       responses:
         200:
           description: OK
@@ -9630,6 +9644,7 @@ paths:
           schema:
             type: integer
             minimum: 1
+            maximum: 500
       responses:
         200:
           description: OK
@@ -11141,6 +11156,767 @@ paths:
               schema: { allOf: [{ $ref: '#/components/schemas/Problem' }, { properties: { type: { enum: ['https://appsolutely.io/problems/temporarily-unavailable'] } } }] }
       security:
         - bearerAuth: []
+webhooks:
+  account.email_changed:
+    post:
+      operationId: onAccountEmailChanged
+      summary: '`account.email_changed` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountEmailChangedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  account.entitlements_changed:
+    post:
+      operationId: onAccountEntitlementsChanged
+      summary: '`account.entitlements_changed` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountEntitlementsChangedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  account.erased:
+    post:
+      operationId: onAccountErased
+      summary: '`account.erased` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountErasedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  account.reinstated:
+    post:
+      operationId: onAccountReinstated
+      summary: '`account.reinstated` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountReinstatedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  account.suspended:
+    post:
+      operationId: onAccountSuspended
+      summary: '`account.suspended` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountSuspendedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  article.created:
+    post:
+      operationId: onArticleCreated
+      summary: '`article.created` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticleCreatedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  article.deleted:
+    post:
+      operationId: onArticleDeleted
+      summary: '`article.deleted` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticleDeletedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  article.updated:
+    post:
+      operationId: onArticleUpdated
+      summary: '`article.updated` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticleUpdatedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  form.submitted:
+    post:
+      operationId: onFormSubmitted
+      summary: '`form.submitted` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FormSubmittedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  order.cancelled:
+    post:
+      operationId: onOrderCancelled
+      summary: '`order.cancelled` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderCancelledEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  order.completed:
+    post:
+      operationId: onOrderCompleted
+      summary: '`order.completed` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderCompletedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  order.expired:
+    post:
+      operationId: onOrderExpired
+      summary: '`order.expired` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderExpiredEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  order.paid:
+    post:
+      operationId: onOrderPaid
+      summary: '`order.paid` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderPaidEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  order.payment_arrived_late:
+    post:
+      operationId: onOrderPaymentArrivedLate
+      summary: '`order.payment_arrived_late` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderPaymentArrivedLateEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  order.refunded:
+    post:
+      operationId: onOrderRefunded
+      summary: '`order.refunded` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRefundedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  order.revived:
+    post:
+      operationId: onOrderRevived
+      summary: '`order.revived` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRevivedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  order.shipped:
+    post:
+      operationId: onOrderShipped
+      summary: '`order.shipped` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderShippedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  order.status_updated:
+    post:
+      operationId: onOrderStatusUpdated
+      summary: '`order.status_updated` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderStatusUpdatedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  page.created:
+    post:
+      operationId: onPageCreated
+      summary: '`page.created` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PageCreatedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  page.deleted:
+    post:
+      operationId: onPageDeleted
+      summary: '`page.deleted` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PageDeletedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  page.updated:
+    post:
+      operationId: onPageUpdated
+      summary: '`page.updated` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PageUpdatedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  payment.refunded:
+    post:
+      operationId: onPaymentRefunded
+      summary: '`payment.refunded` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRefundedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  payment.reversed:
+    post:
+      operationId: onPaymentReversed
+      summary: '`payment.reversed` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentReversedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  product.created:
+    post:
+      operationId: onProductCreated
+      summary: '`product.created` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductCreatedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  product.deleted:
+    post:
+      operationId: onProductDeleted
+      summary: '`product.deleted` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductDeletedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  product.updated:
+    post:
+      operationId: onProductUpdated
+      summary: '`product.updated` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductUpdatedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  referral.reward_issued:
+    post:
+      operationId: onReferralRewardIssued
+      summary: '`referral.reward_issued` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReferralRewardIssuedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  refund.processed:
+    post:
+      operationId: onRefundProcessed
+      summary: '`refund.processed` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefundProcessedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  refund.requested:
+    post:
+      operationId: onRefundRequested
+      summary: '`refund.requested` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefundRequestedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  role.assignment_changed:
+    post:
+      operationId: onRoleAssignmentChanged
+      summary: '`role.assignment_changed` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleAssignmentChangedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  subscription.authentication_required:
+    post:
+      operationId: onSubscriptionAuthenticationRequired
+      summary: '`subscription.authentication_required` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionAuthenticationRequiredEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  subscription.cancel_scheduled:
+    post:
+      operationId: onSubscriptionCancelScheduled
+      summary: '`subscription.cancel_scheduled` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionCancelScheduledEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  subscription.ended:
+    post:
+      operationId: onSubscriptionEnded
+      summary: '`subscription.ended` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionEndedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  subscription.payment_due:
+    post:
+      operationId: onSubscriptionPaymentDue
+      summary: '`subscription.payment_due` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionPaymentDueEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  subscription.payment_failed:
+    post:
+      operationId: onSubscriptionPaymentFailed
+      summary: '`subscription.payment_failed` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionPaymentFailedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  subscription.renewed:
+    post:
+      operationId: onSubscriptionRenewed
+      summary: '`subscription.renewed` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionRenewedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  subscription.resumed:
+    post:
+      operationId: onSubscriptionResumed
+      summary: '`subscription.resumed` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionResumedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  subscription.started:
+    post:
+      operationId: onSubscriptionStarted
+      summary: '`subscription.started` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionStartedEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  webhook.ping:
+    post:
+      operationId: onWebhookPing
+      summary: '`webhook.ping` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookPingEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
+  webhook.rotation_ending:
+    post:
+      operationId: onWebhookRotationEnding
+      summary: '`webhook.rotation_ending` sent to a subscription listening for it'
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+        - $ref: '#/components/parameters/WebhookTimestamp'
+        - $ref: '#/components/parameters/WebhookSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookRotationEndingEvent'
+      responses:
+        2XX:
+          description: 'Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried.'
+        410:
+          description: 'The endpoint will never accept again: the subscription is switched off and nothing more is sent to it.'
 components:
   securitySchemes:
     bearerAuth:
@@ -11182,6 +11958,19 @@ components:
       schema:
         type: string
   schemas:
+    AccountEmailChangedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: account.email_changed
+            data:
+              $ref: '#/components/schemas/AccountState'
+          required:
+            - type
+            - data
     AccountEntitlement:
       type: object
       properties:
@@ -11254,6 +12043,45 @@ components:
       required:
         - source
         - value
+    AccountEntitlementsChangedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: account.entitlements_changed
+            data:
+              $ref: '#/components/schemas/AccountState'
+          required:
+            - type
+            - data
+    AccountErasedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: account.erased
+            data:
+              $ref: '#/components/schemas/AccountState'
+          required:
+            - type
+            - data
+    AccountReinstatedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: account.reinstated
+            data:
+              $ref: '#/components/schemas/AccountState'
+          required:
+            - type
+            - data
     AccountState:
       type: object
       properties:
@@ -11280,8 +12108,10 @@ components:
           items:
             $ref: '#/components/schemas/AccountEntitlement'
         totals:
+          description: 'How much of each entitlement key the account holds, by entitlement key: for a counted key the sum of its quantities, for any other key 1 while it is held. An account holding nothing has an empty object.'
           type: object
-          additionalProperties: true
+          additionalProperties:
+            type: integer
         subscriptions:
           description: "Every subscription of the account that is not `canceled` and counts in the credential's mode, oldest first. A write to any field an entry carries raises `sequence`."
           type: array
@@ -11417,6 +12247,19 @@ components:
         - environment
         - resumes_at
         - manage_url
+    AccountSuspendedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: account.suspended
+            data:
+              $ref: '#/components/schemas/AccountState'
+          required:
+            - type
+            - data
     AdvanceTestClockPayload:
       type: object
       properties:
@@ -11525,6 +12368,32 @@ components:
       required:
         - id
         - title
+    ArticleCreatedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: article.created
+            data:
+              $ref: '#/components/schemas/Article'
+          required:
+            - type
+            - data
+    ArticleDeletedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: article.deleted
+            data:
+              $ref: '#/components/schemas/Article'
+          required:
+            - type
+            - data
     ArticleFeed:
       type: object
       properties:
@@ -11558,6 +12427,19 @@ components:
         next_cursor:
           type: string
           description: 'Pass as `cursor` for the next page. Absent on the last page.'
+    ArticleUpdatedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: article.updated
+            data:
+              $ref: '#/components/schemas/Article'
+          required:
+            - type
+            - data
     AskBackendStorePurchaseIntentPayload:
       type: object
       properties:
@@ -11668,9 +12550,9 @@ components:
             - 'null'
           minimum: 1
         return_url:
-          type:
-            - string
-            - 'null'
+          type: string
+      required:
+        - return_url
     CheckoutSession:
       type: object
       properties:
@@ -11932,50 +12814,39 @@ components:
         next_cursor:
           type: string
           description: 'Pass as `cursor` for the next page. Absent on the last page.'
+    FormSubmittedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: form.submitted
+            data:
+              $ref: '#/components/schemas/FormSubmittedEventData'
+          required:
+            - type
+            - data
+    FormSubmittedEventData:
+      allOf:
+        - $ref: '#/components/schemas/FormEntry'
+        - type: object
+          properties:
+            form_name:
+              type: string
+          required:
+            - form_name
     ListedAccountState:
-      type: object
-      properties:
-        subject:
-          type: string
-        sequence:
-          type: integer
-        status:
-          type: string
-          enum:
-            - active
-            - suspended
-            - erased
-            - unknown
-        email:
-          type:
-            - string
-            - 'null'
-        email_verified:
-          type: boolean
-        entitlements:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountEntitlement'
-        totals:
-          type: object
-          additionalProperties: true
-        subscriptions:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountSubscription'
-        entitlements_changed_at:
-          description: "When what this member's entitlements read returns last changed, to the second: a grant, a subscription, a seat, a purchase or a refund, a value on a product they hold, a window or grant reached by the clock, a tester's mark or an erasure. A name first handed out is changed then; a name recorded before this field existed carries the moment it was added. For display and ordering; start the next walk from `next_changed_since`, not from this."
-          type: string
-          format: date-time
-      required:
-        - subject
-        - sequence
-        - status
-        - email_verified
-        - entitlements
-        - totals
-        - subscriptions
-        - entitlements_changed_at
+      allOf:
+        - $ref: '#/components/schemas/AccountState'
+        - type: object
+          properties:
+            entitlements_changed_at:
+              description: "When what this member's entitlements read returns last changed, to the second: a grant, a subscription, a seat, a purchase or a refund, a value on a product they hold, a window or grant reached by the clock, a tester's mark or an erasure. A name first handed out is changed then; a name recorded before this field existed carries the moment it was added. For display and ordering; start the next walk from `next_changed_since`, not from this."
+              type: string
+              format: date-time
+          required:
+            - entitlements_changed_at
     ListedAccountStatePage:
       type: object
       properties:
@@ -12100,8 +12971,12 @@ components:
             - string
             - 'null'
           format: date-time
+        terms:
+          description: "The site's current terms version (null when it asks for no acceptance) and whether the member has accepted it. A member who has not is asked to in the member area, where most pages wait until they do; this API stays open."
+          $ref: '#/components/schemas/MemberTerms'
       required:
         - id
+        - terms
     MemberSubscription:
       type: object
       properties:
@@ -12178,6 +13053,17 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/MemberSubscription'
+    MemberTerms:
+      type: object
+      properties:
+        current:
+          type:
+            - string
+            - 'null'
+        accepted:
+          type: boolean
+      required:
+        - accepted
     OpenBackendPortalSessionPayload:
       type: object
       properties:
@@ -12276,6 +13162,45 @@ components:
         - total_shown
         - updated_at
         - items
+    OrderCancelledEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: order.cancelled
+            data:
+              $ref: '#/components/schemas/Order'
+          required:
+            - type
+            - data
+    OrderCompletedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: order.completed
+            data:
+              $ref: '#/components/schemas/Order'
+          required:
+            - type
+            - data
+    OrderExpiredEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: order.expired
+            data:
+              $ref: '#/components/schemas/Order'
+          required:
+            - type
+            - data
     OrderFeed:
       type: object
       properties:
@@ -12331,6 +13256,105 @@ components:
         next_cursor:
           type: string
           description: 'Pass as `cursor` for the next page. Absent on the last page.'
+    OrderPaidEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: order.paid
+            data:
+              $ref: '#/components/schemas/OrderPaidEventData'
+          required:
+            - type
+            - data
+    OrderPaidEventData:
+      allOf:
+        - $ref: '#/components/schemas/Order'
+        - type: object
+          properties:
+            payment:
+              oneOf: [{ $ref: '#/components/schemas/WebhookPayment' }, { type: 'null' }]
+            subject:
+              type: [string, 'null']
+          required:
+            - payment
+            - subject
+    OrderPaymentArrivedLateEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: order.payment_arrived_late
+            data:
+              $ref: '#/components/schemas/Order'
+          required:
+            - type
+            - data
+    OrderRefundedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: order.refunded
+            data:
+              $ref: '#/components/schemas/OrderRefundedEventData'
+          required:
+            - type
+            - data
+    OrderRefundedEventData:
+      allOf:
+        - $ref: '#/components/schemas/Order'
+        - type: object
+          properties:
+            payment:
+              $ref: '#/components/schemas/WebhookPayment'
+          required:
+            - payment
+    OrderRevivedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: order.revived
+            data:
+              $ref: '#/components/schemas/Order'
+          required:
+            - type
+            - data
+    OrderShippedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: order.shipped
+            data:
+              $ref: '#/components/schemas/Order'
+          required:
+            - type
+            - data
+    OrderStatusUpdatedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: order.status_updated
+            data:
+              $ref: '#/components/schemas/Order'
+          required:
+            - type
+            - data
     Page:
       type: object
       properties:
@@ -12395,6 +13419,32 @@ components:
         - reference
         - published_at
         - updated_at
+    PageCreatedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: page.created
+            data:
+              $ref: '#/components/schemas/Page'
+          required:
+            - type
+            - data
+    PageDeletedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: page.deleted
+            data:
+              $ref: '#/components/schemas/Page'
+          required:
+            - type
+            - data
     PageFeed:
       type: object
       properties:
@@ -12428,6 +13478,63 @@ components:
         next_cursor:
           type: string
           description: 'Pass as `cursor` for the next page. Absent on the last page.'
+    PageUpdatedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: page.updated
+            data:
+              $ref: '#/components/schemas/Page'
+          required:
+            - type
+            - data
+    PaymentRefundedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: payment.refunded
+            data:
+              $ref: '#/components/schemas/PaymentRefundedEventData'
+          required:
+            - type
+            - data
+    PaymentRefundedEventData:
+      allOf:
+        - $ref: '#/components/schemas/Order'
+        - type: object
+          properties:
+            payment:
+              $ref: '#/components/schemas/WebhookPayment'
+          required:
+            - payment
+    PaymentReversedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: payment.reversed
+            data:
+              $ref: '#/components/schemas/PaymentReversedEventData'
+          required:
+            - type
+            - data
+    PaymentReversedEventData:
+      allOf:
+        - $ref: '#/components/schemas/Order'
+        - type: object
+          properties:
+            payment:
+              $ref: '#/components/schemas/WebhookPayment'
+          required:
+            - payment
     PortalSession:
       type: object
       properties:
@@ -12559,6 +13666,32 @@ components:
         - status
         - published_at
         - updated_at
+    ProductCreatedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: product.created
+            data:
+              $ref: '#/components/schemas/Product'
+          required:
+            - type
+            - data
+    ProductDeletedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: product.deleted
+            data:
+              $ref: '#/components/schemas/Product'
+          required:
+            - type
+            - data
     ProductFeatureValue:
       type: object
       properties:
@@ -12667,6 +13800,19 @@ components:
         - original_price
         - interval
         - interval_count
+    ProductUpdatedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: product.updated
+            data:
+              $ref: '#/components/schemas/Product'
+          required:
+            - type
+            - data
     PushDevice:
       type: object
       properties:
@@ -12805,6 +13951,41 @@ components:
         - code
         - expires_at
         - earned_at
+    ReferralRewardIssuedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: referral.reward_issued
+            data:
+              $ref: '#/components/schemas/ReferralRewardIssuedEventData'
+          required:
+            - type
+            - data
+    ReferralRewardIssuedEventData:
+      type: object
+      properties:
+        subject:
+          type:
+            - string
+            - 'null'
+        referral_code:
+          type:
+            - string
+            - 'null'
+        payment_reference:
+          type:
+            - string
+            - 'null'
+        reward:
+          $ref: '#/components/schemas/WebhookReferralReward'
+      required:
+        - subject
+        - referral_code
+        - payment_reference
+        - reward
     ReferralRewardPage:
       type: object
       required:
@@ -12833,6 +14014,86 @@ components:
         - type
         - value
         - currency
+    Refund:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        reference:
+          description: 'The refund number a person is shown.'
+          type: string
+        order:
+          description: 'The order number, the `id` the order goes by.'
+          type: string
+        payment:
+          description: 'The `reference` of the payment the money comes off, as `order.paid` named it.'
+          type: string
+        amount:
+          description: 'In the minor unit of `currency`.'
+          type: integer
+        currency:
+          type: string
+        status:
+          type: string
+          enum:
+            - pending
+            - approved
+            - rejected
+            - refunded
+            - reported
+            - covered
+            - dismissed
+            - failed
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        refunded_at:
+          description: 'When the money went back; null until it has.'
+          type:
+            - string
+            - 'null'
+          format: date-time
+      required:
+        - id
+        - reference
+        - order
+        - payment
+        - amount
+        - currency
+        - status
+        - created_at
+        - updated_at
+        - refunded_at
+    RefundProcessedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: refund.processed
+            data:
+              $ref: '#/components/schemas/Refund'
+          required:
+            - type
+            - data
+    RefundRequestedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: refund.requested
+            data:
+              $ref: '#/components/schemas/Refund'
+          required:
+            - type
+            - data
     ResumeMeSubscriptionPayload:
       type: object
       properties:
@@ -12884,6 +14145,49 @@ components:
       required:
         - key
         - retired
+    RoleAssignmentChangedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: role.assignment_changed
+            data:
+              $ref: '#/components/schemas/RoleAssignmentChangedEventData'
+          required:
+            - type
+            - data
+    RoleAssignmentChangedEventData:
+      type: object
+      properties:
+        subject:
+          type: string
+        role:
+          type: string
+        change:
+          type: string
+          enum:
+            - added
+            - removed
+        cause:
+          type: string
+          enum:
+            - app
+            - role_retired
+        roles:
+          type: array
+          items:
+            type: string
+        sequence:
+          type: integer
+      required:
+        - subject
+        - role
+        - change
+        - cause
+        - roles
+        - sequence
     RoleList:
       type: object
       required:
@@ -13430,6 +14734,106 @@ components:
       required:
         - store
         - initiation
+    SubscriptionAuthenticationRequiredEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: subscription.authentication_required
+            data:
+              $ref: '#/components/schemas/AccountSubscription'
+          required:
+            - type
+            - data
+    SubscriptionCancelScheduledEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: subscription.cancel_scheduled
+            data:
+              $ref: '#/components/schemas/AccountSubscription'
+          required:
+            - type
+            - data
+    SubscriptionEndedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: subscription.ended
+            data:
+              $ref: '#/components/schemas/AccountSubscription'
+          required:
+            - type
+            - data
+    SubscriptionPaymentDueEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: subscription.payment_due
+            data:
+              $ref: '#/components/schemas/AccountSubscription'
+          required:
+            - type
+            - data
+    SubscriptionPaymentFailedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: subscription.payment_failed
+            data:
+              $ref: '#/components/schemas/AccountSubscription'
+          required:
+            - type
+            - data
+    SubscriptionRenewedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: subscription.renewed
+            data:
+              $ref: '#/components/schemas/SubscriptionRenewedEventData'
+          required:
+            - type
+            - data
+    SubscriptionRenewedEventData:
+      allOf:
+        - $ref: '#/components/schemas/AccountSubscription'
+        - type: object
+          properties:
+            period:
+              $ref: '#/components/schemas/WebhookSubscriptionPeriod'
+          required:
+            - period
+    SubscriptionResumedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: subscription.resumed
+            data:
+              $ref: '#/components/schemas/AccountSubscription'
+          required:
+            - type
+            - data
     SubscriptionSource:
       type: object
       properties:
@@ -13450,6 +14854,26 @@ components:
         - billed_by
         - manage_url
         - subscription_id
+    SubscriptionStartedEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: subscription.started
+            data:
+              $ref: '#/components/schemas/SubscriptionStartedEventData'
+          required:
+            - type
+            - data
+    SubscriptionStartedEventData:
+      allOf:
+        - $ref: '#/components/schemas/AccountSubscription'
+        - type: object
+          properties:
+            period:
+              $ref: '#/components/schemas/WebhookSubscriptionPeriod'
     SyncPushPayload:
       type: object
       properties:
@@ -13993,3 +15417,164 @@ components:
         - event_types
         - is_active
         - secret
+    WebhookEnvelope:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'The occurrence id, as `webhook-id` carries it: the same on every attempt and redelivery.'
+        type:
+          type: string
+          description: 'The event type. Route on it; answer 2xx to a type you do not know.'
+        timestamp:
+          type: string
+          format: date-time
+          description: 'When the event happened. A retry does not change it; the `webhook-timestamp` header does.'
+        version:
+          type: integer
+          const: 1
+          description: "The envelope's schema version."
+        mode:
+          type: string
+          enum:
+            - production
+            - test
+          description: 'Whether real money or test money is behind the event. A subscription is sent only its own mode.'
+      required:
+        - id
+        - type
+        - timestamp
+        - version
+        - mode
+    WebhookPayment:
+      type: object
+      properties:
+        reference:
+          description: 'The payment the event concerns; book a purchase once per reference.'
+          type: string
+        amount:
+          description: 'In minor units of the currency.'
+          type: integer
+        currency:
+          type: string
+      required:
+        - reference
+        - amount
+        - currency
+    WebhookPingEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: webhook.ping
+            data:
+              $ref: '#/components/schemas/WebhookPingEventData'
+          required:
+            - type
+            - data
+    WebhookPingEventData:
+      type: object
+      properties:
+        subscription_id:
+          type: string
+          format: uuid
+      required:
+        - subscription_id
+    WebhookReferralReward:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - credit
+            - cashback
+        value:
+          type: integer
+        currency:
+          type: string
+        code:
+          description: 'The coupon a credit reward is spent through; null for any other reward.'
+          type:
+            - string
+            - 'null'
+        min_order_amount:
+          type:
+            - integer
+            - 'null'
+        expires_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+      required:
+        - type
+        - value
+        - currency
+        - code
+        - min_order_amount
+        - expires_at
+    WebhookRotationEndingEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: webhook.rotation_ending
+            data:
+              $ref: '#/components/schemas/WebhookRotationEndingEventData'
+          required:
+            - type
+            - data
+    WebhookRotationEndingEventData:
+      type: object
+      properties:
+        endpoint_id:
+          type: string
+          format: uuid
+        rotation_started_at:
+          type: string
+          format: date-time
+        completes_at:
+          type: string
+          format: date-time
+      required:
+        - endpoint_id
+        - rotation_started_at
+        - completes_at
+    WebhookSubscriptionPeriod:
+      type: object
+      properties:
+        start:
+          type: string
+          format: date-time
+        end:
+          type: string
+          format: date-time
+      required:
+        - start
+        - end
+  parameters:
+    WebhookId:
+      name: webhook-id
+      in: header
+      required: true
+      description: "The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it."
+      schema:
+        type: string
+    WebhookTimestamp:
+      name: webhook-timestamp
+      in: header
+      required: true
+      description: 'Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock.'
+      schema:
+        type: integer
+    WebhookSignature:
+      name: webhook-signature
+      in: header
+      required: true
+      description: 'Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received.'
+      schema:
+        type: string

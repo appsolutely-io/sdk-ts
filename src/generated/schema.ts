@@ -1342,9 +1342,695 @@ export interface paths {
         trace?: never;
     };
 }
-export type webhooks = Record<string, never>;
+export interface webhooks {
+    "account.email_changed": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `account.email_changed` sent to a subscription listening for it */
+        post: operations["onAccountEmailChanged"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "account.entitlements_changed": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `account.entitlements_changed` sent to a subscription listening for it */
+        post: operations["onAccountEntitlementsChanged"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "account.erased": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `account.erased` sent to a subscription listening for it */
+        post: operations["onAccountErased"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "account.reinstated": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `account.reinstated` sent to a subscription listening for it */
+        post: operations["onAccountReinstated"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "account.suspended": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `account.suspended` sent to a subscription listening for it */
+        post: operations["onAccountSuspended"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "article.created": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `article.created` sent to a subscription listening for it */
+        post: operations["onArticleCreated"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "article.deleted": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `article.deleted` sent to a subscription listening for it */
+        post: operations["onArticleDeleted"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "article.updated": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `article.updated` sent to a subscription listening for it */
+        post: operations["onArticleUpdated"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "form.submitted": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `form.submitted` sent to a subscription listening for it */
+        post: operations["onFormSubmitted"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "order.cancelled": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `order.cancelled` sent to a subscription listening for it */
+        post: operations["onOrderCancelled"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "order.completed": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `order.completed` sent to a subscription listening for it */
+        post: operations["onOrderCompleted"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "order.expired": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `order.expired` sent to a subscription listening for it */
+        post: operations["onOrderExpired"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "order.paid": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `order.paid` sent to a subscription listening for it */
+        post: operations["onOrderPaid"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "order.payment_arrived_late": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `order.payment_arrived_late` sent to a subscription listening for it */
+        post: operations["onOrderPaymentArrivedLate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "order.refunded": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `order.refunded` sent to a subscription listening for it */
+        post: operations["onOrderRefunded"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "order.revived": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `order.revived` sent to a subscription listening for it */
+        post: operations["onOrderRevived"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "order.shipped": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `order.shipped` sent to a subscription listening for it */
+        post: operations["onOrderShipped"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "order.status_updated": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `order.status_updated` sent to a subscription listening for it */
+        post: operations["onOrderStatusUpdated"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "page.created": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `page.created` sent to a subscription listening for it */
+        post: operations["onPageCreated"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "page.deleted": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `page.deleted` sent to a subscription listening for it */
+        post: operations["onPageDeleted"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "page.updated": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `page.updated` sent to a subscription listening for it */
+        post: operations["onPageUpdated"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "payment.refunded": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `payment.refunded` sent to a subscription listening for it */
+        post: operations["onPaymentRefunded"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "payment.reversed": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `payment.reversed` sent to a subscription listening for it */
+        post: operations["onPaymentReversed"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "product.created": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `product.created` sent to a subscription listening for it */
+        post: operations["onProductCreated"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "product.deleted": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `product.deleted` sent to a subscription listening for it */
+        post: operations["onProductDeleted"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "product.updated": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `product.updated` sent to a subscription listening for it */
+        post: operations["onProductUpdated"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "referral.reward_issued": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `referral.reward_issued` sent to a subscription listening for it */
+        post: operations["onReferralRewardIssued"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "refund.processed": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `refund.processed` sent to a subscription listening for it */
+        post: operations["onRefundProcessed"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "refund.requested": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `refund.requested` sent to a subscription listening for it */
+        post: operations["onRefundRequested"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "role.assignment_changed": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `role.assignment_changed` sent to a subscription listening for it */
+        post: operations["onRoleAssignmentChanged"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "subscription.authentication_required": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `subscription.authentication_required` sent to a subscription listening for it */
+        post: operations["onSubscriptionAuthenticationRequired"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "subscription.cancel_scheduled": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `subscription.cancel_scheduled` sent to a subscription listening for it */
+        post: operations["onSubscriptionCancelScheduled"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "subscription.ended": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `subscription.ended` sent to a subscription listening for it */
+        post: operations["onSubscriptionEnded"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "subscription.payment_due": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `subscription.payment_due` sent to a subscription listening for it */
+        post: operations["onSubscriptionPaymentDue"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "subscription.payment_failed": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `subscription.payment_failed` sent to a subscription listening for it */
+        post: operations["onSubscriptionPaymentFailed"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "subscription.renewed": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `subscription.renewed` sent to a subscription listening for it */
+        post: operations["onSubscriptionRenewed"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "subscription.resumed": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `subscription.resumed` sent to a subscription listening for it */
+        post: operations["onSubscriptionResumed"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "subscription.started": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `subscription.started` sent to a subscription listening for it */
+        post: operations["onSubscriptionStarted"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "webhook.ping": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `webhook.ping` sent to a subscription listening for it */
+        post: operations["onWebhookPing"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "webhook.rotation_ending": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** `webhook.rotation_ending` sent to a subscription listening for it */
+        post: operations["onWebhookRotationEnding"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+}
 export interface components {
     schemas: {
+        AccountEmailChangedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "account.email_changed";
+            data: components["schemas"]["AccountState"];
+        };
         AccountEntitlement: {
             key: string;
             label: string;
@@ -1376,6 +2062,21 @@ export interface components {
             /** Format: date-time */
             ends_at?: string | null;
         };
+        AccountEntitlementsChangedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "account.entitlements_changed";
+            data: components["schemas"]["AccountState"];
+        };
+        AccountErasedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "account.erased";
+            data: components["schemas"]["AccountState"];
+        };
+        AccountReinstatedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "account.reinstated";
+            data: components["schemas"]["AccountState"];
+        };
         AccountState: {
             subject: string;
             sequence: number;
@@ -1387,8 +2088,9 @@ export interface components {
             email?: string | null;
             email_verified: boolean;
             entitlements: components["schemas"]["AccountEntitlement"][];
+            /** @description How much of each entitlement key the account holds, by entitlement key: for a counted key the sum of its quantities, for any other key 1 while it is held. An account holding nothing has an empty object. */
             totals: {
-                [key: string]: unknown;
+                [key: string]: number;
             };
             /** @description Every subscription of the account that is not `canceled` and counts in the credential's mode, oldest first. A write to any field an entry carries raises `sequence`. */
             subscriptions: components["schemas"]["AccountSubscription"][];
@@ -1430,6 +2132,11 @@ export interface components {
             resumes_at: string | null;
             manage_url: string | null;
         };
+        AccountSuspendedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "account.suspended";
+            data: components["schemas"]["AccountState"];
+        };
         AdvanceTestClockPayload: {
             seconds: number;
         };
@@ -1470,6 +2177,16 @@ export interface components {
             title: string;
             slug?: string | null;
         };
+        ArticleCreatedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "article.created";
+            data: components["schemas"]["Article"];
+        };
+        ArticleDeletedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "article.deleted";
+            data: components["schemas"]["Article"];
+        };
         ArticleFeed: {
             upserts: components["schemas"]["Article"][];
             tombstones: components["schemas"]["SyncTombstone"][];
@@ -1480,6 +2197,11 @@ export interface components {
             data: components["schemas"]["Article"][];
             /** @description Pass as `cursor` for the next page. Absent on the last page. */
             next_cursor?: string;
+        };
+        ArticleUpdatedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "article.updated";
+            data: components["schemas"]["Article"];
         };
         AskBackendStorePurchaseIntentPayload: {
             /** @enum {string} */
@@ -1520,7 +2242,7 @@ export interface components {
         ChangeMeSubscriptionPayload: {
             sku?: string | null;
             quantity?: number | null;
-            return_url?: string | null;
+            return_url: string;
         };
         CheckoutSession: {
             id: string;
@@ -1615,18 +2337,15 @@ export interface components {
             /** @description Pass as `cursor` for the next page. Absent on the last page. */
             next_cursor?: string;
         };
-        ListedAccountState: {
-            subject: string;
-            sequence: number;
-            /** @enum {string} */
-            status: "active" | "suspended" | "erased" | "unknown";
-            email?: string | null;
-            email_verified: boolean;
-            entitlements: components["schemas"]["AccountEntitlement"][];
-            totals: {
-                [key: string]: unknown;
-            };
-            subscriptions: components["schemas"]["AccountSubscription"][];
+        FormSubmittedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "form.submitted";
+            data: components["schemas"]["FormSubmittedEventData"];
+        };
+        FormSubmittedEventData: components["schemas"]["FormEntry"] & {
+            form_name: string;
+        };
+        ListedAccountState: components["schemas"]["AccountState"] & {
             /**
              * Format: date-time
              * @description When what this member's entitlements read returns last changed, to the second: a grant, a subscription, a seat, a purchase or a refund, a value on a product they hold, a window or grant reached by the clock, a tester's mark or an erasure. A name first handed out is changed then; a name recorded before this field existed carries the moment it was added. For display and ordering; start the next walk from `next_changed_since`, not from this.
@@ -1673,6 +2392,8 @@ export interface components {
             created_at?: string | null;
             /** Format: date-time */
             updated_at?: string | null;
+            /** @description The site's current terms version (null when it asks for no acceptance) and whether the member has accepted it. A member who has not is asked to in the member area, where most pages wait until they do; this API stays open. */
+            terms: components["schemas"]["MemberTerms"];
         };
         MemberSubscription: {
             /** Format: uuid */
@@ -1698,6 +2419,10 @@ export interface components {
         };
         MemberSubscriptionList: {
             data: components["schemas"]["MemberSubscription"][];
+        };
+        MemberTerms: {
+            current?: string | null;
+            accepted: boolean;
         };
         OpenBackendPortalSessionPayload: {
             return_url: string;
@@ -1733,6 +2458,21 @@ export interface components {
             updated_at: string;
             items: components["schemas"]["OrderLineSummary"][];
         };
+        OrderCancelledEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "order.cancelled";
+            data: components["schemas"]["Order"];
+        };
+        OrderCompletedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "order.completed";
+            data: components["schemas"]["Order"];
+        };
+        OrderExpiredEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "order.expired";
+            data: components["schemas"]["Order"];
+        };
         OrderFeed: {
             upserts: components["schemas"]["Order"][];
             tombstones: components["schemas"]["SyncTombstone"][];
@@ -1752,6 +2492,43 @@ export interface components {
             data: components["schemas"]["Order"][];
             /** @description Pass as `cursor` for the next page. Absent on the last page. */
             next_cursor?: string;
+        };
+        OrderPaidEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "order.paid";
+            data: components["schemas"]["OrderPaidEventData"];
+        };
+        OrderPaidEventData: components["schemas"]["Order"] & {
+            payment: components["schemas"]["WebhookPayment"] | null;
+            subject: string | null;
+        };
+        OrderPaymentArrivedLateEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "order.payment_arrived_late";
+            data: components["schemas"]["Order"];
+        };
+        OrderRefundedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "order.refunded";
+            data: components["schemas"]["OrderRefundedEventData"];
+        };
+        OrderRefundedEventData: components["schemas"]["Order"] & {
+            payment: components["schemas"]["WebhookPayment"];
+        };
+        OrderRevivedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "order.revived";
+            data: components["schemas"]["Order"];
+        };
+        OrderShippedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "order.shipped";
+            data: components["schemas"]["Order"];
+        };
+        OrderStatusUpdatedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "order.status_updated";
+            data: components["schemas"]["Order"];
         };
         Page: {
             /** Format: uuid */
@@ -1779,6 +2556,16 @@ export interface components {
             /** Format: date-time */
             updated_at: string;
         };
+        PageCreatedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "page.created";
+            data: components["schemas"]["Page"];
+        };
+        PageDeletedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "page.deleted";
+            data: components["schemas"]["Page"];
+        };
         PageFeed: {
             upserts: components["schemas"]["Page"][];
             tombstones: components["schemas"]["SyncTombstone"][];
@@ -1789,6 +2576,27 @@ export interface components {
             data: components["schemas"]["Page"][];
             /** @description Pass as `cursor` for the next page. Absent on the last page. */
             next_cursor?: string;
+        };
+        PageUpdatedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "page.updated";
+            data: components["schemas"]["Page"];
+        };
+        PaymentRefundedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "payment.refunded";
+            data: components["schemas"]["PaymentRefundedEventData"];
+        };
+        PaymentRefundedEventData: components["schemas"]["Order"] & {
+            payment: components["schemas"]["WebhookPayment"];
+        };
+        PaymentReversedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "payment.reversed";
+            data: components["schemas"]["PaymentReversedEventData"];
+        };
+        PaymentReversedEventData: components["schemas"]["Order"] & {
+            payment: components["schemas"]["WebhookPayment"];
         };
         PortalSession: {
             id: string;
@@ -1844,6 +2652,16 @@ export interface components {
             /** Format: date-time */
             updated_at: string;
         };
+        ProductCreatedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "product.created";
+            data: components["schemas"]["Product"];
+        };
+        ProductDeletedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "product.deleted";
+            data: components["schemas"]["Product"];
+        };
         ProductFeatureValue: {
             key: string;
             /** @enum {string} */
@@ -1879,6 +2697,11 @@ export interface components {
             /** @enum {string|null} */
             interval: "month" | "year" | null;
             interval_count: number | null;
+        };
+        ProductUpdatedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "product.updated";
+            data: components["schemas"]["Product"];
         };
         PushDevice: {
             token: string;
@@ -1928,6 +2751,17 @@ export interface components {
             /** Format: date-time */
             earned_at: string;
         };
+        ReferralRewardIssuedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "referral.reward_issued";
+            data: components["schemas"]["ReferralRewardIssuedEventData"];
+        };
+        ReferralRewardIssuedEventData: {
+            subject: string | null;
+            referral_code: string | null;
+            payment_reference: string | null;
+            reward: components["schemas"]["WebhookReferralReward"];
+        };
         ReferralRewardPage: {
             data: components["schemas"]["ReferralReward"][];
             /** @description Pass as `cursor` for the next page. Absent on the last page. */
@@ -1938,6 +2772,40 @@ export interface components {
             type: "credit" | "cashback";
             value: number;
             currency: string;
+        };
+        Refund: {
+            /** Format: uuid */
+            id: string;
+            /** @description The refund number a person is shown. */
+            reference: string;
+            /** @description The order number, the `id` the order goes by. */
+            order: string;
+            /** @description The `reference` of the payment the money comes off, as `order.paid` named it. */
+            payment: string;
+            /** @description In the minor unit of `currency`. */
+            amount: number;
+            currency: string;
+            /** @enum {string} */
+            status: "pending" | "approved" | "rejected" | "refunded" | "reported" | "covered" | "dismissed" | "failed";
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            updated_at: string;
+            /**
+             * Format: date-time
+             * @description When the money went back; null until it has.
+             */
+            refunded_at: string | null;
+        };
+        RefundProcessedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "refund.processed";
+            data: components["schemas"]["Refund"];
+        };
+        RefundRequestedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "refund.requested";
+            data: components["schemas"]["Refund"];
         };
         ResumeMeSubscriptionPayload: {
             return_url: string;
@@ -1959,6 +2827,21 @@ export interface components {
             created_at?: string | null;
             /** Format: date-time */
             retired_at?: string | null;
+        };
+        RoleAssignmentChangedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "role.assignment_changed";
+            data: components["schemas"]["RoleAssignmentChangedEventData"];
+        };
+        RoleAssignmentChangedEventData: {
+            subject: string;
+            role: string;
+            /** @enum {string} */
+            change: "added" | "removed";
+            /** @enum {string} */
+            cause: "app" | "role_retired";
+            roles: string[];
+            sequence: number;
         };
         RoleList: {
             data: components["schemas"]["Role"][];
@@ -2127,12 +3010,58 @@ export interface components {
             /** @description Required when `store` is `google_play`. */
             purchase_token?: string;
         };
+        SubscriptionAuthenticationRequiredEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "subscription.authentication_required";
+            data: components["schemas"]["AccountSubscription"];
+        };
+        SubscriptionCancelScheduledEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "subscription.cancel_scheduled";
+            data: components["schemas"]["AccountSubscription"];
+        };
+        SubscriptionEndedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "subscription.ended";
+            data: components["schemas"]["AccountSubscription"];
+        };
+        SubscriptionPaymentDueEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "subscription.payment_due";
+            data: components["schemas"]["AccountSubscription"];
+        };
+        SubscriptionPaymentFailedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "subscription.payment_failed";
+            data: components["schemas"]["AccountSubscription"];
+        };
+        SubscriptionRenewedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "subscription.renewed";
+            data: components["schemas"]["SubscriptionRenewedEventData"];
+        };
+        SubscriptionRenewedEventData: components["schemas"]["AccountSubscription"] & {
+            period: components["schemas"]["WebhookSubscriptionPeriod"];
+        };
+        SubscriptionResumedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "subscription.resumed";
+            data: components["schemas"]["AccountSubscription"];
+        };
         SubscriptionSource: {
             /** @enum {string} */
             billed_by: "site" | "app_store" | "google_play";
             manage_url: string | null;
             /** Format: uuid */
             subscription_id: string;
+        };
+        SubscriptionStartedEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "subscription.started";
+            data: components["schemas"]["SubscriptionStartedEventData"];
+        };
+        SubscriptionStartedEventData: components["schemas"]["AccountSubscription"] & {
+            period?: components["schemas"]["WebhookSubscriptionPeriod"];
         };
         SyncPushPayload: {
             mutations: {
@@ -2333,9 +3262,83 @@ export interface components {
             created_at?: string | null;
             secret: string;
         };
+        WebhookEnvelope: {
+            /** @description The occurrence id, as `webhook-id` carries it: the same on every attempt and redelivery. */
+            id: string;
+            /** @description The event type. Route on it; answer 2xx to a type you do not know. */
+            type: string;
+            /**
+             * Format: date-time
+             * @description When the event happened. A retry does not change it; the `webhook-timestamp` header does.
+             */
+            timestamp: string;
+            /**
+             * @description The envelope's schema version.
+             * @constant
+             */
+            version: 1;
+            /**
+             * @description Whether real money or test money is behind the event. A subscription is sent only its own mode.
+             * @enum {string}
+             */
+            mode: "production" | "test";
+        };
+        WebhookPayment: {
+            /** @description The payment the event concerns; book a purchase once per reference. */
+            reference: string;
+            /** @description In minor units of the currency. */
+            amount: number;
+            currency: string;
+        };
+        WebhookPingEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "webhook.ping";
+            data: components["schemas"]["WebhookPingEventData"];
+        };
+        WebhookPingEventData: {
+            /** Format: uuid */
+            subscription_id: string;
+        };
+        WebhookReferralReward: {
+            /** @enum {string} */
+            type: "credit" | "cashback";
+            value: number;
+            currency: string;
+            /** @description The coupon a credit reward is spent through; null for any other reward. */
+            code: string | null;
+            min_order_amount: number | null;
+            /** Format: date-time */
+            expires_at: string | null;
+        };
+        WebhookRotationEndingEvent: components["schemas"]["WebhookEnvelope"] & {
+            /** @constant */
+            type: "webhook.rotation_ending";
+            data: components["schemas"]["WebhookRotationEndingEventData"];
+        };
+        WebhookRotationEndingEventData: {
+            /** Format: uuid */
+            endpoint_id: string;
+            /** Format: date-time */
+            rotation_started_at: string;
+            /** Format: date-time */
+            completes_at: string;
+        };
+        WebhookSubscriptionPeriod: {
+            /** Format: date-time */
+            start: string;
+            /** Format: date-time */
+            end: string;
+        };
     };
     responses: never;
-    parameters: never;
+    parameters: {
+        /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+        WebhookId: string;
+        /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+        WebhookTimestamp: number;
+        /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+        WebhookSignature: string;
+    };
     requestBodies: never;
     headers: {
         /** @description What is left of each budget that counted this request, one list member per policy: `"<policy>";r=<remaining>;t=<seconds until the window turns over>` (draft-ietf-httpapi-ratelimit-headers). */
@@ -2347,18 +3350,26 @@ export interface components {
     };
     pathItems: never;
 }
+export type AccountEmailChangedEvent = components['schemas']['AccountEmailChangedEvent'];
 export type AccountEntitlement = components['schemas']['AccountEntitlement'];
 export type AccountEntitlementList = components['schemas']['AccountEntitlementList'];
 export type AccountEntitlementTerm = components['schemas']['AccountEntitlementTerm'];
+export type AccountEntitlementsChangedEvent = components['schemas']['AccountEntitlementsChangedEvent'];
+export type AccountErasedEvent = components['schemas']['AccountErasedEvent'];
+export type AccountReinstatedEvent = components['schemas']['AccountReinstatedEvent'];
 export type AccountState = components['schemas']['AccountState'];
 export type AccountStateList = components['schemas']['AccountStateList'];
 export type AccountSubscription = components['schemas']['AccountSubscription'];
+export type AccountSuspendedEvent = components['schemas']['AccountSuspendedEvent'];
 export type AdvanceTestClockPayload = components['schemas']['AdvanceTestClockPayload'];
 export type ApiVersion = components['schemas']['ApiVersion'];
 export type Article = components['schemas']['Article'];
 export type ArticleCategorySummary = components['schemas']['ArticleCategorySummary'];
+export type ArticleCreatedEvent = components['schemas']['ArticleCreatedEvent'];
+export type ArticleDeletedEvent = components['schemas']['ArticleDeletedEvent'];
 export type ArticleFeed = components['schemas']['ArticleFeed'];
 export type ArticlePage = components['schemas']['ArticlePage'];
+export type ArticleUpdatedEvent = components['schemas']['ArticleUpdatedEvent'];
 export type AskBackendStorePurchaseIntentPayload = components['schemas']['AskBackendStorePurchaseIntentPayload'];
 export type AskMeStorePurchaseIntentPayload = components['schemas']['AskMeStorePurchaseIntentPayload'];
 export type BackendClient = components['schemas']['BackendClient'];
@@ -2375,6 +3386,8 @@ export type FeatureKeyList = components['schemas']['FeatureKeyList'];
 export type FormEntry = components['schemas']['FormEntry'];
 export type FormEntryFeed = components['schemas']['FormEntryFeed'];
 export type FormEntryPage = components['schemas']['FormEntryPage'];
+export type FormSubmittedEvent = components['schemas']['FormSubmittedEvent'];
+export type FormSubmittedEventData = components['schemas']['FormSubmittedEventData'];
 export type ListedAccountState = components['schemas']['ListedAccountState'];
 export type ListedAccountStatePage = components['schemas']['ListedAccountStatePage'];
 export type MagicLinkPayload = components['schemas']['MagicLinkPayload'];
@@ -2384,36 +3397,65 @@ export type Member = components['schemas']['Member'];
 export type MemberSubscription = components['schemas']['MemberSubscription'];
 export type MemberSubscriptionChange = components['schemas']['MemberSubscriptionChange'];
 export type MemberSubscriptionList = components['schemas']['MemberSubscriptionList'];
+export type MemberTerms = components['schemas']['MemberTerms'];
 export type OpenBackendPortalSessionPayload = components['schemas']['OpenBackendPortalSessionPayload'];
 export type OpenMePortalSessionPayload = components['schemas']['OpenMePortalSessionPayload'];
 export type Order = components['schemas']['Order'];
+export type OrderCancelledEvent = components['schemas']['OrderCancelledEvent'];
+export type OrderCompletedEvent = components['schemas']['OrderCompletedEvent'];
+export type OrderExpiredEvent = components['schemas']['OrderExpiredEvent'];
 export type OrderFeed = components['schemas']['OrderFeed'];
 export type OrderLineSummary = components['schemas']['OrderLineSummary'];
 export type OrderPage = components['schemas']['OrderPage'];
+export type OrderPaidEvent = components['schemas']['OrderPaidEvent'];
+export type OrderPaidEventData = components['schemas']['OrderPaidEventData'];
+export type OrderPaymentArrivedLateEvent = components['schemas']['OrderPaymentArrivedLateEvent'];
+export type OrderRefundedEvent = components['schemas']['OrderRefundedEvent'];
+export type OrderRefundedEventData = components['schemas']['OrderRefundedEventData'];
+export type OrderRevivedEvent = components['schemas']['OrderRevivedEvent'];
+export type OrderShippedEvent = components['schemas']['OrderShippedEvent'];
+export type OrderStatusUpdatedEvent = components['schemas']['OrderStatusUpdatedEvent'];
 export type Page = components['schemas']['Page'];
+export type PageCreatedEvent = components['schemas']['PageCreatedEvent'];
+export type PageDeletedEvent = components['schemas']['PageDeletedEvent'];
 export type PageFeed = components['schemas']['PageFeed'];
 export type PagePage = components['schemas']['PagePage'];
+export type PageUpdatedEvent = components['schemas']['PageUpdatedEvent'];
+export type PaymentRefundedEvent = components['schemas']['PaymentRefundedEvent'];
+export type PaymentRefundedEventData = components['schemas']['PaymentRefundedEventData'];
+export type PaymentReversedEvent = components['schemas']['PaymentReversedEvent'];
+export type PaymentReversedEventData = components['schemas']['PaymentReversedEventData'];
 export type PortalSession = components['schemas']['PortalSession'];
 export type Problem = components['schemas']['Problem'];
 export type Product = components['schemas']['Product'];
+export type ProductCreatedEvent = components['schemas']['ProductCreatedEvent'];
+export type ProductDeletedEvent = components['schemas']['ProductDeletedEvent'];
 export type ProductFeatureValue = components['schemas']['ProductFeatureValue'];
 export type ProductFeatureValueList = components['schemas']['ProductFeatureValueList'];
 export type ProductFeed = components['schemas']['ProductFeed'];
 export type ProductPage = components['schemas']['ProductPage'];
 export type ProductPriceSummary = components['schemas']['ProductPriceSummary'];
 export type ProductSkuPrice = components['schemas']['ProductSkuPrice'];
+export type ProductUpdatedEvent = components['schemas']['ProductUpdatedEvent'];
 export type PushDevice = components['schemas']['PushDevice'];
 export type Redelivery = components['schemas']['Redelivery'];
 export type RedeliveryRefusal = components['schemas']['RedeliveryRefusal'];
 export type Referral = components['schemas']['Referral'];
 export type ReferralDiscount = components['schemas']['ReferralDiscount'];
 export type ReferralReward = components['schemas']['ReferralReward'];
+export type ReferralRewardIssuedEvent = components['schemas']['ReferralRewardIssuedEvent'];
+export type ReferralRewardIssuedEventData = components['schemas']['ReferralRewardIssuedEventData'];
 export type ReferralRewardPage = components['schemas']['ReferralRewardPage'];
 export type ReferralTerms = components['schemas']['ReferralTerms'];
+export type Refund = components['schemas']['Refund'];
+export type RefundProcessedEvent = components['schemas']['RefundProcessedEvent'];
+export type RefundRequestedEvent = components['schemas']['RefundRequestedEvent'];
 export type ResumeMeSubscriptionPayload = components['schemas']['ResumeMeSubscriptionPayload'];
 export type ReturnTarget = components['schemas']['ReturnTarget'];
 export type ReturnTargetList = components['schemas']['ReturnTargetList'];
 export type Role = components['schemas']['Role'];
+export type RoleAssignmentChangedEvent = components['schemas']['RoleAssignmentChangedEvent'];
+export type RoleAssignmentChangedEventData = components['schemas']['RoleAssignmentChangedEventData'];
 export type RoleList = components['schemas']['RoleList'];
 export type RolesHeld = components['schemas']['RolesHeld'];
 export type RolesHeldPage = components['schemas']['RolesHeldPage'];
@@ -2434,7 +3476,17 @@ export type StoreRolePayload = components['schemas']['StoreRolePayload'];
 export type StoreSeatPayload = components['schemas']['StoreSeatPayload'];
 export type SubmitBackendStorePurchaseTransactionPayload = components['schemas']['SubmitBackendStorePurchaseTransactionPayload'];
 export type SubmitMeStorePurchaseTransactionPayload = components['schemas']['SubmitMeStorePurchaseTransactionPayload'];
+export type SubscriptionAuthenticationRequiredEvent = components['schemas']['SubscriptionAuthenticationRequiredEvent'];
+export type SubscriptionCancelScheduledEvent = components['schemas']['SubscriptionCancelScheduledEvent'];
+export type SubscriptionEndedEvent = components['schemas']['SubscriptionEndedEvent'];
+export type SubscriptionPaymentDueEvent = components['schemas']['SubscriptionPaymentDueEvent'];
+export type SubscriptionPaymentFailedEvent = components['schemas']['SubscriptionPaymentFailedEvent'];
+export type SubscriptionRenewedEvent = components['schemas']['SubscriptionRenewedEvent'];
+export type SubscriptionRenewedEventData = components['schemas']['SubscriptionRenewedEventData'];
+export type SubscriptionResumedEvent = components['schemas']['SubscriptionResumedEvent'];
 export type SubscriptionSource = components['schemas']['SubscriptionSource'];
+export type SubscriptionStartedEvent = components['schemas']['SubscriptionStartedEvent'];
+export type SubscriptionStartedEventData = components['schemas']['SubscriptionStartedEventData'];
 export type SyncPushPayload = components['schemas']['SyncPushPayload'];
 export type SyncPushResult = components['schemas']['SyncPushResult'];
 export type SyncPushResults = components['schemas']['SyncPushResults'];
@@ -2455,6 +3507,17 @@ export type WebhookEndpoint = components['schemas']['WebhookEndpoint'];
 export type WebhookEndpointPage = components['schemas']['WebhookEndpointPage'];
 export type WebhookEndpointRotation = components['schemas']['WebhookEndpointRotation'];
 export type WebhookEndpointWithSecret = components['schemas']['WebhookEndpointWithSecret'];
+export type WebhookEnvelope = components['schemas']['WebhookEnvelope'];
+export type WebhookPayment = components['schemas']['WebhookPayment'];
+export type WebhookPingEvent = components['schemas']['WebhookPingEvent'];
+export type WebhookPingEventData = components['schemas']['WebhookPingEventData'];
+export type WebhookReferralReward = components['schemas']['WebhookReferralReward'];
+export type WebhookRotationEndingEvent = components['schemas']['WebhookRotationEndingEvent'];
+export type WebhookRotationEndingEventData = components['schemas']['WebhookRotationEndingEventData'];
+export type WebhookSubscriptionPeriod = components['schemas']['WebhookSubscriptionPeriod'];
+export type ParameterWebhookId = components['parameters']['WebhookId'];
+export type ParameterWebhookTimestamp = components['parameters']['WebhookTimestamp'];
+export type ParameterWebhookSignature = components['parameters']['WebhookSignature'];
 export type HeaderRateLimit = components['headers']['RateLimit'];
 export type HeaderRateLimitPolicy = components['headers']['RateLimit-Policy'];
 export type HeaderXRequestId = components['headers']['X-Request-Id'];
@@ -3219,24 +4282,7 @@ export interface operations {
                     };
                 };
             };
-            /** @description Refused: `second-factor-required`. */
-            401: {
-                headers: {
-                    /** @description The Bearer challenge for this API's realm. */
-                    "WWW-Authenticate"?: string;
-                    RateLimit: components["headers"]["RateLimit"];
-                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
-                    "X-Request-Id": components["headers"]["X-Request-Id"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["Problem"] & {
-                        /** @enum {unknown} */
-                        type?: "https://appsolutely.io/problems/second-factor-required";
-                    };
-                };
-            };
-            /** @description Refused: `account-suspended`, `account-deletion-pending`. */
+            /** @description Refused: `second-factor-required`, `account-suspended`, `account-deletion-pending`. */
             403: {
                 headers: {
                     RateLimit: components["headers"]["RateLimit"];
@@ -3247,7 +4293,7 @@ export interface operations {
                 content: {
                     "application/problem+json": components["schemas"]["Problem"] & {
                         /** @enum {unknown} */
-                        type?: "https://appsolutely.io/problems/account-suspended" | "https://appsolutely.io/problems/account-deletion-pending";
+                        type?: "https://appsolutely.io/problems/second-factor-required" | "https://appsolutely.io/problems/account-suspended" | "https://appsolutely.io/problems/account-deletion-pending";
                     };
                 };
             };
@@ -8035,11 +9081,31 @@ export interface operations {
             /** @description The OpenAPI document of this version */
             200: {
                 headers: {
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
                     [name: string]: unknown;
                 };
                 content: {
                     "application/json": {
                         [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Refused: `rate-limited`. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before asking again. */
+                    "Retry-After"?: string;
+                    RateLimit: components["headers"]["RateLimit"];
+                    "RateLimit-Policy": components["headers"]["RateLimit-Policy"];
+                    "X-Request-Id": components["headers"]["X-Request-Id"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"] & {
+                        /** @enum {unknown} */
+                        type?: "https://appsolutely.io/problems/rate-limited";
                     };
                 };
             };
@@ -10548,6 +11614,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description The paying member's account subject: the OIDC `sub` the app already knows them by. */
                 payer: string;
             };
             cookie?: never;
@@ -14124,6 +15191,1446 @@ export interface operations {
                         type?: "https://appsolutely.io/problems/temporarily-unavailable";
                     };
                 };
+            };
+        };
+    };
+    onAccountEmailChanged: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AccountEmailChangedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onAccountEntitlementsChanged: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AccountEntitlementsChangedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onAccountErased: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AccountErasedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onAccountReinstated: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AccountReinstatedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onAccountSuspended: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AccountSuspendedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onArticleCreated: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ArticleCreatedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onArticleDeleted: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ArticleDeletedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onArticleUpdated: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ArticleUpdatedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onFormSubmitted: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FormSubmittedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onOrderCancelled: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OrderCancelledEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onOrderCompleted: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OrderCompletedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onOrderExpired: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OrderExpiredEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onOrderPaid: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OrderPaidEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onOrderPaymentArrivedLate: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OrderPaymentArrivedLateEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onOrderRefunded: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OrderRefundedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onOrderRevived: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OrderRevivedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onOrderShipped: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OrderShippedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onOrderStatusUpdated: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OrderStatusUpdatedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onPageCreated: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PageCreatedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onPageDeleted: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PageDeletedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onPageUpdated: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PageUpdatedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onPaymentRefunded: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PaymentRefundedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onPaymentReversed: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PaymentReversedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onProductCreated: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProductCreatedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onProductDeleted: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProductDeletedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onProductUpdated: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProductUpdatedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onReferralRewardIssued: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReferralRewardIssuedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onRefundProcessed: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RefundProcessedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onRefundRequested: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RefundRequestedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onRoleAssignmentChanged: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RoleAssignmentChangedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onSubscriptionAuthenticationRequired: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubscriptionAuthenticationRequiredEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onSubscriptionCancelScheduled: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubscriptionCancelScheduledEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onSubscriptionEnded: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubscriptionEndedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onSubscriptionPaymentDue: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubscriptionPaymentDueEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onSubscriptionPaymentFailed: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubscriptionPaymentFailedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onSubscriptionRenewed: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubscriptionRenewedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onSubscriptionResumed: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubscriptionResumedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onSubscriptionStarted: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubscriptionStartedEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onWebhookPing: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookPingEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onWebhookRotationEnding: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The occurrence id, `msg_` followed by a lower-case ULID, which is also the body's `id`. Delivery is at least once: deduplicate on it. */
+                "webhook-id": components["parameters"]["WebhookId"];
+                /** @description Unix seconds when this attempt was made. Refuse a delivery more than 300 seconds either side of your clock. */
+                "webhook-timestamp": components["parameters"]["WebhookTimestamp"];
+                /** @description Space-separated `v1,<base64>` entries, one per active secret: HMAC-SHA256 of `{webhook-id}.{webhook-timestamp}.{raw body}` under the key the `whsec_` secret encodes. Verify the raw bytes received. */
+                "webhook-signature": components["parameters"]["WebhookSignature"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookRotationEndingEvent"];
+            };
+        };
+        responses: {
+            /** @description The endpoint will never accept again: the subscription is switched off and nothing more is sent to it. */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Acknowledged. Any 2xx counts; a redirect is a failed attempt and is retried. */
+            "2XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
