@@ -4,7 +4,10 @@ import type { paths } from './generated/schema.ts';
 export interface ClientOptions {
   /** The install's origin, with any path it is served under: `https://example.com`. */
   baseUrl: string;
-  /** A Sanctum personal access token, sent as a bearer credential on every request. */
+  /**
+   * The bearer credential sent on every request: a signed-in member's access token, or the token the
+   * site backend's machine client is granted. Leave it out for the routes that need none.
+   */
   token?: string | undefined;
   /** Headers sent on every request beside the credential, in any form `new Headers()` accepts. */
   headers?: HeadersInit | undefined;
@@ -43,9 +46,9 @@ type KeyedOperation = {
 
 // Typed against the document, so a keyed create added or removed there fails the typecheck until listed here.
 const KEYED_OPERATIONS: Record<KeyedOperation, true> = {
-  'POST /api/v1/articles': true,
   'POST /api/v1/checkout-sessions': true,
   'POST /api/v1/deliveries/{event}/redeliveries': true,
+  'POST /api/v1/fulfilments': true,
   'POST /api/v1/me/addresses': true,
   'POST /api/v1/me/checkout-sessions': true,
   'POST /api/v1/me/portal-sessions': true,
@@ -57,7 +60,6 @@ const KEYED_OPERATIONS: Record<KeyedOperation, true> = {
   'POST /api/v1/subscriptions/{subscription}/test-clock/advance': true,
   'POST /api/v1/webhook-endpoints': true,
   'POST /api/v1/webhook-endpoints/{endpoint}/secret-rotations': true,
-  'POST /api/v1/webhook-subscriptions/{subscription}/deliveries/{event}/redeliver': true,
 };
 
 /**

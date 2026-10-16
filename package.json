@@ -52,9 +52,9 @@
   "appsolutely": {
     "spec": {
       "path": "docs/api/openapi.yaml",
-      "tag": "v0.30.0",
-      "commit": "3b8b23a92e999f27b91dda6c146dc74d8043c0c5",
-      "sha256": "1ba514052a0f8da68a2fa7e79c17588e1069088da9dd334f1173c317782bd5f1"
+      "tag": null,
+      "commit": "45611b48dc72f07ece8532f70656dc429f44deee",
+      "sha256": "ffa7e9767cce636a61e78cf40b0e3259fd60b02b4dffa904fd75cb5994473f45"
     }
   },
   "dependencies": {

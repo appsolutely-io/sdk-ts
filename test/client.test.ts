@@ -22,10 +22,10 @@ test('a request carries the token as a bearer credential and asks for JSON', asy
   const { calls, fetch } = recordingFetch();
   const client = createClient({ baseUrl: 'https://example.com', token: '1|secret', fetch });
 
-  await client.GET('/api/v1/articles', { params: { query: { limit: 5 } } });
+  await client.GET('/api/v1/products', { params: { query: { limit: 5 } } });
 
   assert.equal(calls.length, 1);
-  assert.equal(calls[0]?.url, 'https://example.com/api/v1/articles?limit=5');
+  assert.equal(calls[0]?.url, 'https://example.com/api/v1/products?limit=5');
   assert.equal(calls[0]?.headers.get('Authorization'), 'Bearer 1|secret');
   assert.equal(calls[0]?.headers.get('Accept'), 'application/json');
 });
@@ -51,15 +51,15 @@ test('without a token no credential is sent, for the routes that need none', asy
 });
 
 test('path parameters and JSON bodies are encoded from the typed arguments', async () => {
-  const { calls, fetch } = recordingFetch(200, { id: '42', title: 'Renamed' });
+  const { calls, fetch } = recordingFetch(200, { id: '42', city: 'Leeds' });
   const client = createClient({ baseUrl: 'https://example.com', token: 't', fetch });
 
-  await client.PATCH('/api/v1/articles/{id}', { params: { path: { id: '42' } }, body: { title: 'Renamed' } });
+  await client.PATCH('/api/v1/me/addresses/{id}', { params: { path: { id: '42' } }, body: { city: 'Leeds' } });
 
   assert.equal(calls[0]?.method, 'PATCH');
-  assert.equal(calls[0]?.url, 'https://example.com/api/v1/articles/42');
+  assert.equal(calls[0]?.url, 'https://example.com/api/v1/me/addresses/42');
   assert.equal(calls[0]?.headers.get('Content-Type'), 'application/json');
-  assert.deepEqual(JSON.parse(calls[0]?.body ?? ''), { title: 'Renamed' });
+  assert.deepEqual(JSON.parse(calls[0]?.body ?? ''), { city: 'Leeds' });
 });
 
 test('a refusal comes back as the typed problem document, not a thrown exception', async () => {
@@ -72,7 +72,7 @@ test('a refusal comes back as the typed problem document, not a thrown exception
   const { fetch } = recordingFetch(401, refusal, 'application/problem+json');
 
   const { data, error, response } = await createClient({ baseUrl: 'https://example.com', fetch }).GET(
-    '/api/v1/articles',
+    '/api/v1/products',
   );
 
   assert.equal(data, undefined);
@@ -86,34 +86,35 @@ test('a validation problem carries the refused fields under errors', async () =>
     type: 'https://appsolutely.io/problems/validation-failed',
     title: 'Validation failed',
     status: 422,
-    errors: { title: ['The title field is required.'] },
+    errors: { name: ['The name field is required.'] },
   };
   const { fetch } = recordingFetch(422, refusal, 'application/problem+json');
 
-  const { error } = await createClient({ baseUrl: 'https://example.com', token: 't', fetch }).POST('/api/v1/articles', {
-    body: { title: '', content: '<p></p>' },
-  });
+  const { error } = await createClient({ baseUrl: 'https://example.com', token: 't', fetch }).POST(
+    '/api/v1/me/addresses',
+    { body: { name: '', address: '1 Main St' } },
+  );
 
   if (error?.type !== 'https://appsolutely.io/problems/validation-failed' || !('errors' in error)) {
     assert.fail(`expected a validation problem, got ${JSON.stringify(error)}`);
   }
-  assert.deepEqual(error.errors, { title: ['The title field is required.'] });
+  assert.deepEqual(error.errors, { name: ['The name field is required.'] });
 });
 
 test('a list page is the records and the next cursor, which asks for the next page', async () => {
   const { calls, fetch } = recordingFetch(200, { data: [{ id: '1' }], next_cursor: 'c2' });
   const client = createClient({ baseUrl: 'https://example.com', token: 't', fetch });
 
-  const first = await client.GET('/api/v1/articles', { params: { query: { limit: 1 } } });
+  const first = await client.GET('/api/v1/products', { params: { query: { limit: 1 } } });
   const cursor = first.data?.next_cursor;
   assert.equal(cursor, 'c2');
-  await client.GET('/api/v1/articles', {
+  await client.GET('/api/v1/products', {
     params: { query: { limit: 1, ...(cursor === undefined ? {} : { cursor }) } },
   });
 
   assert.deepEqual(
     calls.map((call) => call.url),
-    ['https://example.com/api/v1/articles?limit=1', 'https://example.com/api/v1/articles?limit=1&cursor=c2'],
+    ['https://example.com/api/v1/products?limit=1', 'https://example.com/api/v1/products?limit=1&cursor=c2'],
   );
 });
 
@@ -132,11 +133,11 @@ test('an answer with no body, 204 or an empty 202, resolves with no data and no 
 });
 
 test('a keyed create is sent a generated Idempotency-Key, a new one per call', async () => {
-  const { calls, fetch } = recordingFetch(201, { id: '1' });
+  const { calls, fetch } = recordingFetch(200, { token: 'tok', status: 'delivered' });
   const client = createClient({ baseUrl: 'https://example.com', token: 't', fetch });
 
-  await client.POST('/api/v1/articles', { body: { title: 'A', content: '<p>a</p>' } });
-  await client.POST('/api/v1/articles', { body: { title: 'A', content: '<p>a</p>' } });
+  await client.POST('/api/v1/fulfilments', { body: { token: 'tok', delivery_payload: 'LICENCE-1' } });
+  await client.POST('/api/v1/fulfilments', { body: { token: 'tok', delivery_payload: 'LICENCE-1' } });
 
   const keys = calls.map((call) => call.headers.get('Idempotency-Key'));
   assert.match(keys[0] ?? '', /^[0-9a-f-]{36}$/);
@@ -170,8 +171,8 @@ test('an Idempotency-Key the caller passes is sent as given', async () => {
   const { calls, fetch } = recordingFetch(202, { id: '1' });
   const client = createClient({ baseUrl: 'https://example.com', token: 't', fetch });
 
-  await client.POST('/api/v1/webhook-subscriptions/{subscription}/deliveries/{event}/redeliver', {
-    params: { path: { subscription: '3', event: '9' }, header: { 'Idempotency-Key': 'caller-key' } },
+  await client.POST('/api/v1/deliveries/{event}/redeliveries', {
+    params: { path: { event: '9' }, header: { 'Idempotency-Key': 'caller-key' } },
   });
 
   assert.equal(calls[0]?.headers.get('Idempotency-Key'), 'caller-key');
@@ -183,11 +184,11 @@ test('a fetch that retries the request repeats its Idempotency-Key', async () =>
     for (const attempt of [request.clone(), request]) {
       keys.push(attempt.headers.get('Idempotency-Key'));
     }
-    return Response.json({ id: '1' }, { status: 201 });
+    return Response.json({ token: 'tok', status: 'delivered' }, { status: 200 });
   };
 
-  await createClient({ baseUrl: 'https://example.com', token: 't', fetch }).POST('/api/v1/articles', {
-    body: { title: 'A', content: '<p>a</p>' },
+  await createClient({ baseUrl: 'https://example.com', token: 't', fetch }).POST('/api/v1/fulfilments', {
+    body: { token: 'tok', delivery_payload: 'LICENCE-1' },
   });
 
   assert.equal(keys.length, 2);
@@ -202,7 +203,7 @@ test('a request the document does not key is sent no Idempotency-Key', async () 
   await client.POST('/api/v1/auth/magic-link', {
     body: { email: 'a@example.com', abilities: ['me:read'], device_name: 'd', code_challenge: 'c' },
   });
-  await client.PATCH('/api/v1/articles/{id}', { params: { path: { id: '1' } }, body: { title: 'B' } });
+  await client.PATCH('/api/v1/me/addresses/{id}', { params: { path: { id: '1' } }, body: { city: 'Leeds' } });
 
   assert.deepEqual(
     calls.map((call) => call.headers.has('Idempotency-Key')),
@@ -281,12 +282,12 @@ test('a path parameter that is empty, "." or ".." is refused, since the URL woul
   const client = createClient({ baseUrl: 'https://example.com', token: '1|secret', fetch });
 
   for (const id of ['', '.', '..']) {
-    await assert.rejects(client.PATCH('/api/v1/articles/{id}', { params: { path: { id } }, body: {} }), TypeError);
+    await assert.rejects(client.PATCH('/api/v1/me/addresses/{id}', { params: { path: { id } }, body: {} }), TypeError);
   }
-  await client.PATCH('/api/v1/articles/{id}', { params: { path: { id: '...' } }, body: {} });
+  await client.PATCH('/api/v1/me/addresses/{id}', { params: { path: { id: '...' } }, body: {} });
 
   assert.deepEqual(
     calls.map((call) => call.url),
-    ['https://example.com/api/v1/articles/...'],
+    ['https://example.com/api/v1/me/addresses/...'],
   );
 });
