@@ -47,7 +47,7 @@ function keyedOperations(document: OpenAPI3): string[] {
 }
 
 /**
- * The client types for a document: `paths`, `components` and `operations`, plus every
+ * The client types and runtime keyed operations for a document: `paths`, `components` and `operations`, plus every
  * component schema as a root type under its own name, so a consumer imports `Article`
  * rather than reaching into `components['schemas']`.
  */
