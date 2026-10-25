@@ -1,5 +1,14 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import { readFileSync } from 'node:fs';
+import {
+  resolveRef,
+  type OpenAPI3,
+  type OperationObject,
+  type ParameterObject,
+  type PathItemObject,
+} from 'openapi-typescript';
+import { parse } from 'yaml';
 import { createClient } from '../src/index.ts';
 
 interface Recorded {
@@ -17,6 +26,44 @@ function recordingFetch(status = 200, body: unknown = { data: [] }, contentType 
   };
   return { calls, fetch };
 }
+
+test('every operation in the document is keyed exactly when its header is required', async () => {
+  const document: OpenAPI3 = parse(readFileSync(new URL('../spec/openapi.yaml', import.meta.url), 'utf8'));
+  const { calls, fetch } = recordingFetch();
+  const client = createClient({ baseUrl: 'https://example.test', fetch });
+  const request = client.request as (
+    method: string,
+    path: string,
+    init: { params: { path: Record<string, string> } },
+  ) => Promise<unknown>;
+  let keyed = 0;
+  for (const [path, raw] of Object.entries(document.paths ?? {})) {
+    const item = raw as PathItemObject;
+    for (const method of ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'] as const) {
+      const operation = item[method] as OperationObject | undefined;
+      if (operation === undefined) continue;
+      const parameters = [...(item.parameters ?? []), ...(operation.parameters ?? [])];
+      const header = parameters
+        .map((parameter) =>
+          '$ref' in parameter ? resolveRef<ParameterObject>(document, parameter.$ref, { silent: false }) : parameter,
+        )
+        .reverse()
+        .find((parameter) => parameter?.in === 'header' && parameter.name === 'Idempotency-Key');
+      const expected = header?.required === true;
+      const pathParams = Object.fromEntries(
+        Array.from(path.matchAll(/\{([^}]+)\}/g), (match) => [match[1], 'example']),
+      );
+      await request(method, path, { params: { path: pathParams } });
+      const actual = calls.at(-1)?.headers.get('Idempotency-Key');
+      assert.equal(actual != null, expected, `${method.toUpperCase()} ${path}`);
+      if (expected) {
+        assert.match(actual ?? '', /^[0-9a-f-]{36}$/);
+        keyed++;
+      }
+    }
+  }
+  assert.ok(keyed > 0);
+});
 
 test('a request carries the token as a bearer credential and asks for JSON', async () => {
   const { calls, fetch } = recordingFetch();

@@ -7,6 +7,10 @@ and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Generate the runtime idempotency registry with the client types, so a newly documented keyed operation builds and receives an `Idempotency-Key` without updating a separate list.
+
 ### Changed
 
 - This release requires aio v0.32.0 or later. `POST /api/v1/fulfilments` returns `404` on aio 0.30 and 0.31.

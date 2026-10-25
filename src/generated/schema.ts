@@ -14343,3 +14343,20 @@ export interface operations {
         };
     };
 }
+
+export const keyedOperations = {
+    "POST /api/v1/checkout-sessions": true,
+    "POST /api/v1/deliveries/{event}/redeliveries": true,
+    "POST /api/v1/fulfilments": true,
+    "POST /api/v1/me/addresses": true,
+    "POST /api/v1/me/checkout-sessions": true,
+    "POST /api/v1/me/portal-sessions": true,
+    "POST /api/v1/me/subscriptions/{subscription}/cancellation": true,
+    "POST /api/v1/me/subscriptions/{subscription}/changes": true,
+    "POST /api/v1/me/subscriptions/{subscription}/resumption": true,
+    "POST /api/v1/portal-sessions": true,
+    "POST /api/v1/subscriptions/{subscription}/test-clock": true,
+    "POST /api/v1/subscriptions/{subscription}/test-clock/advance": true,
+    "POST /api/v1/webhook-endpoints": true,
+    "POST /api/v1/webhook-endpoints/{endpoint}/secret-rotations": true
+} as const;
