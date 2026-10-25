@@ -56,14 +56,14 @@ The client is [openapi-fetch](https://openapi-ts.dev/openapi-fetch/), whose docu
 "appsolutely": {
   "spec": {
     "path": "docs/api/openapi.yaml",
-    "tag": "v0.32.0",
-    "commit": "283d65c57fbf03d8a8a0cce0f1cd4c888afaedb2",
-    "sha256": "04021d5837ae0a679c847be0b342c068f2cb0f2f7a8ffb596e3e0defed55e328"
+    "tag": null,
+    "commit": "d66073e65a5f22f8c9958a127d9abc834868cf51",
+    "sha256": "4f9822368fde6d546790da8f99ec04728e75ef94a5c3f75be8242b9208b9a955"
   }
 }
 ```
 
-This client describes aio v0.32.0. While aio is below 1.0.0, minor releases may remove operations or change their shapes, even when the API path stays at v1. Check the release's breaking changes before upgrading an install. The package's own version follows its own semver; the aio tag, not the package version, names the release it matches.
+This client describes the public document at aio commit `d66073e65a5f22f8c9958a127d9abc834868cf51`, which has no release tag yet. Use an install containing that commit. While aio is below 1.0.0, minor releases may remove operations or change their shapes, even when the API path stays at v1. Check the release's breaking changes before upgrading an install. The package's own version follows its own semver; the document pin names the contract it matches. Publishing requires a pin at a final aio release.
 
 ## Develop
 
@@ -79,7 +79,7 @@ pnpm verify
 | `pnpm verify`                                | Everything below short of the contract test: formatting, the document, the generated types, the type checks, the tests and the consumer check.                                                                                                                                         |
 | `pnpm spec:pin --aio <checkout> --ref <tag>` | Copies `docs/api/openapi.yaml` from a local aio checkout at a release tag, or at a commit on aio's `master` (the checkout needs `origin/master`), into `spec/openapi.yaml` and records the pin in `package.json`.                                                                      |
 | `pnpm check:spec`                            | Validates the pinned document against the OpenAPI 3.1 schema and checks it is the one the pin records.                                                                                                                                                                                 |
-| `pnpm generate` / `pnpm check:generated`     | Writes `src/generated/schema.ts` from the pinned document with openapi-typescript, or fails when the committed file is not what it generates.                                                                                                                                          |
+| `pnpm generate` / `pnpm check:generated`     | Writes the types and runtime keyed-operation registry in `src/generated/schema.ts` from the pinned document, or fails when the committed file is not what it generates.                                                                                                                |
 | `pnpm typecheck`                             | Type-checks the sources, scripts and tests, including the compile-time assertions in `test/types.test.ts`.                                                                                                                                                                             |
 | `pnpm test`                                  | Unit tests.                                                                                                                                                                                                                                                                            |
 | `pnpm test:contract`                         | Checks a running install serves every operation the pinned document describes, then round-trips a read and a write. Set `APPSOLUTELY_CONTRACT_BASE_URL` and `APPSOLUTELY_CONTRACT_TOKEN` (a member's access token with `me:read` and `me:write`); it files one address and deletes it. |

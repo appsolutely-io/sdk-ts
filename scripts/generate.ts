@@ -1,4 +1,4 @@
-// Writes the client types from the committed document; with --check, fails instead when they differ.
+// Writes the client types and keyed operations from the committed document; --check refuses drift.
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { parseArgs } from 'node:util';

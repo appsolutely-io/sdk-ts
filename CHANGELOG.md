@@ -7,10 +7,17 @@ and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Generate the runtime idempotency registry with the client types, so a newly documented keyed operation builds and receives an `Idempotency-Key` without updating a separate list.
+
 ### Changed
 
+- Generated from the public document at aio commit `d66073e65a5f22f8c9958a127d9abc834868cf51`. The install must contain that commit; the pin has no release tag yet.
+- **BREAKING** — `Order.tax_amount` and `Order.total_amount` may be null or absent while pricing is unknown, including orders carried by webhook events. `Seat.member`, including seats nested in a pool, may be null or absent. Seat creation still requires a string `member`.
+
 - This release requires aio v0.32.0 or later. `POST /api/v1/fulfilments` returns `404` on aio 0.30 and 0.31.
-- Generated from the released aio v0.32.0 document, including `subscription-change-refused` when resuming a member subscription.
+- The previously pinned aio v0.32.0 document included `subscription-change-refused` when resuming a member subscription.
 
 - **BREAKING** — the install no longer answers an administrator on this API, so the client no longer describes the administrator's operations: `/api/v1/pages`, `/api/v1/articles`, `/api/v1/orders`, `/api/v1/form-entries`, `/api/v1/account-states`, the webhook subscription deliveries and their redelivery, and the administrator sync feeds (`/api/v1/sync/articles`, `pages`, `products`, `orders` and `form-entries`). Their schemas that nothing else answers (`ArticlePage`, `PagePage`, `FormEntryPage`, `AccountStateList`, `WebhookDelivery`, `WebhookDeliveryPage`, the feeds and the article payloads) are no longer exported. An administrator's work is done through the install's Administrator API (`/api/admin/v1`).
 - **BREAKING** — `/api/v1/products` answers the site backend alone, with a token holding `catalogue:read`.
@@ -19,6 +26,11 @@ and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `POST /api/v1/fulfilments`, the backend fulfilling a pending digital delivery with `fulfilments:write` (`FulfillDeliveryPayload`, answered as `Fulfilment`). It is keyed, so it is sent a generated `Idempotency-Key` when the caller passes none.
+
+### Upgrading
+
+- Consumers: change reads of `Order.tax_amount` and `Order.total_amount` from assuming `number` to handling `number | null | undefined`; check for null or absence before arithmetic or formatting, and display unknown pricing explicitly.
+- Consumers: change reads of `Seat.member` and `SeatPool.seats[number].member` from assuming `string` to handling `string | null | undefined`; check for null or absence before using the account subject. Keep sending a string `member` when creating a seat.
 
 ## [0.2.0] - 2026-10-16
 

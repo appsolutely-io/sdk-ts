@@ -1,5 +1,5 @@
 import createFetchClient, { defaultPathSerializer, type Client, type Middleware } from 'openapi-fetch';
-import type { paths } from './generated/schema.ts';
+import { keyedOperations, type paths } from './generated/schema.ts';
 
 export interface ClientOptions {
   /** The install's origin, with any path it is served under: `https://example.com`. */
@@ -44,23 +44,7 @@ type KeyedOperation = {
   }[keyof paths[Path]];
 }[keyof paths];
 
-// Typed against the document, so a keyed create added or removed there fails the typecheck until listed here.
-const KEYED_OPERATIONS: Record<KeyedOperation, true> = {
-  'POST /api/v1/checkout-sessions': true,
-  'POST /api/v1/deliveries/{event}/redeliveries': true,
-  'POST /api/v1/fulfilments': true,
-  'POST /api/v1/me/addresses': true,
-  'POST /api/v1/me/checkout-sessions': true,
-  'POST /api/v1/me/portal-sessions': true,
-  'POST /api/v1/me/subscriptions/{subscription}/cancellation': true,
-  'POST /api/v1/me/subscriptions/{subscription}/changes': true,
-  'POST /api/v1/me/subscriptions/{subscription}/resumption': true,
-  'POST /api/v1/portal-sessions': true,
-  'POST /api/v1/subscriptions/{subscription}/test-clock': true,
-  'POST /api/v1/subscriptions/{subscription}/test-clock/advance': true,
-  'POST /api/v1/webhook-endpoints': true,
-  'POST /api/v1/webhook-endpoints/{endpoint}/secret-rotations': true,
-};
+const KEYED_OPERATIONS: Record<KeyedOperation, true> = keyedOperations;
 
 /**
  * Sends a generated `Idempotency-Key` on each keyed create the caller sent none for. The key is on the

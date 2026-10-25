@@ -16,6 +16,11 @@ import {
   type Product,
   type ProductPage,
   type ProductSkuPrice,
+  type OrderPaidEvent,
+  type Seat,
+  type SeatPool,
+  type StoreSeatPayload,
+  type StoreMeOrganisationSeatPayload,
 } from '../src/index.ts';
 import type { IsAny } from './support/types.ts';
 
@@ -48,6 +53,19 @@ export type Checks = [
   // Narrowed to the documented type URIs, so a branch on a misspelt one is a compile error.
   Assert<string extends Refusal['type'] ? false : true>,
   Assert<'https://appsolutely.io/problems/unauthenticated' extends Refusal['type'] ? true : false>,
+];
+
+export type NullableResponseChecks = [
+  Assert<Equal<Order['tax_amount'], number | null | undefined>>,
+  Assert<Equal<Order['total_amount'], number | null | undefined>>,
+  Assert<Equal<Data<typeof getOrder>['tax_amount'], number | null | undefined>>,
+  Assert<Equal<Data<typeof getOrder>['total_amount'], number | null | undefined>>,
+  Assert<Equal<OrderPaidEvent['data']['tax_amount'], number | null | undefined>>,
+  Assert<Equal<OrderPaidEvent['data']['total_amount'], number | null | undefined>>,
+  Assert<Equal<Seat['member'], string | null | undefined>>,
+  Assert<Equal<SeatPool['seats'][number]['member'], string | null | undefined>>,
+  Assert<Equal<StoreSeatPayload['member'], string>>,
+  Assert<Equal<StoreMeOrganisationSeatPayload['member'], string>>,
 ];
 
 // The catalogue a backend reads: each sku's price, the store currency, entitlements walked by change time.
