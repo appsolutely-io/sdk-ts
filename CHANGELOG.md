@@ -17,7 +17,7 @@ and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **BREAKING** — `Order.tax_amount` and `Order.total_amount` may be null or absent while pricing is unknown, including orders carried by webhook events. `Seat.member`, including seats nested in a pool, may be null or absent. Seat creation still requires a string `member`.
 
 - This release requires aio v0.32.0 or later. `POST /api/v1/fulfilments` returns `404` on aio 0.30 and 0.31.
-- Generated from the released aio v0.32.0 document, including `subscription-change-refused` when resuming a member subscription.
+- The previously pinned aio v0.32.0 document included `subscription-change-refused` when resuming a member subscription.
 
 - **BREAKING** — the install no longer answers an administrator on this API, so the client no longer describes the administrator's operations: `/api/v1/pages`, `/api/v1/articles`, `/api/v1/orders`, `/api/v1/form-entries`, `/api/v1/account-states`, the webhook subscription deliveries and their redelivery, and the administrator sync feeds (`/api/v1/sync/articles`, `pages`, `products`, `orders` and `form-entries`). Their schemas that nothing else answers (`ArticlePage`, `PagePage`, `FormEntryPage`, `AccountStateList`, `WebhookDelivery`, `WebhookDeliveryPage`, the feeds and the article payloads) are no longer exported. An administrator's work is done through the install's Administrator API (`/api/admin/v1`).
 - **BREAKING** — `/api/v1/products` answers the site backend alone, with a token holding `catalogue:read`.
