@@ -7,8 +7,6 @@ and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.3.0] - 2026-10-30
-
 ### Fixed
 
 - Generate the runtime idempotency registry with the client types, so a newly documented keyed operation builds and receives an `Idempotency-Key` without updating a separate list.
