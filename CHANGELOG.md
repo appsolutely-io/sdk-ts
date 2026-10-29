@@ -15,7 +15,7 @@ and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Typed client for aio v0.38.0; this release does not run or claim the aio SDK conformance suite. The public document is pinned to that release; the document and generated types are unchanged from the previous development pin.
+- Typed client for aio v0.38.0; this release does not run or claim the aio SDK conformance suite. The public document is pinned to that release; the document and generated types are unchanged from the unreleased pin this release started from. Compared with 0.2.0, the generated types have the changes listed in this entry.
 - **BREAKING** — `StorePurchaseTransaction` requires `belongs_to_you: boolean`, including a recorded ended purchase with no subscription reference. Member and backend store-purchase problems expose optional ownership, outcome and rejection-reason extensions.
 - **BREAKING** — `Order.tax_amount` and `Order.total_amount` may be null or absent while pricing is unknown, including orders carried by webhook events. `Seat.member`, including seats nested in a pool, may be null or absent. Seat creation still requires a string `member`.
 
