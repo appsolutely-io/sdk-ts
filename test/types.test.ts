@@ -19,6 +19,7 @@ import {
   type OrderPaidEvent,
   type Seat,
   type SeatPool,
+  type StorePurchaseTransaction,
   type StoreSeatPayload,
   type StoreMeOrganisationSeatPayload,
 } from '../src/index.ts';
@@ -93,7 +94,7 @@ export type CatalogueChecks = [
   Assert<Equal<Extract<CheckoutRefusal, { order?: string }>['payment_url'], string | null | undefined>>,
 ];
 
-// A member's terms acceptance, integer entitlement totals, and the refusals aio 0.27.0 changed.
+// A member's terms acceptance, integer entitlement totals, and documented exchange and sync refusals.
 const exchangeMagicLink = async () =>
   (await client.POST('/api/v1/auth/magic-link/token', { body: { link: 'l', code_verifier: 'v' } })).error;
 type MagicLinkRefusal = NonNullable<Awaited<ReturnType<typeof exchangeMagicLink>>>;
@@ -143,3 +144,68 @@ export type ResumptionRefusalCheck = Assert<
 export const retiredPages = () => client.GET('/api/v1/pages');
 // @ts-expect-error administrator article writes are served by the Administrator API
 export const retiredArticle = () => client.POST('/api/v1/articles', { body: {} });
+
+type OAuthBody = operations['exchangeOAuthToken']['requestBody']['content']['application/x-www-form-urlencoded'];
+type CodeGrant = {
+  grant_type: 'authorization_code';
+  code: string;
+  redirect_uri: string;
+  code_verifier: string;
+};
+
+export type OAuthGrantChecks = [
+  Assert<Equal<IsAny<OAuthBody>, false>>,
+  Assert<CodeGrant extends OAuthBody ? true : false>,
+  Assert<Equal<Omit<CodeGrant, 'code'> extends OAuthBody ? true : false, false>>,
+  Assert<Equal<Omit<CodeGrant, 'redirect_uri'> extends OAuthBody ? true : false, false>>,
+  Assert<Equal<Omit<CodeGrant, 'code_verifier'> extends OAuthBody ? true : false, false>>,
+  Assert<{ grant_type: 'refresh_token'; refresh_token: string } extends OAuthBody ? true : false>,
+  Assert<Equal<{ grant_type: 'refresh_token' } extends OAuthBody ? true : false, false>>,
+  Assert<
+    { grant_type: 'urn:ietf:params:oauth:grant-type:device_code'; device_code: string } extends OAuthBody ? true : false
+  >,
+  Assert<Equal<{ grant_type: 'urn:ietf:params:oauth:grant-type:device_code' } extends OAuthBody ? true : false, false>>,
+  Assert<{ grant_type: 'client_credentials' } extends OAuthBody ? true : false>,
+  // Schema minLength is checked by the server; TypeScript string types also accept an empty value.
+  Assert<{ grant_type: 'refresh_token'; refresh_token: '' } extends OAuthBody ? true : false>,
+];
+
+type StorePurchaseRefusal<
+  Operation extends 'transactionsMeStorePurchase' | 'transactionsStorePurchase',
+  Status extends 409 | 422 | 503,
+> = operations[Operation]['responses'][Status]['content']['application/problem+json'];
+
+type StoreOperation = 'transactionsMeStorePurchase' | 'transactionsStorePurchase';
+
+type StoreOutcomes<Operation extends StoreOperation> = [
+  StorePurchaseRefusal<Operation, 409>['outcome'],
+  StorePurchaseRefusal<Operation, 422>['outcome'],
+  StorePurchaseRefusal<Operation, 503>['outcome'],
+  StorePurchaseRefusal<Operation, 409>['belongs_to_you'],
+  StorePurchaseRefusal<Operation, 422>['belongs_to_you'],
+  StorePurchaseRefusal<Operation, 503>['belongs_to_you'],
+  StorePurchaseRefusal<Operation, 422>['refusal'],
+];
+
+type ExpectedStoreOutcomes = [
+  'belongs_to_another_account' | undefined,
+  'rejected' | undefined,
+  'unavailable' | undefined,
+  boolean | undefined,
+  boolean | undefined,
+  boolean | undefined,
+  (
+    | 'signature_invalid'
+    | 'store_says_invalid'
+    | 'not_purchased'
+    | 'sandbox_not_tester'
+    | 'unmappable_prepaid'
+    | undefined
+  ),
+];
+
+export type StorePurchaseChecks = [
+  Assert<Equal<StorePurchaseTransaction['belongs_to_you'], boolean>>,
+  Assert<Equal<StoreOutcomes<'transactionsMeStorePurchase'>, ExpectedStoreOutcomes>>,
+  Assert<Equal<StoreOutcomes<'transactionsStorePurchase'>, ExpectedStoreOutcomes>>,
+];

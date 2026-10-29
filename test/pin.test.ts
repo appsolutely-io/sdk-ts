@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { after, before, test } from 'node:test';
@@ -13,7 +13,8 @@ let candidate = '';
 let unmerged = '';
 
 function git(...args: string[]): string {
-  return execFileSync('git', ['-C', checkout, ...args], { encoding: 'utf8' }).trim();
+  const env = Object.fromEntries(Object.entries(process.env).filter(([name]) => !name.startsWith('GIT_')));
+  return execFileSync('git', ['-C', checkout, ...args], { encoding: 'utf8', env }).trim();
 }
 
 function commitDocument(text: string): string {
@@ -115,5 +116,29 @@ test('a release tag pins even when its commit is not on the default branch', () 
     assert.equal(resolvePin(checkout, 'v1.4.0').commit, unmerged);
   } finally {
     git('tag', '-d', 'v1.4.0');
+  }
+});
+
+test('fixture git commands ignore inherited repository and configuration variables', () => {
+  const inherited = {
+    GIT_DIR: join(checkout, 'unrelated.git'),
+    GIT_WORK_TREE: join(checkout, 'unrelated-worktree'),
+    GIT_INDEX_FILE: join(checkout, 'unrelated-index'),
+    GIT_CONFIG_COUNT: '1',
+    GIT_CONFIG_KEY_0: 'core.bare',
+    GIT_CONFIG_VALUE_0: 'true',
+    GIT_CONFIG_PARAMETERS: "'core.bare=true'",
+  };
+  const saved = Object.fromEntries(Object.keys(inherited).map((name) => [name, process.env[name]]));
+  try {
+    Object.assign(process.env, inherited);
+    assert.equal(git('rev-parse', '--show-toplevel'), realpathSync(checkout));
+    assert.equal(git('ls-files', AIO_SPEC_PATH), AIO_SPEC_PATH);
+    assert.equal(git('rev-parse', 'HEAD'), unmerged);
+  } finally {
+    for (const [name, value] of Object.entries(saved)) {
+      if (value === undefined) delete process.env[name];
+      else process.env[name] = value;
+    }
   }
 });

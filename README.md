@@ -48,6 +48,10 @@ const filed = await client.POST('/api/v1/me/addresses', {
 
 The client is [openapi-fetch](https://openapi-ts.dev/openapi-fetch/), whose documentation covers middleware, query and body serialisation, and the other request options.
 
+A store-purchase transaction answers a required `belongs_to_you` boolean. Check it to decide whether the answer credits the purchase to the caller: a `recorded` outcome with no subscription reference can also describe an unowned ended purchase. Store-purchase problems describe `outcome`, `belongs_to_you` and rejection `refusal` as optional extensions, since the same response status also serves other problem types. A recorded or definitively rejected transaction is final; an unclaimed transaction awaits restore, and an unavailable result can be retried after its cause is resolved.
+
+OAuth token request types require `refresh_token` for the refresh grant, `code`, `redirect_uri` and `code_verifier` for the authorization-code grant, and `device_code` for the device grant. The server also rejects empty required values through the document's `minLength` rules. TypeScript string types do not enforce those runtime length rules.
+
 ## Which install it matches
 
 `package.json` records the aio release the client was generated from:
@@ -56,14 +60,14 @@ The client is [openapi-fetch](https://openapi-ts.dev/openapi-fetch/), whose docu
 "appsolutely": {
   "spec": {
     "path": "docs/api/openapi.yaml",
-    "tag": null,
-    "commit": "d66073e65a5f22f8c9958a127d9abc834868cf51",
+    "tag": "v0.38.0",
+    "commit": "e2eaed76728f9eeacec52a8ad25ed38df0a0c463",
     "sha256": "4f9822368fde6d546790da8f99ec04728e75ef94a5c3f75be8242b9208b9a955"
   }
 }
 ```
 
-This client describes the public document at aio commit `d66073e65a5f22f8c9958a127d9abc834868cf51`, which has no release tag yet. Use an install containing that commit. While aio is below 1.0.0, minor releases may remove operations or change their shapes, even when the API path stays at v1. Check the release's breaking changes before upgrading an install. The package's own version follows its own semver; the document pin names the contract it matches. Publishing requires a pin at a final aio release.
+This is a typed client for aio v0.38.0; this release does not run or claim the aio SDK conformance suite. Use an install running aio v0.38.0. It exposes typed HTTP operations; retry scheduling, cursor recovery, sign-in sessions, credential storage and application flows remain the caller's responsibility. While aio is below 1.0.0, minor releases may remove operations or change their shapes, even when the API path stays at v1. Check the release's breaking changes before upgrading an install. The package's own version follows its own semver; the document pin names the contract it matches. Publishing requires a pin at a final aio release.
 
 ## Develop
 
@@ -108,6 +112,10 @@ And this repository variable:
 | Variable         | Used for                                                        |
 | ---------------- | --------------------------------------------------------------- |
 | `AIO_REPOSITORY` | The aio repository the releases are read from, as `owner/name`. |
+
+## Design decisions
+
+The [decision records](docs/decisions/README.md) explain the implementation choices and their tradeoffs.
 
 ## Licence
 
