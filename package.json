@@ -1,6 +1,6 @@
 {
   "name": "@appsolutely/sdk",
-  "version": "0.3.0",
+  "version": "0.2.0",
   "description": "Typed TypeScript client for the Appsolutely public API, generated from the OpenAPI document an aio release ships.",
   "license": "MIT",
   "repository": {
