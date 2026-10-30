@@ -60,14 +60,14 @@ OAuth token request types require `refresh_token` for the refresh grant, `code`,
 "appsolutely": {
   "spec": {
     "path": "docs/api/openapi.yaml",
-    "tag": "v0.38.0",
-    "commit": "e2eaed76728f9eeacec52a8ad25ed38df0a0c463",
-    "sha256": "4f9822368fde6d546790da8f99ec04728e75ef94a5c3f75be8242b9208b9a955"
+    "tag": "v0.39.0",
+    "commit": "0ef711fe5da2e5a888144e10935b95120a9143bc",
+    "sha256": "b0cb4cb271563aa6f8fa23abd263af3c7910be83a4b804ee53b228761cad38f3"
   }
 }
 ```
 
-This is a typed client for aio v0.38.0; this release does not run or claim the aio SDK conformance suite. Use an install running aio v0.38.0. It exposes typed HTTP operations; retry scheduling, cursor recovery, sign-in sessions, credential storage and application flows remain the caller's responsibility. While aio is below 1.0.0, minor releases may remove operations or change their shapes, even when the API path stays at v1. Check the release's breaking changes before upgrading an install. The package's own version follows its own semver; the document pin names the contract it matches. Publishing requires a pin at a final aio release.
+This is a typed client for aio v0.39.0; this release does not run or claim the aio SDK conformance suite. Use an install running aio v0.39.0. It exposes typed HTTP operations; retry scheduling, cursor recovery, sign-in sessions, credential storage and application flows remain the caller's responsibility. While aio is below 1.0.0, minor releases may remove operations or change their shapes, even when the API path stays at v1. Check the release's breaking changes before upgrading an install. The package's own version follows its own semver; the document pin names the contract it matches. Publishing requires a pin at a final aio release.
 
 ## Develop
 
