@@ -7,8 +7,6 @@ and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.39.0] - 2026-10-30
-
 Compatible with aio v0.39.0.
 
 ### Fixed
