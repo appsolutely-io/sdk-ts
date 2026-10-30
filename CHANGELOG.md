@@ -7,13 +7,17 @@ and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.39.0] - 2026-10-30
+
+Compatible with aio v0.39.0.
+
 ### Fixed
 
 - Generate the runtime idempotency registry with the client types, so a newly documented keyed operation builds and receives an `Idempotency-Key` without updating a separate list.
 
 ### Changed
 
-- Typed client for aio v0.38.0; this release does not run or claim the aio SDK conformance suite. The public document is pinned to that release; the document and generated types are unchanged from the unreleased pin this release started from. Compared with 0.2.0, the generated types have the changes listed in this entry.
+- Typed client for aio v0.39.0; this release does not run or claim the aio SDK conformance suite. The public document is pinned to that release. Against aio v0.38.0 only the description of the API changed (it now states the compatibility policy after the first public release); no operation or schema changed, so the generated types are unchanged. Compared with 0.2.0, the generated types have the changes listed in this entry.
 - **BREAKING** — `StorePurchaseTransaction` requires `belongs_to_you: boolean`, including a recorded ended purchase with no subscription reference. Member and backend store-purchase problems expose optional ownership, outcome and rejection-reason extensions.
 - **BREAKING** — `Order.tax_amount` and `Order.total_amount` may be null or absent while pricing is unknown, including orders carried by webhook events. `Seat.member`, including seats nested in a pool, may be null or absent. Seat creation still requires a string `member`.
 

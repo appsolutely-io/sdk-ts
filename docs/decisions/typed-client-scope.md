@@ -2,7 +2,7 @@
 
 ## Decision
 
-Release the typed HTTP client against aio v0.38.0 without running or claiming the aio SDK conformance suite. Runtime client policies require separate design and implementation, one domain at a time.
+Release the typed HTTP client against aio v0.39.0 without running or claiming the aio SDK conformance suite. Runtime client policies require separate design and implementation, one domain at a time.
 
 ## Rationale
 
