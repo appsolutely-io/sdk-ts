@@ -1,0 +1,74 @@
+{
+  "name": "@appsolutely-io/sdk",
+  "version": "0.1.0-next.0",
+  "description": "Typed TypeScript client for the Appsolutely public API, generated from the OpenAPI document an aio release ships.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/appsolutely-io/sdk-ts.git"
+  },
+  "homepage": "https://github.com/appsolutely-io/sdk-ts#readme",
+  "bugs": {
+    "url": "https://github.com/appsolutely-io/sdk-ts/issues"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "packageManager": "pnpm@12.8.1",
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "node --test \"test/*.test.ts\"",
+    "test:contract": "node --test \"test/contract/*.test.ts\"",
+    "build": "node scripts/clean.ts && tsc -p tsconfig.build.json",
+    "prepack": "pnpm build",
+    "spec:pin": "node scripts/pin-spec.ts",
+    "generate": "node scripts/generate.ts",
+    "check:spec": "node scripts/validate-spec.ts",
+    "check:generated": "node scripts/generate.ts --check",
+    "check:consumer": "node scripts/check-consumer.ts --typescript 5.4.5,5.9.3,6.0.3,7.0.2",
+    "check:publishable": "node scripts/check-publishable.ts",
+    "verify": "pnpm format:check && pnpm check:spec && pnpm check:generated && pnpm typecheck && pnpm test && pnpm check:consumer",
+    "release:decide": "node scripts/release-decide.ts",
+    "set-version": "node scripts/set-version.ts",
+    "watch:aio": "node scripts/watch-aio.ts",
+    "prepublishOnly": "pnpm build && pnpm check:publishable"
+  },
+  "devDependencies": {
+    "@seriousme/openapi-schema-validator": "^2.11.0",
+    "@types/node": "^24.0.0",
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
+    "openapi-typescript": "^7.13.0",
+    "prettier": "^3.9.9",
+    "typescript": "~5.9.3",
+    "yaml": "^2.9.1"
+  },
+  "appsolutely": {
+    "spec": {
+      "path": "docs/api/openapi.yaml",
+      "tag": null,
+      "commit": "074e28bced08374ca80c33d2882bdbfa8203c14f",
+      "sha256": "029ec0513e035a1c056bffe50c9ad9b7b6b7b979f089094b1517aee0819cbb2b"
+    }
+  },
+  "dependencies": {
+    "openapi-fetch": "^0.17.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "tag": "next"
+  }
+}
