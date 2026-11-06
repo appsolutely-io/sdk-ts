@@ -1,0 +1,41 @@
+{
+  "name": "@asly/sdk",
+  "version": "0.1.0-next.0",
+  "description": "Alias of @appsolutely-io/sdk, the typed TypeScript client for the Appsolutely public API.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/appsolutely-io/sdk-ts.git",
+    "directory": "packages/asly-sdk"
+  },
+  "homepage": "https://github.com/appsolutely-io/sdk-ts#readme",
+  "bugs": {
+    "url": "https://github.com/appsolutely-io/sdk-ts/issues"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    }
+  },
+  "types": "./index.d.ts",
+  "files": [
+    "index.js",
+    "index.d.ts"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "scripts": {
+    "prepublishOnly": "node ../../scripts/check-alias.ts"
+  },
+  "dependencies": {
+    "@appsolutely-io/sdk": "0.1.0-next.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "tag": "next"
+  }
+}
