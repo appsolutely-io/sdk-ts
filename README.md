@@ -38,7 +38,7 @@ const filed = await client.POST('/api/v1/me/addresses', {
 });
 ```
 
-- `baseUrl` is the install's address, including any path it is served under. It must be an absolute `http` or `https` URL. Leave the key out to run in [mock mode](#mock-mode).
+- `baseUrl` is the install's address, including any path it is served under. It must be an absolute `http` or `https` URL. It is required unless [mock mode](#mock-mode) is on.
 - `token` is the bearer credential sent as `Authorization: Bearer` on every request: a signed-in member's access token for the member's own routes (`/api/v1/me/...`), or, for the site backend's routes, the token its machine client is granted by the client-credentials grant. Leave it out for the routes that need none. An administrator's work is not in this API: it is done through the install's Administrator API (`/api/admin/v1`), which this client does not describe.
 - `headers` adds headers to every request, in any form `new Headers()` accepts; an `Accept` header you set replaces the default, and `token` always sets `Authorization`. `fetch` replaces the fetch implementation.
 - Each HTTP method is a client method (`GET`, `POST`, `PATCH`, `DELETE`, ...), typed by path. A success's `data` is the resource itself, or `{ data, next_cursor }` for a list; a `202` or `204` with no body resolves with `data` undefined. `response` is always the raw `Response`.
@@ -52,18 +52,15 @@ The client is [openapi-fetch](https://openapi-ts.dev/openapi-fetch/), whose docu
 
 ## Mock mode
 
-A client created without a `baseUrl` runs in mock mode: every request is answered from sample data bundled with the package (`dist/mock/aio.json`), and nothing is sent over the network. This lets an app run and render before it is connected to an install.
+Mock mode answers every request from sample data bundled with the package (`dist/mock/aio.json`) and sends nothing over the network. An app can then run and render before it is connected to an install.
 
-```ts
-const client = createClient(); // no baseUrl: mock mode
-client.mock; // true
-const { data } = await client.GET('/api/v1/me'); // the sample member, member@example.test
-```
-
-- **It says so.** `client.mock` is `true`, and creating the client logs one `console.warn` notice.
-- **What is bundled.** One sample member at `example.test`, its entitlements, subscription, orders, address and billing entry, the OAuth userinfo, the backend client info, a catalogue with two plans and a one-off product, and the backend's entitlement reads. Every answer matches the response schema the pinned API document declares. `mockOperations` exports them.
-- **Matching.** Answers are keyed by `METHOD /path/{template}`, as the document names the operation (`GET /api/v1/products/{id}`). Any path parameter value matches, and the query is ignored; a literal segment wins over a parameter in the same place. An operation with no answer gets a `501` problem document in `error`.
-- **Layering your own data.** `mock.operations` replaces the bundled answer for each operation it names and keeps the rest. Each `body` is typed as what that operation documents, a success or a problem document. Spread a bundled answer to change one field; the exported bundle is frozen. Set `bundled: false` to serve only your own answers. A status outside 200 to 599, or a body on a `204`, `205` or `304`, is refused when the client is created.
+- **The switch.** Mock mode is off by default. Only the caller turns it on, with `mock: true` or with a `mock` object, as below. Nothing else does: a missing `baseUrl` never falls back to sample data.
+- **Without a `baseUrl`.** With mock mode off, a missing, `undefined` or empty `baseUrl`, or one that is not an absolute `http(s)` URL, throws a `TypeError` when the client is created. The message names `baseUrl` and the fix: set baseUrl, or pass mock: true to use the bundled sample data.
+- **The marker.** In mock mode, `client.mock` is `true`, creating the client logs one `console.warn` notice, and every answer's `response` carries the header `x-appsolutely-mock: 1` (exported as `MOCK_HEADER`). An app can check `response.headers.get(MOCK_HEADER)` to show that the data is not real.
+- **Mock wins.** With both `mock: true` and a `baseUrl`, mock mode applies, the `baseUrl` is ignored, and the notice says so. The `fetch` option is not called either.
+- **What is bundled.** One sample member at `example.test`, its entitlements, subscription, orders, address and billing entry, the OAuth userinfo, the backend client info, a catalogue with two plans and a one-off product, and the backend's entitlement reads. Every answer matches the response schema of the pinned API document. `mockOperations` exports them, frozen.
+- **Matching.** Answers are keyed by `METHOD /path/{template}`, as the document names the operation (`GET /api/v1/products/{id}`). Any path parameter value matches, the query is ignored, and a literal segment wins over a parameter in the same place. An operation with no answer gets a `501` problem document in `error`.
+- **Layering your own data.** `mock.operations` replaces the bundled answer for each operation it names and keeps the rest. Each `body` is typed as what that operation documents. Spread a bundled answer to change one field. `bundled: false` serves only your own answers. A status outside 200 to 599, or a body on a `204`, `205` or `304`, throws when the client is created.
 
   ```ts
   import { createClient, mockOperations } from '@appsolutely-io/sdk';
@@ -79,8 +76,13 @@ const { data } = await client.GET('/api/v1/me'); // the sample member, member@ex
   });
   ```
 
-- **Switching it off.** Pass a `baseUrl`. Mock mode is on by itself only when the `baseUrl` key is left out. A `baseUrl` key holding `undefined`, the usual shape of an unset setting, is a `TypeError`, and so is an empty one, so a missing setting in production never answers from sample data. To choose mock mode from a setting, say so: `createClient({ baseUrl: env.API_URL || undefined, mock: !env.API_URL })`. `mock: false` turns mock mode off and makes a missing `baseUrl` a `TypeError`. `mock: true`, or an object as above, turns it on even when a `baseUrl` is given.
-- In mock mode the `fetch` option is not called.
+- **The recommended app pattern.** Drive the switch from its own setting, never from the absence of the address:
+
+  ```ts
+  const client = createClient({ baseUrl: env.API_URL, mock: env.USE_MOCK === '1' });
+  ```
+
+  With `USE_MOCK` unset and `API_URL` missing, this throws instead of quietly serving sample data.
 
 ## Answers worth checking
 

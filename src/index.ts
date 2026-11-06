@@ -7,6 +7,7 @@ export {
 } from './billing-entry.ts';
 export {
   MOCK_BASE_URL,
+  MOCK_HEADER,
   mockOperations,
   type MockAnswer,
   type MockOperations,

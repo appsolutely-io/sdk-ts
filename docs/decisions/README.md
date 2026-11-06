@@ -6,4 +6,4 @@ These records explain choices in the current implementation. For installation an
 
 - [Derive the client contract and keyed operation inventory from the document](document-derived-client.md)
 - [Keep the typed HTTP client distinct from SDK conformance](typed-client-scope.md)
-- [Answer from bundled sample data when no install is given](mock-mode.md)
+- [Answer from bundled sample data only when asked](mock-mode.md)

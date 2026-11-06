@@ -66,11 +66,16 @@ export const mockOperations: Readonly<MockOperations> = deepFreeze(
   bundledAnswers.operations as unknown as MockOperations,
 );
 
-/** The origin a mock client addresses when it is given no base URL; `.invalid` never resolves (RFC 6761). */
+/** The response header every mocked answer carries, set to `1`, so an app can show it is not real data. */
+export const MOCK_HEADER = 'x-appsolutely-mock';
+
+/** The origin a mock client addresses in place of any baseUrl; `.invalid` never resolves (RFC 6761). */
 export const MOCK_BASE_URL = 'https://mock.invalid';
 
 export const MOCK_NOTICE =
-  'Appsolutely client in mock mode: requests are answered from bundled sample data and nothing is sent to a server. Pass baseUrl to call an install.';
+  'Appsolutely client in mock mode: requests are answered from bundled sample data and nothing is sent to a server.';
+
+export const MOCK_IGNORES_BASE_URL = 'The baseUrl passed is ignored while mock mode is on.';
 
 /** The answers a mock client serves: the bundled ones unless turned off, with the caller's on top. */
 export function mockAnswers(options: MockOptions): MockOperations {
@@ -118,6 +123,7 @@ function bySpecificity(a: Route, b: Route): number {
 
 function respond(status: number, body: unknown, headers: Record<string, string> = {}): Response {
   const head = new Headers(headers);
+  head.set(MOCK_HEADER, '1');
   if (body === undefined) {
     return new Response(null, { status, headers: head });
   }

@@ -1,7 +1,7 @@
 // Packs this package, installs the tarball into a fresh project, and holds what a consumer
 // sees to the published contract: it type-checks under each module resolution with no `any`
 // on a documented resource's data, runs (a request through the installed client reaches a
-// stub fetch with the credential, and a client with no base URL answers from the bundled mock data), carries none of the words the boundary scan refuses, and names its spec pin.
+// stub fetch with the credential, and a client created with mock: true answers from the bundled mock data), carries none of the words the boundary scan refuses, and names its spec pin.
 //   pnpm check:consumer [--typescript 5.9.3,5.4.5]
 import { execFileSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
@@ -49,9 +49,9 @@ if (JSON.stringify(seen) !== JSON.stringify([['https://example.com/api/v1/produc
   throw new Error('The installed client did not send the expected request: ' + JSON.stringify(seen));
 }
 
-const mocked = createClient();
+const mocked = createClient({ mock: true });
 const me = await mocked.GET('/api/v1/me');
-if (mocked.mock !== true || me.data?.email !== 'member@example.test') {
+if (mocked.mock !== true || me.data?.email !== 'member@example.test' || me.response.headers.get('x-appsolutely-mock') !== '1') {
   throw new Error('The installed client did not answer from its bundled mock data: ' + JSON.stringify(me.data));
 }
 `;

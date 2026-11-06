@@ -4,7 +4,7 @@ import { afterEach, beforeEach, test } from 'node:test';
 import { Ajv2020 } from 'ajv/dist/2020.js';
 import addFormats from 'ajv-formats';
 import { parse } from 'yaml';
-import { createClient, mockOperations } from '../src/index.ts';
+import { MOCK_HEADER, createClient, mockOperations, type ClientOptions } from '../src/index.ts';
 import { mockTransport, type MockAnswer } from '../src/mock.ts';
 import { SPEC_FILE } from '../scripts/lib/spec.ts';
 
@@ -26,29 +26,7 @@ const unreachable = async (): Promise<Response> => {
   throw new Error('mock mode reached the network');
 };
 
-test('a client with no base URL is in mock mode, says so once, and answers from the bundled data', async () => {
-  const client = createClient({ fetch: unreachable });
-
-  assert.equal(client.mock, true);
-  assert.equal(notices.length, 1);
-  assert.match(String(notices[0]?.[0]), /mock mode/);
-
-  const { data, error, response } = await client.GET('/api/v1/me');
-  assert.equal(error, undefined);
-  assert.equal(response.status, 200);
-  assert.equal(data?.email, 'member@example.test');
-  assert.equal(notices.length, 1);
-});
-
-test('a client created with no options at all is in mock mode', async () => {
-  const client = createClient();
-
-  assert.equal(client.mock, true);
-  const { data } = await client.GET('/api/v1/products');
-  assert.ok((data?.data.length ?? 0) > 0);
-});
-
-test('a client with a base URL is not in mock mode and sends its requests', async () => {
+test('mock mode is off by default: a client with a base URL sends its requests, unmarked and silent', async () => {
   const seen: string[] = [];
   const client = createClient({
     baseUrl: 'https://example.com',
@@ -60,25 +38,83 @@ test('a client with a base URL is not in mock mode and sends its requests', asyn
 
   assert.equal(client.mock, false);
   assert.equal(notices.length, 0);
-  await client.GET('/api/v1/me');
+  const { response } = await client.GET('/api/v1/me');
   assert.deepEqual(seen, ['https://example.com/api/v1/me']);
+  assert.equal(response.headers.get(MOCK_HEADER), null);
 });
 
-test('mock: false turns mock mode off, so a missing base URL is refused', () => {
-  assert.throws(() => createClient({ mock: false }), TypeError);
+test('without mock mode, a missing or unusable baseUrl is refused at construction, naming the fix', () => {
+  const unset: string | undefined = undefined;
+  const refused: ClientOptions[] = [
+    {},
+    { baseUrl: unset },
+    { baseUrl: '' },
+    { baseUrl: 'example.com' },
+    { baseUrl: '/api' },
+    { baseUrl: 'ftp://example.com' },
+    { baseUrl: 'https://example.com/?q=1' },
+    { mock: false },
+    { baseUrl: unset, mock: false },
+  ];
+  for (const options of refused) {
+    assert.throws(
+      () => createClient(options),
+      (error: unknown) =>
+        error instanceof TypeError &&
+        /baseUrl/.test(error.message) &&
+        /set baseUrl, or pass mock: true to use the bundled sample data/.test(error.message),
+      JSON.stringify(options),
+    );
+  }
   assert.equal(notices.length, 0);
 });
 
-test('mock: true serves mock data even with a base URL, which may carry a path', async () => {
+test('mock: true serves the bundled data, sets the flag, logs one notice and marks every response', async () => {
+  const client = createClient({ mock: true, fetch: unreachable });
+
+  assert.equal(client.mock, true);
+  assert.equal(notices.length, 1);
+  assert.match(String(notices[0]?.[0]), /mock mode/);
+
+  const { data, error, response } = await client.GET('/api/v1/me');
+  assert.equal(error, undefined);
+  assert.equal(response.status, 200);
+  assert.equal(data?.email, 'member@example.test');
+  assert.equal(response.headers.get(MOCK_HEADER), '1');
+
+  const unanswered = await client.GET('/api/v1/me/referral');
+  assert.equal(unanswered.response.status, 501);
+  assert.equal(unanswered.response.headers.get(MOCK_HEADER), '1');
+  assert.equal(notices.length, 1);
+});
+
+test('a mock object turns mock mode on as mock: true does', async () => {
+  const client = createClient({ mock: {} });
+
+  assert.equal(client.mock, true);
+  const { data, response } = await client.GET('/api/v1/products');
+  assert.ok((data?.data.length ?? 0) > 0);
+  assert.equal(response.headers.get(MOCK_HEADER), '1');
+});
+
+test('mock mode with a baseUrl: mock wins, nothing is sent, and the notice says the baseUrl is ignored', async () => {
   const client = createClient({ baseUrl: 'https://example.com/platform', mock: true, fetch: unreachable });
 
   assert.equal(client.mock, true);
-  const { data } = await client.GET('/api/v1/client');
+  assert.equal(notices.length, 1);
+  assert.match(String(notices[0]?.[0]), /baseUrl .*ignored/);
+  const { data, response } = await client.GET('/api/v1/client');
   assert.equal(data?.mode, 'test');
+  assert.equal(response.headers.get(MOCK_HEADER), '1');
+});
+
+test('mock mode with an unusable baseUrl still serves mock data, since the baseUrl is ignored', () => {
+  assert.equal(createClient({ baseUrl: '', mock: true }).mock, true);
+  assert.match(String(notices[0]?.[0]), /ignored/);
 });
 
 test('a path parameter matches the template whatever its value', async () => {
-  const client = createClient();
+  const client = createClient({ mock: true });
 
   const { data } = await client.GET('/api/v1/products/{id}', { params: { path: { id: 'any-product' } } });
   assert.equal(data?.title, 'Team');
@@ -140,7 +176,7 @@ test('bundled: false serves only the operations given, and answers others with a
 });
 
 test('each answer is a fresh copy, so a caller changing one does not change the next', async () => {
-  const client = createClient();
+  const client = createClient({ mock: true });
 
   const first = await client.GET('/api/v1/me');
   if (first.data !== undefined) first.data.name = 'changed';
@@ -189,23 +225,6 @@ test('the bundled sample data names only example.test addresses', () => {
     addresses.filter((address) => !address.endsWith('@example.test')),
     [],
   );
-});
-
-test('a baseUrl key holding undefined is refused rather than read as mock mode', () => {
-  const unset: string | undefined = undefined;
-  assert.throws(() => createClient({ baseUrl: unset }), /baseUrl is undefined/);
-  assert.equal(notices.length, 0);
-});
-
-test('a baseUrl key holding undefined is accepted when mock mode is asked for', () => {
-  const unset: string | undefined = undefined;
-  assert.equal(createClient({ baseUrl: unset, mock: true }).mock, true);
-  assert.equal(createClient({ baseUrl: unset, mock: {} }).mock, true);
-});
-
-test('an empty baseUrl is refused, with or without mock mode', () => {
-  assert.throws(() => createClient({ baseUrl: '' }), TypeError);
-  assert.throws(() => createClient({ baseUrl: '', mock: true }), TypeError);
 });
 
 test('an answer whose status is not a usable HTTP status is refused when the client is created', () => {
