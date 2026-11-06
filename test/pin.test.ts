@@ -1,0 +1,157 @@
+import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
+import { mkdtempSync, mkdirSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, join } from 'node:path';
+import { after, before, test } from 'node:test';
+import { resolvePin } from '../scripts/lib/pin.ts';
+import { AIO_DEFAULT_BRANCH, AIO_SPEC_PATH, sha256 } from '../scripts/lib/spec.ts';
+
+let checkout = '';
+let released = '';
+let candidate = '';
+let unmerged = '';
+
+function git(...args: string[]): string {
+  const env = Object.fromEntries(Object.entries(process.env).filter(([name]) => !name.startsWith('GIT_')));
+  return execFileSync('git', ['-C', checkout, ...args], { encoding: 'utf8', env }).trim();
+}
+
+function commitDocument(text: string): string {
+  writeFileSync(join(checkout, AIO_SPEC_PATH), text);
+  git('add', AIO_SPEC_PATH);
+  git(
+    '-c',
+    'user.name=t',
+    '-c',
+    'user.email=t@example.com',
+    '-c',
+    'core.hooksPath=/dev/null',
+    'commit',
+    '-q',
+    '-m',
+    'doc',
+  );
+  return git('rev-parse', 'HEAD');
+}
+
+before(() => {
+  checkout = mkdtempSync(join(tmpdir(), 'sdk-pin-'));
+  git('init', '-q');
+  mkdirSync(join(checkout, dirname(AIO_SPEC_PATH)), { recursive: true });
+  released = commitDocument('openapi: 3.1.0\n# released\n');
+  git('tag', 'v1.2.3');
+  candidate = commitDocument('openapi: 3.1.0\n# candidate\n');
+  git('tag', 'v1.3.0-rc.1');
+  git('update-ref', `refs/remotes/origin/${AIO_DEFAULT_BRANCH}`, candidate);
+  git('checkout', '-q', '-b', 'feature');
+  unmerged = commitDocument('openapi: 3.1.0\n# unmerged\n');
+});
+
+after(() => rmSync(checkout, { recursive: true, force: true }));
+
+test('a release tag pins that release and records the tag', () => {
+  const pin = resolvePin(checkout, 'v1.2.3');
+
+  assert.equal(pin.tag, 'v1.2.3');
+  assert.equal(pin.commit, released);
+  assert.equal(pin.document, 'openapi: 3.1.0\n# released\n');
+  assert.equal(pin.sha256, sha256('openapi: 3.1.0\n# released\n'));
+});
+
+test('a commit that a release tag points at records that tag', () => {
+  assert.equal(resolvePin(checkout, released).tag, 'v1.2.3');
+});
+
+test('a commit no final release points at records no tag', () => {
+  const pin = resolvePin(checkout, candidate);
+
+  assert.equal(pin.tag, null);
+  assert.equal(pin.commit, candidate);
+});
+
+test('a pre-release tag is not recorded as the release a client matches', () => {
+  assert.equal(resolvePin(checkout, 'v1.3.0-rc.1').tag, null);
+});
+
+test('a commit carrying several release tags records the newest, compared as versions', () => {
+  git('tag', 'v1.10.0', released);
+  git('tag', 'v1.1.0', released);
+  try {
+    assert.equal(resolvePin(checkout, released).tag, 'v1.10.0');
+  } finally {
+    git('tag', '-d', 'v1.10.0', 'v1.1.0');
+  }
+});
+
+test('a pre-release ref does not hide a final release on the same commit', () => {
+  git('tag', 'v1.3.0', candidate);
+  try {
+    assert.equal(resolvePin(checkout, 'v1.3.0-rc.1').tag, 'v1.3.0');
+  } finally {
+    git('tag', '-d', 'v1.3.0');
+  }
+});
+
+test('an unknown ref is refused', () => {
+  assert.throws(() => resolvePin(checkout, 'v9.9.9'), /v9\.9\.9/);
+});
+
+test('a commit only another branch has is refused, since no release may ever contain it', () => {
+  assert.throws(() => resolvePin(checkout, unmerged), /not on aio's default branch/);
+});
+
+test('a commit is refused when the checkout cannot show the default branch', () => {
+  git('update-ref', '-d', `refs/remotes/origin/${AIO_DEFAULT_BRANCH}`);
+  try {
+    assert.throws(() => resolvePin(checkout, candidate), /not on aio's default branch/);
+  } finally {
+    git('update-ref', `refs/remotes/origin/${AIO_DEFAULT_BRANCH}`, candidate);
+  }
+});
+
+test('a release tag pins even when its commit is not on the default branch', () => {
+  git('tag', 'v1.4.0', unmerged);
+  try {
+    assert.equal(resolvePin(checkout, 'v1.4.0').commit, unmerged);
+  } finally {
+    git('tag', '-d', 'v1.4.0');
+  }
+});
+
+test('fixture git commands ignore inherited repository and configuration variables', () => {
+  const inherited = {
+    GIT_DIR: join(checkout, 'unrelated.git'),
+    GIT_WORK_TREE: join(checkout, 'unrelated-worktree'),
+    GIT_INDEX_FILE: join(checkout, 'unrelated-index'),
+    GIT_CONFIG_COUNT: '1',
+    GIT_CONFIG_KEY_0: 'core.bare',
+    GIT_CONFIG_VALUE_0: 'true',
+    GIT_CONFIG_PARAMETERS: "'core.bare=true'",
+  };
+  const saved = Object.fromEntries(Object.keys(inherited).map((name) => [name, process.env[name]]));
+  try {
+    Object.assign(process.env, inherited);
+    assert.equal(git('rev-parse', '--show-toplevel'), realpathSync(checkout));
+    assert.equal(git('ls-files', AIO_SPEC_PATH), AIO_SPEC_PATH);
+    assert.equal(git('rev-parse', 'HEAD'), unmerged);
+  } finally {
+    for (const [name, value] of Object.entries(saved)) {
+      if (value === undefined) delete process.env[name];
+      else process.env[name] = value;
+    }
+  }
+});
+
+test('a document larger than the default child-process buffer pins whole', () => {
+  const large = `openapi: 3.1.0\n${'# padding line for a large document\n'.repeat(60_000)}`;
+  assert.ok(large.length > 2 * 1024 * 1024);
+  git('tag', 'v1.5.0', commitDocument(large));
+  try {
+    const pin = resolvePin(checkout, 'v1.5.0');
+    assert.equal(pin.document, large);
+    assert.equal(pin.sha256, sha256(large));
+  } finally {
+    git('tag', '-d', 'v1.5.0');
+  }
+});
