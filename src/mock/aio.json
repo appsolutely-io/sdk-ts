@@ -1,0 +1,481 @@
+{
+  "description": "Generic sample answers the client serves in mock mode. Every body conforms to the response schema the pinned API document declares for its operation and status.",
+  "operations": {
+    "GET /api/v1": {
+      "status": 200,
+      "body": {
+        "version": "v1",
+        "status": "stable",
+        "deprecated_at": null,
+        "sunset_at": null,
+        "successor": null,
+        "documentation": null
+      }
+    },
+    "GET /oauth/userinfo": {
+      "status": 200,
+      "body": {
+        "sub": "00000000-0000-4000-8000-000000000001",
+        "name": "Sample Member",
+        "picture": null,
+        "updated_at": 1767225600,
+        "email": "member@example.test",
+        "email_verified": true,
+        "roles": ["member"],
+        "entitlements": [
+          {
+            "key": "projects",
+            "label": "Projects",
+            "quantity": 10,
+            "expires_at": "2026-02-01T00:00:00Z",
+            "period_start": "2026-01-01T00:00:00Z",
+            "period_end": "2026-02-01T00:00:00Z",
+            "breakdown": [{ "source": "plan", "value": 10 }]
+          }
+        ],
+        "entitlement_values": {
+          "projects": { "kind": "quantity", "value": 10 },
+          "priority-support": { "kind": "boolean", "value": true }
+        }
+      }
+    },
+    "GET /api/v1/me": {
+      "status": 200,
+      "body": {
+        "id": "00000000-0000-4000-8000-000000000001",
+        "name": "Sample Member",
+        "email": "member@example.test",
+        "email_verified_at": "2026-01-01T00:00:00Z",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z",
+        "terms": { "current": "2026-01-01", "accepted": true }
+      }
+    },
+    "GET /api/v1/me/entitlements": {
+      "status": 200,
+      "body": {
+        "data": [
+          {
+            "key": "projects",
+            "label": "Projects",
+            "quantity": 10,
+            "expires_at": "2026-02-01T00:00:00Z",
+            "kind": "paid",
+            "period_start": "2026-01-01T00:00:00Z",
+            "period_end": "2026-02-01T00:00:00Z",
+            "breakdown": [
+              { "source": "plan", "value": 10, "payment_reference": null, "ends_at": "2026-02-01T00:00:00Z" }
+            ]
+          },
+          {
+            "key": "priority-support",
+            "label": "Priority support",
+            "quantity": 1,
+            "expires_at": "2026-02-01T00:00:00Z",
+            "kind": "paid",
+            "period_start": "2026-01-01T00:00:00Z",
+            "period_end": "2026-02-01T00:00:00Z",
+            "breakdown": [
+              { "source": "plan", "value": 1, "payment_reference": null, "ends_at": "2026-02-01T00:00:00Z" }
+            ]
+          }
+        ]
+      }
+    },
+    "GET /api/v1/me/subscriptions": {
+      "status": 200,
+      "body": {
+        "data": [
+          {
+            "id": "00000000-0000-4000-8000-000000000301",
+            "product": "00000000-0000-4000-8000-000000000102",
+            "sku": "team-monthly",
+            "status": "active",
+            "quantity": 1,
+            "currency": "USD",
+            "current_period_end": "2026-02-01T00:00:00Z",
+            "cancel_at_period_end": false,
+            "pending_sku": null,
+            "pending_quantity": null,
+            "billed_by": "site",
+            "manage_url": null
+          }
+        ]
+      }
+    },
+    "GET /api/v1/me/orders": {
+      "status": 200,
+      "body": {
+        "data": [
+          {
+            "id": "00000000-0000-4000-8000-000000000401",
+            "reference": "ORD-1001",
+            "subject_reference": "00000000-0000-4000-8000-000000000001",
+            "status": "paid",
+            "mode": "test",
+            "subscription_start_state": null,
+            "subscription_start_refusal": null,
+            "summary": "Team, monthly",
+            "currency": "USD",
+            "amount": 1200,
+            "discounted_amount": 0,
+            "shipping_amount": 0,
+            "tax_amount": 0,
+            "tax_included": true,
+            "total_amount": 1200,
+            "total_shown": "final",
+            "note": null,
+            "payment_url": null,
+            "created_at": "2026-01-01T00:00:00Z",
+            "updated_at": "2026-01-01T00:00:00Z",
+            "items": [
+              {
+                "id": "00000000-0000-4000-8000-000000000501",
+                "product": "00000000-0000-4000-8000-000000000102",
+                "quantity": 1,
+                "currency": "USD",
+                "price": 1200
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "GET /api/v1/me/orders/{id}": {
+      "status": 200,
+      "body": {
+        "id": "00000000-0000-4000-8000-000000000401",
+        "reference": "ORD-1001",
+        "subject_reference": "00000000-0000-4000-8000-000000000001",
+        "status": "paid",
+        "mode": "test",
+        "subscription_start_state": null,
+        "subscription_start_refusal": null,
+        "summary": "Team, monthly",
+        "currency": "USD",
+        "amount": 1200,
+        "discounted_amount": 0,
+        "shipping_amount": 0,
+        "tax_amount": 0,
+        "tax_included": true,
+        "total_amount": 1200,
+        "total_shown": "final",
+        "note": null,
+        "payment_url": null,
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z",
+        "items": [
+          {
+            "id": "00000000-0000-4000-8000-000000000501",
+            "product": "00000000-0000-4000-8000-000000000102",
+            "quantity": 1,
+            "currency": "USD",
+            "price": 1200
+          }
+        ]
+      }
+    },
+    "GET /api/v1/me/addresses": {
+      "status": 200,
+      "body": {
+        "data": [
+          {
+            "id": "00000000-0000-4000-8000-000000000601",
+            "name": "Sample Member",
+            "mobile": null,
+            "address": "1 Example Street",
+            "address_extra": null,
+            "town": null,
+            "city": "Example City",
+            "province": null,
+            "postcode": "00000",
+            "country": "US",
+            "note": null,
+            "remark": null,
+            "sort": 0,
+            "created_at": "2026-01-01T00:00:00Z",
+            "updated_at": "2026-01-01T00:00:00Z"
+          }
+        ]
+      }
+    },
+    "GET /api/v1/me/billing-entry": {
+      "status": 200,
+      "body": {
+        "available": false,
+        "wording": null,
+        "presentation": null,
+        "needs_store_token": null,
+        "url": null,
+        "expires_at": null
+      }
+    },
+    "GET /api/v1/client": {
+      "status": 200,
+      "body": {
+        "client_id": "00000000-0000-4000-8000-000000000701",
+        "mode": "test",
+        "site": "example",
+        "scopes": ["catalogue:read", "entitlements:read", "checkout:write"],
+        "store_currency": "USD"
+      }
+    },
+    "GET /api/v1/products": {
+      "status": 200,
+      "body": {
+        "data": [
+          {
+            "id": "00000000-0000-4000-8000-000000000101",
+            "type": "subscription",
+            "title": "Starter",
+            "subtitle": "For trying things out",
+            "slug": "starter",
+            "cover": null,
+            "keywords": null,
+            "price": 0,
+            "original_price": null,
+            "currency": "USD",
+            "prices": [{ "currency": "USD", "price": 0, "original_price": null }],
+            "sku_prices": [
+              {
+                "sku": "starter-monthly",
+                "currency": "USD",
+                "price": 0,
+                "original_price": null,
+                "interval": "month",
+                "interval_count": 1
+              }
+            ],
+            "status": 1,
+            "sort": 1,
+            "published_at": "2026-01-01T00:00:00Z",
+            "expired_at": null,
+            "created_at": "2026-01-01T00:00:00Z",
+            "updated_at": "2026-01-01T00:00:00Z"
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000102",
+            "type": "subscription",
+            "title": "Team",
+            "subtitle": "For small teams",
+            "slug": "team",
+            "cover": null,
+            "keywords": null,
+            "price": 1200,
+            "original_price": null,
+            "currency": "USD",
+            "prices": [{ "currency": "USD", "price": 1200, "original_price": null }],
+            "sku_prices": [
+              {
+                "sku": "team-monthly",
+                "currency": "USD",
+                "price": 1200,
+                "original_price": null,
+                "interval": "month",
+                "interval_count": 1
+              },
+              {
+                "sku": "team-yearly",
+                "currency": "USD",
+                "price": 12000,
+                "original_price": 14400,
+                "interval": "year",
+                "interval_count": 1
+              }
+            ],
+            "status": 1,
+            "sort": 2,
+            "published_at": "2026-01-01T00:00:00Z",
+            "expired_at": null,
+            "created_at": "2026-01-01T00:00:00Z",
+            "updated_at": "2026-01-01T00:00:00Z"
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000103",
+            "type": "auto_virtual",
+            "title": "Extra projects pack",
+            "subtitle": "Five more projects",
+            "slug": "extra-projects-pack",
+            "cover": null,
+            "keywords": null,
+            "price": 500,
+            "original_price": null,
+            "currency": "USD",
+            "prices": [{ "currency": "USD", "price": 500, "original_price": null }],
+            "sku_prices": [
+              {
+                "sku": "extra-projects-pack",
+                "currency": "USD",
+                "price": 500,
+                "original_price": null,
+                "interval": null,
+                "interval_count": null
+              }
+            ],
+            "status": 1,
+            "sort": 3,
+            "published_at": "2026-01-01T00:00:00Z",
+            "expired_at": null,
+            "created_at": "2026-01-01T00:00:00Z",
+            "updated_at": "2026-01-01T00:00:00Z"
+          }
+        ]
+      }
+    },
+    "GET /api/v1/products/{id}": {
+      "status": 200,
+      "body": {
+        "id": "00000000-0000-4000-8000-000000000102",
+        "type": "subscription",
+        "title": "Team",
+        "subtitle": "For small teams",
+        "slug": "team",
+        "cover": null,
+        "keywords": null,
+        "price": 1200,
+        "original_price": null,
+        "currency": "USD",
+        "prices": [{ "currency": "USD", "price": 1200, "original_price": null }],
+        "sku_prices": [
+          {
+            "sku": "team-monthly",
+            "currency": "USD",
+            "price": 1200,
+            "original_price": null,
+            "interval": "month",
+            "interval_count": 1
+          },
+          {
+            "sku": "team-yearly",
+            "currency": "USD",
+            "price": 12000,
+            "original_price": 14400,
+            "interval": "year",
+            "interval_count": 1
+          }
+        ],
+        "status": 1,
+        "sort": 2,
+        "published_at": "2026-01-01T00:00:00Z",
+        "expired_at": null,
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      }
+    },
+    "GET /api/v1/entitlements": {
+      "status": 200,
+      "body": {
+        "data": [
+          {
+            "subject": "00000000-0000-4000-8000-000000000001",
+            "sequence": 3,
+            "status": "active",
+            "email": "member@example.test",
+            "email_verified": true,
+            "entitlements": [
+              {
+                "key": "projects",
+                "label": "Projects",
+                "quantity": 10,
+                "expires_at": "2026-02-01T00:00:00Z",
+                "kind": "paid",
+                "period_start": "2026-01-01T00:00:00Z",
+                "period_end": "2026-02-01T00:00:00Z",
+                "breakdown": [
+                  { "source": "plan", "value": 10, "payment_reference": null, "ends_at": "2026-02-01T00:00:00Z" }
+                ]
+              }
+            ],
+            "totals": { "projects": 10 },
+            "subscriptions": [
+              {
+                "id": "00000000-0000-4000-8000-000000000301",
+                "type": "subscription",
+                "status": "active",
+                "mode": "test",
+                "cancel_at_period_end": false,
+                "transition_cause": null,
+                "recovery_reason": null,
+                "current_period_start": "2026-01-01T00:00:00Z",
+                "current_period_end": "2026-02-01T00:00:00Z",
+                "trial_ends_at": null,
+                "ended_at": null,
+                "subject_reference": "00000000-0000-4000-8000-000000000001",
+                "pending_period": null,
+                "product": "00000000-0000-4000-8000-000000000102",
+                "sku": "team-monthly",
+                "quantity": 1,
+                "billed_by": "site",
+                "environment": null,
+                "resumes_at": null,
+                "manage_url": null
+              }
+            ],
+            "entitlements_changed_at": "2026-01-01T00:00:00Z"
+          },
+          {
+            "subject": "00000000-0000-4000-8000-000000000002",
+            "sequence": 1,
+            "status": "active",
+            "email": "another.member@example.test",
+            "email_verified": false,
+            "entitlements": [],
+            "totals": {},
+            "subscriptions": [],
+            "entitlements_changed_at": "2026-01-01T00:00:00Z"
+          }
+        ],
+        "next_changed_since": "2026-01-01T00:00:00Z"
+      }
+    },
+    "GET /api/v1/entitlements/{sub}": {
+      "status": 200,
+      "body": {
+        "subject": "00000000-0000-4000-8000-000000000001",
+        "sequence": 3,
+        "status": "active",
+        "email": "member@example.test",
+        "email_verified": true,
+        "entitlements": [
+          {
+            "key": "projects",
+            "label": "Projects",
+            "quantity": 10,
+            "expires_at": "2026-02-01T00:00:00Z",
+            "kind": "paid",
+            "period_start": "2026-01-01T00:00:00Z",
+            "period_end": "2026-02-01T00:00:00Z",
+            "breakdown": [
+              { "source": "plan", "value": 10, "payment_reference": null, "ends_at": "2026-02-01T00:00:00Z" }
+            ]
+          }
+        ],
+        "totals": { "projects": 10 },
+        "subscriptions": [
+          {
+            "id": "00000000-0000-4000-8000-000000000301",
+            "type": "subscription",
+            "status": "active",
+            "mode": "test",
+            "cancel_at_period_end": false,
+            "transition_cause": null,
+            "recovery_reason": null,
+            "current_period_start": "2026-01-01T00:00:00Z",
+            "current_period_end": "2026-02-01T00:00:00Z",
+            "trial_ends_at": null,
+            "ended_at": null,
+            "subject_reference": "00000000-0000-4000-8000-000000000001",
+            "pending_period": null,
+            "product": "00000000-0000-4000-8000-000000000102",
+            "sku": "team-monthly",
+            "quantity": 1,
+            "billed_by": "site",
+            "environment": null,
+            "resumes_at": null,
+            "manage_url": null
+          }
+        ]
+      }
+    }
+  }
+}

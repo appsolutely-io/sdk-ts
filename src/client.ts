@@ -1,9 +1,14 @@
 import createFetchClient, { defaultPathSerializer, type Client, type Middleware } from 'openapi-fetch';
 import { keyedOperations, type paths } from './generated/schema.ts';
+import { MOCK_BASE_URL, MOCK_NOTICE, mockAnswers, mockTransport, type MockOptions } from './mock.ts';
 
 export interface ClientOptions {
-  /** The install's origin, with any path it is served under: `https://example.com`. */
-  baseUrl: string;
+  /**
+   * The install's origin, with any path it is served under: `https://example.com`. Leave the key out to
+   * run in mock mode, answered from bundled sample data, unless `mock` is `false`. A key holding
+   * `undefined` is refused unless `mock` turns mock mode on.
+   */
+  baseUrl?: string | undefined;
   /**
    * The bearer credential sent on every request: a signed-in member's access token, or the token the
    * site backend's machine client is granted. Leave it out for the routes that need none.
@@ -11,8 +16,13 @@ export interface ClientOptions {
   token?: string | undefined;
   /** Headers sent on every request beside the credential, in any form `new Headers()` accepts. */
   headers?: HeadersInit | undefined;
-  /** A fetch implementation, for runtimes or tests that supply their own. */
+  /** A fetch implementation, for runtimes or tests that supply their own. Mock mode does not call it. */
   fetch?: ((request: Request) => Promise<Response>) | undefined;
+  /**
+   * Mock mode. Left out, it is on exactly when the `baseUrl` key is left out. `false` turns it off, so
+   * `baseUrl` is required; `true`, or answers to layer over the bundled ones, turn it on even with a `baseUrl`.
+   */
+  mock?: boolean | MockOptions | undefined;
 }
 
 const IDEMPOTENCY_KEY = 'Idempotency-Key';
@@ -34,7 +44,10 @@ export type ClientPaths = {
 };
 
 /** Successes are `application/json`; refusals are RFC 9457 `application/problem+json`, typed as `error`. */
-export type AppsolutelyClient = Client<ClientPaths, 'application/json' | 'application/problem+json'>;
+export type AppsolutelyClient = Client<ClientPaths, 'application/json' | 'application/problem+json'> & {
+  /** True when requests are answered from mock data and never reach a server. */
+  readonly mock: boolean;
+};
 
 type KeyedOperation = {
   [Path in keyof paths]: {
@@ -59,7 +72,10 @@ const idempotencyKey: Middleware = {
   },
 };
 
-function assertBaseUrl(baseUrl: string): void {
+function assertBaseUrl(baseUrl: string | undefined): asserts baseUrl is string {
+  if (baseUrl === undefined) {
+    throw new TypeError('baseUrl is required when mock mode is off');
+  }
   let url: URL | undefined;
   try {
     url = new URL(baseUrl);
@@ -100,8 +116,22 @@ function pathSerializer(pathname: string, pathParams: Record<string, unknown>): 
  * typed from the OpenAPI document the package was generated from; a refusal resolves as the
  * typed problem document in `error` rather than throwing, branched on by its `type`.
  */
-export function createClient(options: ClientOptions): AppsolutelyClient {
-  assertBaseUrl(options.baseUrl);
+export function createClient(options: ClientOptions = {}): AppsolutelyClient {
+  // A baseUrl key holding undefined is usually an unset setting, not a request for sample data, so it is
+  // refused unless mock mode is asked for; only leaving the key out turns mock mode on by itself.
+  if (
+    'baseUrl' in options &&
+    options.baseUrl === undefined &&
+    options.mock !== true &&
+    typeof options.mock !== 'object'
+  ) {
+    throw new TypeError(
+      'baseUrl is undefined: pass the install address, leave baseUrl out for mock mode, or set mock: true',
+    );
+  }
+  const mock = options.mock ?? !('baseUrl' in options);
+  const baseUrl = mock !== false && options.baseUrl === undefined ? MOCK_BASE_URL : options.baseUrl;
+  assertBaseUrl(baseUrl);
   const headers = new Headers(options.headers);
   if (!headers.has('Accept')) {
     headers.set('Accept', 'application/json');
@@ -117,13 +147,20 @@ export function createClient(options: ClientOptions): AppsolutelyClient {
   });
 
   const client = createFetchClient<ClientPaths, 'application/json' | 'application/problem+json'>({
-    baseUrl: options.baseUrl,
+    baseUrl,
     // A plain object: openapi-fetch tells a Headers apart with instanceof against the global at request
     // time, so a Headers made before a polyfill replaces the global would be read as having no entries.
     headers: plainHeaders,
     pathSerializer,
-    ...(options.fetch === undefined ? {} : { fetch: options.fetch }),
+    ...(mock !== false
+      ? { fetch: mockTransport(mockAnswers(mock === true ? {} : mock), baseUrl) }
+      : options.fetch === undefined
+        ? {}
+        : { fetch: options.fetch }),
   });
   client.use(idempotencyKey);
-  return client;
+  if (mock !== false) {
+    console.warn(MOCK_NOTICE);
+  }
+  return Object.defineProperty(client, 'mock', { value: mock !== false, enumerable: true }) as AppsolutelyClient;
 }
