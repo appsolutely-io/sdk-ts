@@ -66,6 +66,29 @@ test('generation includes only effective required idempotency headers in a stabl
   assert.deepEqual(emptyModule.keyedOperations, {});
 });
 
+test('generation derives a stable conditional registry from documented 304 responses', async () => {
+  const responses = { 200: { description: 'Changed' }, 304: { description: 'Unchanged' } };
+  const document = {
+    openapi: '3.1.0',
+    info: { title: 'Example', version: '1' },
+    components: { pathItems: { Conditional: { get: { responses } } } },
+    paths: {
+      '/z': { get: { responses }, post: { responses: { 204: { description: 'Accepted' } } } },
+      '/plain': { get: { responses: { 200: { description: 'Read' } } } },
+      '/a': { $ref: '#/components/pathItems/Conditional' },
+    },
+  };
+  const generated = await generateSchema(stringify(document));
+  const { outputText } = transpileModule(generated, { compilerOptions: { module: ModuleKind.ESNext } });
+  const module = await import(`data:text/javascript;base64,${Buffer.from(outputText).toString('base64')}`);
+  assert.deepEqual(module.notModifiedOperations, { 'GET /a': true, 'GET /z': true });
+  assert.equal(await generateSchema(stringify(document)), generated);
+  const empty = await generateSchema(stringify({ ...document, paths: {} }));
+  const emptyJs = transpileModule(empty, { compilerOptions: { module: ModuleKind.ESNext } }).outputText;
+  const emptyModule = await import(`data:text/javascript;base64,${Buffer.from(emptyJs).toString('base64')}`);
+  assert.deepEqual(emptyModule.notModifiedOperations, {});
+});
+
 test('a newly documented keyed operation generates a buildable client that supplies its key', () => {
   const root = fileURLToPath(new URL('../', import.meta.url));
   const work = mkdtempSync(join(tmpdir(), 'sdk-generation-'));

@@ -72,7 +72,7 @@ if (answer.response.status === 304) {
 }
 ```
 
-`GET` and `request('get', ...)` preserve the original 304 Response without parsing or manufacturing a resource, consistent with [RFC 9110 conditional requests](https://www.rfc-editor.org/rfc/rfc9110.html#section-13.1.2). The public result type includes the bodyless branch for operations documenting 304, so checking only `error` does not narrow `data` to a representation; check `data !== undefined` before reading it. Operations without a documented 304 and non-GET writes retain their existing response inference. Unconditional requests retain their existing runtime behavior. Mock mode still covers only its bundled sample operations; these new operations need caller-provided mock answers.
+For operations documenting 304, `GET` and `request('get', ...)` return the original 304 Response with neither `data` nor `error`, consistent with [RFC 9110 conditional requests](https://www.rfc-editor.org/rfc/rfc9110.html#section-13.1.2). The public result type includes the bodyless branch for operations documenting 304, so checking only `error` does not narrow `data` to a representation; check `data !== undefined` before reading it. Operations without a documented 304 and non-GET writes retain their existing response inference. Unconditional requests retain their existing runtime behavior. Mock mode still covers only its bundled sample operations; these new operations need caller-provided mock answers.
 
 ## Mock mode
 

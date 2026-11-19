@@ -369,7 +369,7 @@ test('deletion, payment switches and backend messages use the document-derived k
   });
 });
 
-test('conditional reads preserve the validator and bodyless 304 metadata without decoding JSON', async () => {
+test('conditional reads return the original 304 Response with neither data nor error', async () => {
   for (const path of [
     '/api/v1/me',
     '/api/v1/me/entitlements',
@@ -398,6 +398,61 @@ test('conditional reads preserve the validator and bodyless 304 metadata without
     assert.equal(requested.data, undefined, path);
     assert.equal(requested.error, undefined, path);
   }
+});
+
+test('every generic request handles 304 only when its operation documents it', async () => {
+  const document: OpenAPI3 = parse(readFileSync(new URL('../spec/openapi.yaml', import.meta.url), 'utf8'));
+  let response = new Response(null, { status: 304 });
+  const client = createClient({ baseUrl: 'https://example.test', fetch: async () => response });
+  const request = client.request as (
+    method: string,
+    path: string,
+    init: { params: { path: Record<string, string> } },
+  ) => Promise<{ response: Response; data?: unknown; error?: unknown }>;
+  let conditional = 0;
+  let unconditional = 0;
+  for (const [path, raw] of Object.entries(document.paths ?? {})) {
+    const item = raw as PathItemObject;
+    for (const method of ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'] as const) {
+      const operation = item[method] as OperationObject | undefined;
+      if (operation === undefined) continue;
+      response = new Response(null, { status: 304 });
+      const pathParams = Object.fromEntries(
+        Array.from(path.matchAll(/\{([^}]+)\}/g), (match) => [match[1], 'example']),
+      );
+      const result = await request(method, path, { params: { path: pathParams } });
+      const label = `${method.toUpperCase()} ${path}`;
+      const documented = Object.hasOwn(operation.responses ?? {}, '304');
+      assert.equal(result.response, response, label);
+      assert.equal(result.data, undefined, label);
+      assert.equal(result.error, documented ? undefined : '', label);
+      if (documented) conditional++;
+      else unconditional++;
+    }
+  }
+  assert.ok(conditional > 0);
+  assert.ok(unconditional > 0);
+});
+
+test('an undocumented GET 304 retains the transport error result', async () => {
+  const response = new Response(null, { status: 304 });
+  const client = createClient({ baseUrl: 'https://example.test', fetch: async () => response });
+  const result = await client.GET('/api/v1/products', { headers: { 'If-None-Match': '"saved"' } });
+  assert.equal(result.response, response);
+  assert.equal(result.error, '');
+  assert.equal(result.data, undefined);
+});
+
+test('a generic POST 304 retains the same transport error result as POST', async () => {
+  const client = createClient({
+    baseUrl: 'https://example.test',
+    fetch: async () => new Response(null, { status: 304 }),
+  });
+  const direct = await client.POST('/api/v1/me/deletion');
+  const generic = await client.request('post', '/api/v1/me/deletion');
+  assert.equal(direct.error, '');
+  assert.equal(generic.error, direct.error);
+  assert.equal(generic.data, undefined);
 });
 
 test('a conditional read with a changed representation returns its typed page and ETag', async () => {

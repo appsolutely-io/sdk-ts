@@ -5,7 +5,7 @@ import createFetchClient, {
   type MaybeOptionalInit,
   type Middleware,
 } from 'openapi-fetch';
-import { keyedOperations, type paths } from './generated/schema.ts';
+import { keyedOperations, notModifiedOperations, type paths } from './generated/schema.ts';
 import {
   MOCK_BASE_URL,
   MOCK_IGNORES_BASE_URL,
@@ -116,10 +116,13 @@ const idempotencyKey: Middleware = {
 
 function withNotModified<Args extends unknown[], Result extends { response: Response }>(
   call: (...args: Args) => Promise<Result>,
+  operation: (args: Args) => string,
 ): (...args: Args) => Promise<Result | NotModified> {
   return async (...args: Args) => {
     const result = await call(...args);
-    return result.response.status === 304 ? { response: result.response } : result;
+    return result.response.status === 304 && Object.hasOwn(notModifiedOperations, operation(args))
+      ? { response: result.response }
+      : result;
   };
 }
 
@@ -203,8 +206,8 @@ export function createClient(options: ClientOptions): AppsolutelyClient {
   });
   client.use(idempotencyKey);
   const conditionalClient = Object.assign(client, {
-    GET: withNotModified(client.GET),
-    request: withNotModified(client.request),
+    GET: withNotModified(client.GET, ([url]) => `GET ${url}`),
+    request: withNotModified(client.request, ([method, url]) => `${method.toUpperCase()} ${url}`),
   });
   if (mock) {
     console.warn(options.baseUrl === undefined ? MOCK_NOTICE : `${MOCK_NOTICE} ${MOCK_IGNORES_BASE_URL}`);

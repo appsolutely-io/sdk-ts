@@ -29312,3 +29312,15 @@ export const keyedOperations = {
     "PUT /api/v1/me/organisations/{organisation}/members/{membership}/admin": true,
     "PUT /api/v1/me/organisations/{organisation}/members/{membership}/roles/{key}": true
 } as const;
+
+export const notModifiedOperations = {
+    "GET /api/v1/me": true,
+    "GET /api/v1/me/entitlements": true,
+    "GET /api/v1/me/messages": true,
+    "GET /api/v1/me/organisations": true,
+    "GET /api/v1/me/realtime/digest": true,
+    "GET /api/v1/reference-data/address/areas": true,
+    "GET /api/v1/reference-data/address/countries": true,
+    "GET /api/v1/reference-data/address/formats": true,
+    "GET /api/v1/reference-data/address/postal-codes": true
+} as const;
