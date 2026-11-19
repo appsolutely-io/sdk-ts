@@ -78,6 +78,13 @@ const idempotencyKey: Middleware = {
   },
 };
 
+function withNotModified<Call extends (...args: never[]) => Promise<{ response: Response }>>(call: Call): Call {
+  return (async (...args: Parameters<Call>) => {
+    const result = await call(...args);
+    return result.response.status === 304 ? { response: result.response } : result;
+  }) as Call;
+}
+
 const BASE_URL_FIX = 'set baseUrl, or pass mock: true to use the bundled sample data';
 
 function assertBaseUrl(baseUrl: string | undefined): asserts baseUrl is string {
@@ -157,6 +164,8 @@ export function createClient(options: ClientOptions): AppsolutelyClient {
         : { fetch: options.fetch }),
   });
   client.use(idempotencyKey);
+  client.GET = withNotModified(client.GET);
+  client.request = withNotModified(client.request);
   if (mock) {
     console.warn(options.baseUrl === undefined ? MOCK_NOTICE : `${MOCK_NOTICE} ${MOCK_IGNORES_BASE_URL}`);
   }

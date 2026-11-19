@@ -338,3 +338,107 @@ test('a path parameter that is empty, "." or ".." is refused, since the URL woul
     ['https://example.com/api/v1/me/addresses/...'],
   );
 });
+
+test('deletion, payment switches and backend messages use the document-derived key middleware', async () => {
+  const { calls, fetch } = recordingFetch(202, { state: 'pending' });
+  const client = createClient({ baseUrl: 'https://example.test', token: 't', fetch });
+
+  await client.POST('/api/v1/me/deletion');
+  await client.POST('/api/v1/me/deletion', { params: { header: { 'Idempotency-Key': 'deletion-receipt' } } });
+  await client.POST('/api/v1/me/orders/{id}/payment-method', {
+    params: { path: { id: 'order/one' } },
+    body: { payment_method: 'card', from_payment: 'attempt-one' },
+  });
+  await client.POST('/api/v1/members/{sub}/messages', {
+    params: { path: { sub: 'member/one' } },
+    body: { category: 'service', title: 'Ready', body: 'Your report is ready.', channels: ['in_app'] },
+  });
+
+  for (const index of [0, 2, 3]) {
+    assert.match(calls[index]?.headers.get('Idempotency-Key') ?? '', /^[0-9a-f-]{36}$/);
+  }
+  assert.equal(calls[1]?.headers.get('Idempotency-Key'), 'deletion-receipt');
+  assert.equal(calls[2]?.url, 'https://example.test/api/v1/me/orders/order%2Fone/payment-method');
+  assert.deepEqual(JSON.parse(calls[2]?.body ?? ''), { payment_method: 'card', from_payment: 'attempt-one' });
+  assert.equal(calls[3]?.url, 'https://example.test/api/v1/members/member%2Fone/messages');
+  assert.deepEqual(JSON.parse(calls[3]?.body ?? ''), {
+    category: 'service',
+    title: 'Ready',
+    body: 'Your report is ready.',
+    channels: ['in_app'],
+  });
+});
+
+test('conditional reads preserve the validator and bodyless 304 metadata without decoding JSON', async () => {
+  for (const path of [
+    '/api/v1/me',
+    '/api/v1/me/entitlements',
+    '/api/v1/me/organisations',
+    '/api/v1/me/messages',
+    '/api/v1/me/realtime/digest',
+    '/api/v1/reference-data/address/countries',
+  ] as const) {
+    const requests: Request[] = [];
+    const client = createClient({
+      baseUrl: 'https://example.test',
+      token: 't',
+      fetch: async (request) => {
+        requests.push(request);
+        return new Response(null, { status: 304, headers: { ETag: '"current"' } });
+      },
+    });
+    const result = await client.GET(path, { params: { header: { 'If-None-Match': '"current"' } } });
+    assert.equal(requests[0]?.headers.get('If-None-Match'), '"current"', path);
+    assert.equal(result.response.status, 304, path);
+    assert.equal(result.response.headers.get('ETag'), '"current"', path);
+    assert.equal(result.data, undefined, path);
+    assert.equal(result.error, undefined, path);
+    const requested = await client.request('get', path, { params: { header: { 'If-None-Match': '"current"' } } });
+    assert.equal(requested.response.status, 304, path);
+    assert.equal(requested.data, undefined, path);
+    assert.equal(requested.error, undefined, path);
+  }
+});
+
+test('a conditional read with a changed representation returns its typed page and ETag', async () => {
+  const page = { data: [], sequence: '9007199254740993' };
+  const client = createClient({
+    baseUrl: 'https://example.test',
+    token: 't',
+    fetch: async () => Response.json(page, { headers: { ETag: '"new"' } }),
+  });
+  const result = await client.GET('/api/v1/me/messages', { params: { header: { 'If-None-Match': '"old"' } } });
+  assert.equal(result.response.status, 200);
+  assert.equal(result.response.headers.get('ETag'), '"new"');
+  assert.deepEqual(result.data, page);
+  assert.equal(result.error, undefined);
+});
+
+test('inbox cursors and read-all boundaries remain opaque strings and preferences send only requested choices', async () => {
+  const { calls, fetch } = recordingFetch();
+  const client = createClient({ baseUrl: 'https://example.test', token: 't', fetch });
+  await client.GET('/api/v1/me/messages/changes', { params: { query: { cursor: 'opaque+/=', limit: 5 } } });
+  await client.POST('/api/v1/me/messages/read-all', { body: { through_sequence: '9007199254740993' } });
+  await client.PUT('/api/v1/me/message-preferences', {
+    body: { preferences: [{ category: 'promotional', channel: 'push', enabled: false }] },
+  });
+  await client.GET('/api/v1/me/realtime/events', { params: { query: { after: 0 } } });
+  assert.equal(new URL(calls[0]?.url ?? '').searchParams.get('cursor'), 'opaque+/=');
+  assert.deepEqual(JSON.parse(calls[1]?.body ?? ''), { through_sequence: '9007199254740993' });
+  assert.deepEqual(JSON.parse(calls[2]?.body ?? ''), {
+    preferences: [{ category: 'promotional', channel: 'push', enabled: false }],
+  });
+  assert.equal(new URL(calls[3]?.url ?? '').searchParams.get('after'), '0');
+});
+
+test('an expired inbox cursor remains a 410 problem for the caller to recover', async () => {
+  const refusal = { type: 'https://appsolutely.io/problems/cursor-expired', title: 'Cursor expired', status: 410 };
+  const { fetch } = recordingFetch(410, refusal, 'application/problem+json');
+  const result = await createClient({ baseUrl: 'https://example.test', token: 't', fetch }).GET(
+    '/api/v1/me/messages/changes',
+    { params: { query: { cursor: 'old' } } },
+  );
+  assert.equal(result.response.status, 410);
+  assert.equal(result.data, undefined);
+  assert.deepEqual(result.error, refusal);
+});

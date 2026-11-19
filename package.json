@@ -60,8 +60,8 @@
     "spec": {
       "path": "docs/api/openapi.yaml",
       "tag": null,
-      "commit": "074e28bced08374ca80c33d2882bdbfa8203c14f",
-      "sha256": "029ec0513e035a1c056bffe50c9ad9b7b6b7b979f089094b1517aee0819cbb2b"
+      "commit": "efbdc4df48ecc711109c5e565a4bfdc8182d5e12",
+      "sha256": "df3fd9f13fd5efb844f760110221cf1d65fca96c8de58a4c5ae54513fe362771"
     }
   },
   "dependencies": {

@@ -5,6 +5,19 @@ All notable changes to this package are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Generate the complete Site API surface at aio commit `efbdc4df4`, including announcements, account deletion, member inbox and changes, message preferences, realtime transport metadata, order payment-method switching, backend member-message delivery and address reference data. The pin remains untagged (`tag: null`); package versions are unchanged.
+- Opt-in conditional reads through documented `If-None-Match` headers. `GET` and `request('get', ...)` return a bodyless 304 with the original Response and neither data nor error; callers retain their saved representation and inspect the status.
+
+### Compatibility
+
+- The regenerated `Order` type requires `attempts`; order fixtures must provide it. The bundled order answers now include empty attempt lists. Order payment methods and current-payment references, address region/entry fields and the payment-method-switched event are typed from the adopted document.
+- Newly documented required inputs remain mandatory in the public types: the inbox change cursor, read-all's string `through_sequence`, realtime polling's `after`, preference choices and the payment method when switching an order. The client supplies documented idempotency keys unless the caller passes one; no runtime retry, realtime connection or deletion-flow orchestration is added.
+- Existing unconditional requests keep their behavior. A conditional 304 is no longer exposed as an empty error string by the underlying HTTP client. The Administrator API is still outside this package's scope, and bundled mock coverage remains partial.
+
 ## [0.1.0-next.0] - 2026-11-06
 
 A pre-release, published under the `next` dist-tag. It describes the API document at aio commit `074e28bce` on aio's default branch, which no aio release contains yet. Use an install running that commit or a newer one.
