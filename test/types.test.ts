@@ -22,6 +22,13 @@ import {
   type StorePurchaseTransaction,
   type StoreSeatPayload,
   type StoreMeOrganisationSeatPayload,
+  type InboxMessagePage,
+  type InboxChangeFeed,
+  type MessagePreferenceList,
+  type MemberDeletionAccepted,
+  type RealtimeEvents,
+  type AddressCountryPage,
+  type UserAddress,
 } from '../src/index.ts';
 import type { IsAny } from './support/types.ts';
 
@@ -129,6 +136,93 @@ export const unknownPath = () => client.GET('/api/v1/nothing-here');
 export const wrongId = () => client.GET('/api/v1/products/{id}', { params: { path: { id: 1 } } });
 // @ts-expect-error page-number paging is refused by the API, so it is a compile error
 export const pageNumber = () => client.GET('/api/v1/products', { params: { query: { per_page: 5 } } });
+
+const inbox = () => client.GET('/api/v1/me/messages', { params: { header: { 'If-None-Match': '"inbox"' } } });
+const inboxChanges = () => client.GET('/api/v1/me/messages/changes', { params: { query: { cursor: 'opaque' } } });
+const preferences = () =>
+  client.PUT('/api/v1/me/message-preferences', {
+    body: { preferences: [{ category: 'service', channel: 'in_app', enabled: true }] },
+  });
+const deletion = () => client.POST('/api/v1/me/deletion');
+const switchPayment = () =>
+  client.POST('/api/v1/me/orders/{id}/payment-method', {
+    params: { path: { id: 'order' } },
+    body: { payment_method: 'card', from_payment: null },
+  });
+const realtimeEvents = () => client.GET('/api/v1/me/realtime/events', { params: { query: { after: 0 } } });
+const addressCountries = () => client.GET('/api/v1/reference-data/address/countries');
+
+export type AdoptedContractChecks = [
+  Assert<Equal<Data<typeof inbox>, InboxMessagePage>>,
+  Assert<Equal<Data<typeof inboxChanges>, InboxChangeFeed>>,
+  Assert<Equal<Data<typeof preferences>, MessagePreferenceList>>,
+  Assert<Equal<Data<typeof deletion>, MemberDeletionAccepted>>,
+  Assert<Equal<Data<typeof switchPayment>, Order>>,
+  Assert<Equal<Data<typeof realtimeEvents>, RealtimeEvents>>,
+  Assert<Equal<Data<typeof addressCountries>, AddressCountryPage>>,
+  Assert<Equal<Order['attempts'][number]['reference'], string>>,
+  Assert<Equal<UserAddress['region_code'], string | null | undefined>>,
+  Assert<Equal<operations['listMeMessages']['responses'][304]['content'], undefined>>,
+];
+
+export async function conditionalDataRequiresPresence(): Promise<void> {
+  const answer = await inbox();
+  if (!answer.error) {
+    // @ts-expect-error a bodyless 304 has no data even when it has no error
+    answer.data.sequence;
+  }
+  if (answer.data !== undefined) {
+    const page: InboxMessagePage = answer.data;
+    void page;
+  }
+  const requested = await client.request('get', '/api/v1/me/messages');
+  if (!requested.error) {
+    // @ts-expect-error the generic request method also permits a bodyless 304
+    requested.data.sequence;
+  }
+  const text = await client.GET('/api/v1/me/messages', { parseAs: 'text' });
+  if (!text.error) {
+    // @ts-expect-error parseAs does not make a bodyless 304 contain text
+    text.data.toUpperCase();
+  }
+  if (text.data !== undefined) {
+    const body: string = text.data;
+    void body;
+  }
+  const product = await getProduct();
+  if (!product.error) {
+    const id: string = product.data.id;
+    void id;
+  }
+  const written = await client.request('post', '/api/v1/me/deletion');
+  if (!written.error) {
+    const receipt: MemberDeletionAccepted = written.data;
+    void receipt;
+  }
+}
+
+// @ts-expect-error an inbox change feed requires its opaque cursor
+export const inboxWithoutCursor = () => client.GET('/api/v1/me/messages/changes');
+// @ts-expect-error realtime polling requires the last observed sequence
+export const realtimeWithoutAfter = () => client.GET('/api/v1/me/realtime/events');
+export const readAllWithoutBoundary = () =>
+  client.POST('/api/v1/me/messages/read-all', {
+    // @ts-expect-error read-all requires the sequence boundary the member has observed
+    body: {},
+  });
+export const preferencesWithoutChoice = () =>
+  client.PUT('/api/v1/me/message-preferences', {
+    // @ts-expect-error preferences writes require the choices being changed
+    body: {},
+  });
+export const switchWithoutMethod = () =>
+  client.POST('/api/v1/me/orders/{id}/payment-method', {
+    params: { path: { id: 'order' } },
+    // @ts-expect-error a payment switch must name a payment method
+    body: {},
+  });
+// @ts-expect-error address area lookup requires a country
+export const areasWithoutCountry = () => client.GET('/api/v1/reference-data/address/areas');
 
 test('the type assertions in this file compile', () => {});
 

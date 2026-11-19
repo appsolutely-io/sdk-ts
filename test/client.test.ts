@@ -7,9 +7,19 @@ import {
   type OperationObject,
   type ParameterObject,
   type PathItemObject,
+  type ReferenceObject,
 } from 'openapi-typescript';
 import { parse } from 'yaml';
 import { createClient } from '../src/index.ts';
+
+function resolve<T>(document: OpenAPI3, value: T | ReferenceObject): T {
+  if (value !== null && typeof value === 'object' && '$ref' in value && typeof value.$ref === 'string') {
+    const resolved = resolveRef<T>(document, value.$ref, { silent: false });
+    assert.ok(resolved !== undefined, `Cannot resolve ${value.$ref}`);
+    return resolved;
+  }
+  return value as T;
+}
 
 interface Recorded {
   url: string;
@@ -38,10 +48,11 @@ test('every operation in the document is keyed exactly when its header is requir
   ) => Promise<unknown>;
   let keyed = 0;
   for (const [path, raw] of Object.entries(document.paths ?? {})) {
-    const item = raw as PathItemObject;
+    const item = resolve<PathItemObject>(document, raw);
     for (const method of ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'] as const) {
-      const operation = item[method] as OperationObject | undefined;
-      if (operation === undefined) continue;
+      const rawOperation = item[method];
+      if (rawOperation === undefined) continue;
+      const operation = resolve<OperationObject>(document, rawOperation);
       const parameters = [...(item.parameters ?? []), ...(operation.parameters ?? [])];
       const header = parameters
         .map((parameter) =>
@@ -337,4 +348,217 @@ test('a path parameter that is empty, "." or ".." is refused, since the URL woul
     calls.map((call) => call.url),
     ['https://example.com/api/v1/me/addresses/...'],
   );
+});
+
+test('deletion, payment switches and backend messages use the document-derived key middleware', async () => {
+  const { calls, fetch } = recordingFetch(202, { state: 'pending' });
+  const client = createClient({ baseUrl: 'https://example.test', token: 't', fetch });
+
+  await client.POST('/api/v1/me/deletion');
+  await client.POST('/api/v1/me/deletion', { params: { header: { 'Idempotency-Key': 'deletion-receipt' } } });
+  await client.POST('/api/v1/me/orders/{id}/payment-method', {
+    params: { path: { id: 'order/one' } },
+    body: { payment_method: 'card', from_payment: 'attempt-one' },
+  });
+  await client.POST('/api/v1/members/{sub}/messages', {
+    params: { path: { sub: 'member/one' } },
+    body: { category: 'service', title: 'Ready', body: 'Your report is ready.', channels: ['in_app'] },
+  });
+
+  for (const index of [0, 2, 3]) {
+    assert.match(calls[index]?.headers.get('Idempotency-Key') ?? '', /^[0-9a-f-]{36}$/);
+  }
+  assert.equal(calls[1]?.headers.get('Idempotency-Key'), 'deletion-receipt');
+  assert.equal(calls[2]?.url, 'https://example.test/api/v1/me/orders/order%2Fone/payment-method');
+  assert.deepEqual(JSON.parse(calls[2]?.body ?? ''), { payment_method: 'card', from_payment: 'attempt-one' });
+  assert.equal(calls[3]?.url, 'https://example.test/api/v1/members/member%2Fone/messages');
+  assert.deepEqual(JSON.parse(calls[3]?.body ?? ''), {
+    category: 'service',
+    title: 'Ready',
+    body: 'Your report is ready.',
+    channels: ['in_app'],
+  });
+});
+
+test('conditional reads return the original 304 Response with neither data nor error', async () => {
+  for (const path of [
+    '/api/v1/me',
+    '/api/v1/me/entitlements',
+    '/api/v1/me/organisations',
+    '/api/v1/me/messages',
+    '/api/v1/me/realtime/digest',
+    '/api/v1/reference-data/address/countries',
+  ] as const) {
+    const requests: Request[] = [];
+    const client = createClient({
+      baseUrl: 'https://example.test',
+      token: 't',
+      fetch: async (request) => {
+        requests.push(request);
+        return new Response(null, { status: 304, headers: { ETag: '"current"' } });
+      },
+    });
+    const result = await client.GET(path, { params: { header: { 'If-None-Match': '"current"' } } });
+    assert.equal(requests[0]?.headers.get('If-None-Match'), '"current"', path);
+    assert.equal(result.response.status, 304, path);
+    assert.equal(result.response.headers.get('ETag'), '"current"', path);
+    assert.equal(result.data, undefined, path);
+    assert.equal(result.error, undefined, path);
+    const requested = await client.request('get', path, { params: { header: { 'If-None-Match': '"current"' } } });
+    assert.equal(requested.response.status, 304, path);
+    assert.equal(requested.data, undefined, path);
+    assert.equal(requested.error, undefined, path);
+  }
+});
+
+test('every generic request handles 304 only when its operation documents it', async () => {
+  const document: OpenAPI3 = parse(readFileSync(new URL('../spec/openapi.yaml', import.meta.url), 'utf8'));
+  const paths = document.paths;
+  assert.ok(paths);
+  const referencedPath = '/api/v1/products';
+  const referencedItem = paths[referencedPath];
+  assert.ok(referencedItem);
+  document.components = {
+    ...document.components,
+    pathItems: { ...document.components?.pathItems, ProductCatalogue: referencedItem },
+  };
+  paths[referencedPath] = { $ref: '#/components/pathItems/ProductCatalogue' };
+  const visited = new Set<string>();
+  let response = new Response(null, { status: 304 });
+  const client = createClient({ baseUrl: 'https://example.test', fetch: async () => response });
+  const request = client.request as (
+    method: string,
+    path: string,
+    init: { params: { path: Record<string, string> } },
+  ) => Promise<{ response: Response; data?: unknown; error?: unknown }>;
+  let conditional = 0;
+  let unconditional = 0;
+  for (const [path, raw] of Object.entries(document.paths ?? {})) {
+    const item = resolve<PathItemObject>(document, raw);
+    for (const method of ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'] as const) {
+      const rawOperation = item[method];
+      if (rawOperation === undefined) continue;
+      const operation = resolve<OperationObject>(document, rawOperation);
+      response = new Response(null, { status: 304 });
+      const pathParams = Object.fromEntries(
+        Array.from(path.matchAll(/\{([^}]+)\}/g), (match) => [match[1], 'example']),
+      );
+      const result = await request(method, path, { params: { path: pathParams } });
+      const label = `${method.toUpperCase()} ${path}`;
+      visited.add(label);
+      const documented = Object.hasOwn(operation.responses ?? {}, '304');
+      assert.equal(result.response, response, label);
+      assert.equal(result.data, undefined, label);
+      assert.equal(result.error, documented ? undefined : '', label);
+      if (documented) conditional++;
+      else unconditional++;
+    }
+  }
+  assert.ok(conditional > 0);
+  assert.ok(unconditional > 0);
+  assert.ok(visited.has(`GET ${referencedPath}`));
+});
+
+test('undeclared 304s retain transport errors with zero content length on every entry point', async () => {
+  const response = new Response(null, { status: 304, headers: { 'Content-Length': '0', ETag: '"saved"' } });
+  const client = createClient({ baseUrl: 'https://example.test', fetch: async () => response });
+  const calls = [
+    ['GET', () => client.GET('/api/v1/products')],
+    ['request(get)', () => client.request('get', '/api/v1/products')],
+    ['POST', () => client.POST('/api/v1/me/deletion')],
+    ['request(post)', () => client.request('post', '/api/v1/me/deletion')],
+  ] as const;
+  for (const [name, call] of calls) {
+    const answer = await call();
+    assert.equal(answer.response, response, name);
+    assert.equal(answer.response.headers.get('ETag'), '"saved"', name);
+    assert.equal(answer.data, undefined, name);
+    assert.equal(answer.error, '', name);
+  }
+  for (const method of ['PUT', 'DELETE', 'OPTIONS', 'HEAD', 'PATCH'] as const) {
+    const call = client[method] as (path: string) => Promise<{ response: Response; data?: unknown; error?: unknown }>;
+    const answer = await call('/api/v1/products');
+    assert.equal(answer.response, response, method);
+    assert.equal(answer.data, undefined, method);
+    assert.equal(answer.error, '', method);
+  }
+  const trace = client.TRACE as (path: string) => Promise<unknown>;
+  await assert.rejects(trace('/api/v1/products'), TypeError);
+});
+
+test('documented 304s remain bodyless with zero content length', async () => {
+  const response = new Response(null, { status: 304, headers: { 'Content-Length': '0', ETag: '"saved"' } });
+  const client = createClient({ baseUrl: 'https://example.test', fetch: async () => response });
+  const calls = [() => client.GET('/api/v1/me/messages'), () => client.request('get', '/api/v1/me/messages')];
+  for (const call of calls) {
+    const answer = await call();
+    assert.equal(answer.response, response);
+    assert.equal(answer.response.headers.get('ETag'), '"saved"');
+    assert.equal(answer.data, undefined);
+    assert.equal(answer.error, undefined);
+  }
+});
+
+test('an undocumented GET 304 retains the transport error result', async () => {
+  const response = new Response(null, { status: 304 });
+  const client = createClient({ baseUrl: 'https://example.test', fetch: async () => response });
+  const result = await client.GET('/api/v1/products', { headers: { 'If-None-Match': '"saved"' } });
+  assert.equal(result.response, response);
+  assert.equal(result.error, '');
+  assert.equal(result.data, undefined);
+});
+
+test('a generic POST 304 retains the same transport error result as POST', async () => {
+  const client = createClient({
+    baseUrl: 'https://example.test',
+    fetch: async () => new Response(null, { status: 304 }),
+  });
+  const direct = await client.POST('/api/v1/me/deletion');
+  const generic = await client.request('post', '/api/v1/me/deletion');
+  assert.equal(direct.error, '');
+  assert.equal(generic.error, direct.error);
+  assert.equal(generic.data, undefined);
+});
+
+test('a conditional read with a changed representation returns its typed page and ETag', async () => {
+  const page = { data: [], sequence: '9007199254740993' };
+  const client = createClient({
+    baseUrl: 'https://example.test',
+    token: 't',
+    fetch: async () => Response.json(page, { headers: { ETag: '"new"' } }),
+  });
+  const result = await client.GET('/api/v1/me/messages', { params: { header: { 'If-None-Match': '"old"' } } });
+  assert.equal(result.response.status, 200);
+  assert.equal(result.response.headers.get('ETag'), '"new"');
+  assert.deepEqual(result.data, page);
+  assert.equal(result.error, undefined);
+});
+
+test('inbox cursors and read-all boundaries remain opaque strings and preferences send only requested choices', async () => {
+  const { calls, fetch } = recordingFetch();
+  const client = createClient({ baseUrl: 'https://example.test', token: 't', fetch });
+  await client.GET('/api/v1/me/messages/changes', { params: { query: { cursor: 'opaque+/=', limit: 5 } } });
+  await client.POST('/api/v1/me/messages/read-all', { body: { through_sequence: '9007199254740993' } });
+  await client.PUT('/api/v1/me/message-preferences', {
+    body: { preferences: [{ category: 'promotional', channel: 'push', enabled: false }] },
+  });
+  await client.GET('/api/v1/me/realtime/events', { params: { query: { after: 0 } } });
+  assert.equal(new URL(calls[0]?.url ?? '').searchParams.get('cursor'), 'opaque+/=');
+  assert.deepEqual(JSON.parse(calls[1]?.body ?? ''), { through_sequence: '9007199254740993' });
+  assert.deepEqual(JSON.parse(calls[2]?.body ?? ''), {
+    preferences: [{ category: 'promotional', channel: 'push', enabled: false }],
+  });
+  assert.equal(new URL(calls[3]?.url ?? '').searchParams.get('after'), '0');
+});
+
+test('an expired inbox cursor remains a 410 problem for the caller to recover', async () => {
+  const refusal = { type: 'https://appsolutely.io/problems/cursor-expired', title: 'Cursor expired', status: 410 };
+  const { fetch } = recordingFetch(410, refusal, 'application/problem+json');
+  const result = await createClient({ baseUrl: 'https://example.test', token: 't', fetch }).GET(
+    '/api/v1/me/messages/changes',
+    { params: { query: { cursor: 'old' } } },
+  );
+  assert.equal(result.response.status, 410);
+  assert.equal(result.data, undefined);
+  assert.deepEqual(result.error, refusal);
 });

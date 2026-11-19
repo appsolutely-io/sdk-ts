@@ -2,7 +2,7 @@
 
 ## Decision
 
-Generate path and schema types from the pinned OpenAPI document and use openapi-fetch for requests. Adapt only the idempotency header's optionality in the public client types, and generate the runtime keyed-operation inventory from that same document.
+Generate path and schema types from the pinned OpenAPI document and use openapi-fetch for requests. Adapt the idempotency header's optionality and documented bodyless conditional responses in the public client types, and generate the runtime keyed-operation inventory from that same document.
 
 ## Rationale
 
@@ -13,6 +13,8 @@ A generated contract makes documented parameters, bodies and answers available t
 Making all parameters optional would discard useful contract checks. Maintaining an untyped runtime list would permit drift after regeneration. Reimplementing the HTTP client would duplicate request serialization already provided by openapi-fetch. The generator resolves effective required headers, including referenced and inherited parameters, and emits a stable registry alongside the types. Generated types provide compile-time checks, not runtime validation of arbitrary server JSON or string lengths.
 
 The middleware places a generated key on the actual Request, so a fetch implementation repeating that Request repeats its key. Generating another key on each transport retry would lose that protection. Separate client calls intentionally get distinct keys unless the caller supplies one. The SDK itself does not schedule retries.
+
+Conditional GET remains opt-in through the documented `If-None-Match` header. A shared response adapter preserves a documented 304's original Response and returns neither data nor error. An undeclared 304 returns the transport's empty-string error on every request method, including when `Content-Length: 0` makes openapi-fetch skip parsing and omit its error value. This transport error is not an RFC 9457 problem document. The public GET/request result includes a bodyless branch only when the operation's generated responses include 304; other methods retain openapi-fetch's response inference. Checking only `error` cannot prove that a representation exists, so callers must check `data` before reading it. The adapter does not synthesize a cached resource, modify response headers or manage validators; the caller owns the saved representation and branches on `response.status` ([RFC 9110 conditional requests](https://www.rfc-editor.org/rfc/rfc9110.html#section-13.1.2) and [304 responses](https://www.rfc-editor.org/rfc/rfc9110.html#section-15.4.5)).
 
 ## Current implementation
 

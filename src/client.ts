@@ -1,5 +1,11 @@
-import createFetchClient, { defaultPathSerializer, type Client, type Middleware } from 'openapi-fetch';
-import { keyedOperations, type paths } from './generated/schema.ts';
+import createFetchClient, {
+  defaultPathSerializer,
+  type Client,
+  type FetchResponse,
+  type MaybeOptionalInit,
+  type Middleware,
+} from 'openapi-fetch';
+import { keyedOperations, notModifiedOperations, type paths } from './generated/schema.ts';
 import {
   MOCK_BASE_URL,
   MOCK_IGNORES_BASE_URL,
@@ -49,8 +55,38 @@ export type ClientPaths = {
   [Path in keyof paths]: { [Method in keyof paths[Path]]: WithOptionalKey<paths[Path][Method]> };
 };
 
+type ResponseMedia = 'application/json' | 'application/problem+json';
+type HttpMethod = Parameters<Client<ClientPaths>['request']>[0];
+type PathsWithMethod<Method extends HttpMethod> = {
+  [Path in keyof ClientPaths]: NonNullable<ClientPaths[Path][Method]> extends never ? never : Path;
+}[keyof ClientPaths];
+type InitArgs<Init> = {} extends Init
+  ? [init?: Init & Record<string, unknown>]
+  : [init: Init & Record<string, unknown>];
+type NotModified = { data?: never; error?: never; response: Response };
+type ClientResponse<Operation extends object, Init> =
+  | FetchResponse<Operation, Init, ResponseMedia>
+  | (Operation extends { responses: infer Responses } ? (304 extends keyof Responses ? NotModified : never) : never);
+
+type GetMethod = <Path extends PathsWithMethod<'get'>, Init extends MaybeOptionalInit<ClientPaths[Path], 'get'>>(
+  url: Path,
+  ...init: InitArgs<Init>
+) => Promise<ClientResponse<ClientPaths[Path]['get'], Init>>;
+
+type RequestMethod = <
+  Method extends HttpMethod,
+  Path extends PathsWithMethod<Method>,
+  Init extends MaybeOptionalInit<ClientPaths[Path], Method>,
+>(
+  method: Method,
+  url: Path,
+  ...init: InitArgs<Init>
+) => Promise<ClientResponse<NonNullable<ClientPaths[Path][Method]>, Init>>;
+
 /** Successes are `application/json`; refusals are RFC 9457 `application/problem+json`, typed as `error`. */
-export type AppsolutelyClient = Client<ClientPaths, 'application/json' | 'application/problem+json'> & {
+export type AppsolutelyClient = Omit<Client<ClientPaths, ResponseMedia>, 'GET' | 'request'> & {
+  GET: GetMethod;
+  request: RequestMethod;
   /** True when requests are answered from mock data and never reach a server. */
   readonly mock: boolean;
 };
@@ -77,6 +113,19 @@ const idempotencyKey: Middleware = {
     return request;
   },
 };
+
+function withNotModified<Args extends unknown[], Result extends { response: Response }>(
+  call: (...args: Args) => Promise<Result>,
+  operation: (args: Args) => string,
+): (...args: Args) => Promise<Result | NotModified | { error: string; response: Response }> {
+  return async (...args: Args) => {
+    const result = await call(...args);
+    if (result.response.status !== 304) return result;
+    return Object.hasOwn(notModifiedOperations, operation(args))
+      ? { response: result.response }
+      : { error: '', response: result.response };
+  };
+}
 
 const BASE_URL_FIX = 'set baseUrl, or pass mock: true to use the bundled sample data';
 
@@ -157,8 +206,19 @@ export function createClient(options: ClientOptions): AppsolutelyClient {
         : { fetch: options.fetch }),
   });
   client.use(idempotencyKey);
+  const conditionalClient = Object.assign(client, {
+    GET: withNotModified(client.GET, ([url]) => `GET ${url}`),
+    PUT: withNotModified(client.PUT, ([url]) => `PUT ${url}`),
+    POST: withNotModified(client.POST, ([url]) => `POST ${url}`),
+    DELETE: withNotModified(client.DELETE, ([url]) => `DELETE ${url}`),
+    OPTIONS: withNotModified(client.OPTIONS, ([url]) => `OPTIONS ${url}`),
+    HEAD: withNotModified(client.HEAD, ([url]) => `HEAD ${url}`),
+    PATCH: withNotModified(client.PATCH, ([url]) => `PATCH ${url}`),
+    TRACE: withNotModified(client.TRACE, ([url]) => `TRACE ${url}`),
+    request: withNotModified(client.request, ([method, url]) => `${method.toUpperCase()} ${url}`),
+  });
   if (mock) {
     console.warn(options.baseUrl === undefined ? MOCK_NOTICE : `${MOCK_NOTICE} ${MOCK_IGNORES_BASE_URL}`);
   }
-  return Object.defineProperty(client, 'mock', { value: mock, enumerable: true }) as AppsolutelyClient;
+  return Object.defineProperty(conditionalClient, 'mock', { value: mock, enumerable: true }) as AppsolutelyClient;
 }

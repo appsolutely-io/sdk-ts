@@ -44,11 +44,35 @@ const filed = await client.POST('/api/v1/me/addresses', {
 - Each HTTP method is a client method (`GET`, `POST`, `PATCH`, `DELETE`, ...), typed by path. A success's `data` is the resource itself, or `{ data, next_cursor }` for a list; a `202` or `204` with no body resolves with `data` undefined. `response` is always the raw `Response`.
 - A refusal does not throw: it resolves with `error` set to the RFC 9457 problem document (`type`, `title`, `status`, `detail`, and extensions such as `errors` on `validation-failed`) and `data` undefined. Branch on `error.type`, a URI under `https://appsolutely.io/problems/` typed to the ones each operation documents.
 - A list is paged by `limit` (1 to 100) and `cursor`: send the previous page's `next_cursor` as `cursor` with the query otherwise unchanged; `next_cursor` is absent on the last page.
-- A create the document keys (filing a member address, fulfilling a digital delivery, redelivering a webhook) is sent a generated `Idempotency-Key`, a new one per call. To retry a create safely after a lost answer, pass your own in `params.header` and send the same one again; a `fetch` that retries the `Request` it is given repeats its key. On `409`, `429` or `503` the answer's `Retry-After` says when to send it again.
+- A create the document keys (filing a member address, requesting account deletion, switching an order's payment method, delivering a member message, fulfilling a digital delivery, redelivering a webhook) is sent a generated `Idempotency-Key`, a new one per call. To retry a create safely after a lost answer, pass your own in `params.header` and send the same one again; a `fetch` that retries the `Request` it is given repeats its key. On `409`, `429` or `503` the answer's `Retry-After` says when to send it again.
 - A path parameter that is empty, `.` or `..` rejects with a `TypeError` before anything is sent, since the URL would resolve to another route.
 - Every schema in the document is exported from the package root under its own name (`Product`, `ProductPage`, `Order`, `UserAddress`, `Fulfilment`, `Problem`, `ValidationProblem`, ...), alongside `paths`, `components` and `operations`.
 
 The client is [openapi-fetch](https://openapi-ts.dev/openapi-fetch/), whose documentation covers middleware, query and body serialisation, and the other request options.
+
+## Inbox, realtime and conditional reads
+
+The generated Site API types include public/member announcements, account deletion, inbox messages and changes, message preferences, realtime transport metadata, order payment-method switching and the backend's member-message delivery. Address reference-data reads expose countries, areas, formats and postal codes. The Administrator API remains outside this client.
+
+Pass an inbox change feed's opaque cursor unchanged, and send the observed string `through_sequence` when marking the inbox read. Realtime polling requires `after`; the caller owns polling, reconnection, cursor recovery and refetching resources after hints. Preference writes contain only the choices being changed. A deletion request returns its acceptance receipt; it does not automate the interactive account-deletion flow.
+
+Conditional reads are opt-in on operations documenting `If-None-Match`, including profile, entitlements, organisations, inbox messages, realtime digest and address reference data. Keep the saved representation yourself and inspect `response.status` before using `data`:
+
+```ts
+const answer = await client.GET('/api/v1/me/messages', {
+  params: { header: { 'If-None-Match': savedEtag } },
+});
+if (answer.response.status === 304) {
+  // The saved representation is still current; data and error are undefined.
+} else if (answer.error) {
+  throw new Error(answer.error.title);
+} else if (answer.data !== undefined) {
+  const messages = answer.data;
+  const etag = answer.response.headers.get('ETag');
+}
+```
+
+For operations documenting 304, `GET` and `request('get', ...)` return the original 304 Response with neither `data` nor `error`, consistent with [RFC 9110 conditional requests](https://www.rfc-editor.org/rfc/rfc9110.html#section-13.1.2). The public result type includes the bodyless branch for operations documenting 304, so checking only `error` does not narrow `data` to a representation; check `data !== undefined` before reading it. Operations without a documented 304 and non-GET writes retain their existing response inference. An undeclared 304 has the transport's empty-string `error` on every request method, including when its headers declare `Content-Length: 0`; it is not a problem document or a cached representation. Other responses retain their existing runtime behavior. Mock mode still covers only its bundled sample operations; these new operations need caller-provided mock answers.
 
 ## Mock mode
 
@@ -99,13 +123,13 @@ OAuth token request types require `refresh_token` for the refresh grant, `code`,
   "spec": {
     "path": "docs/api/openapi.yaml",
     "tag": null,
-    "commit": "074e28bced08374ca80c33d2882bdbfa8203c14f",
-    "sha256": "029ec0513e035a1c056bffe50c9ad9b7b6b7b979f089094b1517aee0819cbb2b"
+    "commit": "efbdc4df48ecc711109c5e565a4bfdc8182d5e12",
+    "sha256": "df3fd9f13fd5efb844f760110221cf1d65fca96c8de58a4c5ae54513fe362771"
   }
 }
 ```
 
-This pre-release is a typed client for aio at commit `074e28bce` on its default branch, which no aio release contains yet (`tag` is null); it does not run or claim the aio SDK conformance suite. Use an install running that aio commit or a newer one. It exposes typed HTTP operations; retry scheduling, cursor recovery, sign-in sessions, credential storage and application flows remain the caller's responsibility. While aio is below 1.0.0, minor releases may remove operations or change their shapes, even when the API path stays at v1. Check the release's breaking changes before upgrading an install. The package's own version follows its own semver; the document pin names the contract it matches. A final version requires a pin at a final aio release; a pre-release may pin a commit on aio's default branch.
+This pre-release is a typed client for aio at commit `efbdc4df4` on its default branch, which no aio release contains yet (`tag` is null); it does not run or claim the aio SDK conformance suite. Use an install running that aio commit or a newer one. It exposes typed HTTP operations; retry scheduling, cursor recovery, sign-in sessions, credential storage and application flows remain the caller's responsibility. While aio is below 1.0.0, minor releases may remove operations or change their shapes, even when the API path stays at v1. Check the release's breaking changes before upgrading an install. The package's own version follows its own semver; the document pin names the contract it matches. A final version requires a pin at a final aio release; a pre-release may pin a commit on aio's default branch.
 
 ## Develop
 
