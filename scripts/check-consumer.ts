@@ -35,6 +35,34 @@ export async function read(): Promise<[Product, Product[]]> {
   void checks;
   return [product.data, products.data.data];
 }
+
+export async function conditional(): Promise<void> {
+  const answer = await client.GET('/api/v1/me/messages', {
+    params: { header: { 'If-None-Match': '"saved"' } },
+  });
+  if (!answer.error) {
+    // @ts-expect-error a bodyless 304 is neither a resource nor a refusal
+    answer.data.sequence;
+  }
+  if (answer.data !== undefined) {
+    const length: number = answer.data.data.length;
+    void length;
+  }
+  const requested = await client.request('get', '/api/v1/me/messages');
+  if (!requested.error) {
+    // @ts-expect-error generic requests also require checking for a representation
+    requested.data.sequence;
+  }
+  const text = await client.GET('/api/v1/me/messages', { parseAs: 'text' });
+  if (text.data !== undefined) {
+    const body: string = text.data;
+    void body;
+  }
+  // @ts-expect-error conditional response typing must retain required feed parameters
+  await client.GET('/api/v1/me/messages/changes');
+  // @ts-expect-error generic request typing must retain required feed parameters
+  await client.request('get', '/api/v1/me/messages/changes');
+}
 `;
 
 const runtimeSource = `import { createClient } from '${packageName}';

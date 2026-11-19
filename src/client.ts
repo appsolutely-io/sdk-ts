@@ -1,4 +1,10 @@
-import createFetchClient, { defaultPathSerializer, type Client, type Middleware } from 'openapi-fetch';
+import createFetchClient, {
+  defaultPathSerializer,
+  type Client,
+  type FetchResponse,
+  type MaybeOptionalInit,
+  type Middleware,
+} from 'openapi-fetch';
 import { keyedOperations, type paths } from './generated/schema.ts';
 import {
   MOCK_BASE_URL,
@@ -49,8 +55,38 @@ export type ClientPaths = {
   [Path in keyof paths]: { [Method in keyof paths[Path]]: WithOptionalKey<paths[Path][Method]> };
 };
 
+type ResponseMedia = 'application/json' | 'application/problem+json';
+type HttpMethod = Parameters<Client<ClientPaths>['request']>[0];
+type PathsWithMethod<Method extends HttpMethod> = {
+  [Path in keyof ClientPaths]: NonNullable<ClientPaths[Path][Method]> extends never ? never : Path;
+}[keyof ClientPaths];
+type InitArgs<Init> = {} extends Init
+  ? [init?: Init & Record<string, unknown>]
+  : [init: Init & Record<string, unknown>];
+type NotModified = { data?: never; error?: never; response: Response };
+type ClientResponse<Operation extends object, Init> =
+  | FetchResponse<Operation, Init, ResponseMedia>
+  | (Operation extends { responses: infer Responses } ? (304 extends keyof Responses ? NotModified : never) : never);
+
+type GetMethod = <Path extends PathsWithMethod<'get'>, Init extends MaybeOptionalInit<ClientPaths[Path], 'get'>>(
+  url: Path,
+  ...init: InitArgs<Init>
+) => Promise<ClientResponse<ClientPaths[Path]['get'], Init>>;
+
+type RequestMethod = <
+  Method extends HttpMethod,
+  Path extends PathsWithMethod<Method>,
+  Init extends MaybeOptionalInit<ClientPaths[Path], Method>,
+>(
+  method: Method,
+  url: Path,
+  ...init: InitArgs<Init>
+) => Promise<ClientResponse<NonNullable<ClientPaths[Path][Method]>, Init>>;
+
 /** Successes are `application/json`; refusals are RFC 9457 `application/problem+json`, typed as `error`. */
-export type AppsolutelyClient = Client<ClientPaths, 'application/json' | 'application/problem+json'> & {
+export type AppsolutelyClient = Omit<Client<ClientPaths, ResponseMedia>, 'GET' | 'request'> & {
+  GET: GetMethod;
+  request: RequestMethod;
   /** True when requests are answered from mock data and never reach a server. */
   readonly mock: boolean;
 };
@@ -78,11 +114,13 @@ const idempotencyKey: Middleware = {
   },
 };
 
-function withNotModified<Call extends (...args: never[]) => Promise<{ response: Response }>>(call: Call): Call {
-  return (async (...args: Parameters<Call>) => {
+function withNotModified<Args extends unknown[], Result extends { response: Response }>(
+  call: (...args: Args) => Promise<Result>,
+): (...args: Args) => Promise<Result | NotModified> {
+  return async (...args: Args) => {
     const result = await call(...args);
     return result.response.status === 304 ? { response: result.response } : result;
-  }) as Call;
+  };
 }
 
 const BASE_URL_FIX = 'set baseUrl, or pass mock: true to use the bundled sample data';
@@ -164,10 +202,12 @@ export function createClient(options: ClientOptions): AppsolutelyClient {
         : { fetch: options.fetch }),
   });
   client.use(idempotencyKey);
-  client.GET = withNotModified(client.GET);
-  client.request = withNotModified(client.request);
+  const conditionalClient = Object.assign(client, {
+    GET: withNotModified(client.GET),
+    request: withNotModified(client.request),
+  });
   if (mock) {
     console.warn(options.baseUrl === undefined ? MOCK_NOTICE : `${MOCK_NOTICE} ${MOCK_IGNORES_BASE_URL}`);
   }
-  return Object.defineProperty(client, 'mock', { value: mock, enumerable: true }) as AppsolutelyClient;
+  return Object.defineProperty(conditionalClient, 'mock', { value: mock, enumerable: true }) as AppsolutelyClient;
 }

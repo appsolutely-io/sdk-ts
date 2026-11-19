@@ -165,6 +165,42 @@ export type AdoptedContractChecks = [
   Assert<Equal<operations['listMeMessages']['responses'][304]['content'], undefined>>,
 ];
 
+export async function conditionalDataRequiresPresence(): Promise<void> {
+  const answer = await inbox();
+  if (!answer.error) {
+    // @ts-expect-error a bodyless 304 has no data even when it has no error
+    answer.data.sequence;
+  }
+  if (answer.data !== undefined) {
+    const page: InboxMessagePage = answer.data;
+    void page;
+  }
+  const requested = await client.request('get', '/api/v1/me/messages');
+  if (!requested.error) {
+    // @ts-expect-error the generic request method also permits a bodyless 304
+    requested.data.sequence;
+  }
+  const text = await client.GET('/api/v1/me/messages', { parseAs: 'text' });
+  if (!text.error) {
+    // @ts-expect-error parseAs does not make a bodyless 304 contain text
+    text.data.toUpperCase();
+  }
+  if (text.data !== undefined) {
+    const body: string = text.data;
+    void body;
+  }
+  const product = await getProduct();
+  if (!product.error) {
+    const id: string = product.data.id;
+    void id;
+  }
+  const written = await client.request('post', '/api/v1/me/deletion');
+  if (!written.error) {
+    const receipt: MemberDeletionAccepted = written.data;
+    void receipt;
+  }
+}
+
 // @ts-expect-error an inbox change feed requires its opaque cursor
 export const inboxWithoutCursor = () => client.GET('/api/v1/me/messages/changes');
 // @ts-expect-error realtime polling requires the last observed sequence

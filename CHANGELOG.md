@@ -16,7 +16,7 @@ and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - The regenerated `Order` type requires `attempts`; order fixtures must provide it. The bundled order answers now include empty attempt lists. Order payment methods and current-payment references, address region/entry fields and the payment-method-switched event are typed from the adopted document.
 - Newly documented required inputs remain mandatory in the public types: the inbox change cursor, read-all's string `through_sequence`, realtime polling's `after`, preference choices and the payment method when switching an order. The client supplies documented idempotency keys unless the caller passes one; no runtime retry, realtime connection or deletion-flow orchestration is added.
-- Existing unconditional requests keep their behavior. A conditional 304 is no longer exposed as an empty error string by the underlying HTTP client. The Administrator API is still outside this package's scope, and bundled mock coverage remains partial.
+- Existing unconditional requests keep their runtime behavior. A conditional 304 is no longer exposed as an empty error string by the underlying HTTP client. Public GET/request results for operations documenting 304 include a bodyless branch; checking only `error` is insufficient to read a resource, so callers must check `data !== undefined`. Other operations retain their response inference, including `parseAs`. The Administrator API is still outside this package's scope, and bundled mock coverage remains partial.
 
 ## [0.1.0-next.0] - 2026-11-06
 
