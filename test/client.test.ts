@@ -7,9 +7,19 @@ import {
   type OperationObject,
   type ParameterObject,
   type PathItemObject,
+  type ReferenceObject,
 } from 'openapi-typescript';
 import { parse } from 'yaml';
 import { createClient } from '../src/index.ts';
+
+function resolve<T>(document: OpenAPI3, value: T | ReferenceObject): T {
+  if (value !== null && typeof value === 'object' && '$ref' in value && typeof value.$ref === 'string') {
+    const resolved = resolveRef<T>(document, value.$ref, { silent: false });
+    assert.ok(resolved !== undefined, `Cannot resolve ${value.$ref}`);
+    return resolved;
+  }
+  return value as T;
+}
 
 interface Recorded {
   url: string;
@@ -38,10 +48,11 @@ test('every operation in the document is keyed exactly when its header is requir
   ) => Promise<unknown>;
   let keyed = 0;
   for (const [path, raw] of Object.entries(document.paths ?? {})) {
-    const item = raw as PathItemObject;
+    const item = resolve<PathItemObject>(document, raw);
     for (const method of ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'] as const) {
-      const operation = item[method] as OperationObject | undefined;
-      if (operation === undefined) continue;
+      const rawOperation = item[method];
+      if (rawOperation === undefined) continue;
+      const operation = resolve<OperationObject>(document, rawOperation);
       const parameters = [...(item.parameters ?? []), ...(operation.parameters ?? [])];
       const header = parameters
         .map((parameter) =>
@@ -402,6 +413,17 @@ test('conditional reads return the original 304 Response with neither data nor e
 
 test('every generic request handles 304 only when its operation documents it', async () => {
   const document: OpenAPI3 = parse(readFileSync(new URL('../spec/openapi.yaml', import.meta.url), 'utf8'));
+  const paths = document.paths;
+  assert.ok(paths);
+  const referencedPath = '/api/v1/products';
+  const referencedItem = paths[referencedPath];
+  assert.ok(referencedItem);
+  document.components = {
+    ...document.components,
+    pathItems: { ...document.components?.pathItems, ProductCatalogue: referencedItem },
+  };
+  paths[referencedPath] = { $ref: '#/components/pathItems/ProductCatalogue' };
+  const visited = new Set<string>();
   let response = new Response(null, { status: 304 });
   const client = createClient({ baseUrl: 'https://example.test', fetch: async () => response });
   const request = client.request as (
@@ -412,16 +434,18 @@ test('every generic request handles 304 only when its operation documents it', a
   let conditional = 0;
   let unconditional = 0;
   for (const [path, raw] of Object.entries(document.paths ?? {})) {
-    const item = raw as PathItemObject;
+    const item = resolve<PathItemObject>(document, raw);
     for (const method of ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'] as const) {
-      const operation = item[method] as OperationObject | undefined;
-      if (operation === undefined) continue;
+      const rawOperation = item[method];
+      if (rawOperation === undefined) continue;
+      const operation = resolve<OperationObject>(document, rawOperation);
       response = new Response(null, { status: 304 });
       const pathParams = Object.fromEntries(
         Array.from(path.matchAll(/\{([^}]+)\}/g), (match) => [match[1], 'example']),
       );
       const result = await request(method, path, { params: { path: pathParams } });
       const label = `${method.toUpperCase()} ${path}`;
+      visited.add(label);
       const documented = Object.hasOwn(operation.responses ?? {}, '304');
       assert.equal(result.response, response, label);
       assert.equal(result.data, undefined, label);
@@ -432,6 +456,47 @@ test('every generic request handles 304 only when its operation documents it', a
   }
   assert.ok(conditional > 0);
   assert.ok(unconditional > 0);
+  assert.ok(visited.has(`GET ${referencedPath}`));
+});
+
+test('undeclared 304s retain transport errors with zero content length on every entry point', async () => {
+  const response = new Response(null, { status: 304, headers: { 'Content-Length': '0', ETag: '"saved"' } });
+  const client = createClient({ baseUrl: 'https://example.test', fetch: async () => response });
+  const calls = [
+    ['GET', () => client.GET('/api/v1/products')],
+    ['request(get)', () => client.request('get', '/api/v1/products')],
+    ['POST', () => client.POST('/api/v1/me/deletion')],
+    ['request(post)', () => client.request('post', '/api/v1/me/deletion')],
+  ] as const;
+  for (const [name, call] of calls) {
+    const answer = await call();
+    assert.equal(answer.response, response, name);
+    assert.equal(answer.response.headers.get('ETag'), '"saved"', name);
+    assert.equal(answer.data, undefined, name);
+    assert.equal(answer.error, '', name);
+  }
+  for (const method of ['PUT', 'DELETE', 'OPTIONS', 'HEAD', 'PATCH'] as const) {
+    const call = client[method] as (path: string) => Promise<{ response: Response; data?: unknown; error?: unknown }>;
+    const answer = await call('/api/v1/products');
+    assert.equal(answer.response, response, method);
+    assert.equal(answer.data, undefined, method);
+    assert.equal(answer.error, '', method);
+  }
+  const trace = client.TRACE as (path: string) => Promise<unknown>;
+  await assert.rejects(trace('/api/v1/products'), TypeError);
+});
+
+test('documented 304s remain bodyless with zero content length', async () => {
+  const response = new Response(null, { status: 304, headers: { 'Content-Length': '0', ETag: '"saved"' } });
+  const client = createClient({ baseUrl: 'https://example.test', fetch: async () => response });
+  const calls = [() => client.GET('/api/v1/me/messages'), () => client.request('get', '/api/v1/me/messages')];
+  for (const call of calls) {
+    const answer = await call();
+    assert.equal(answer.response, response);
+    assert.equal(answer.response.headers.get('ETag'), '"saved"');
+    assert.equal(answer.data, undefined);
+    assert.equal(answer.error, undefined);
+  }
 });
 
 test('an undocumented GET 304 retains the transport error result', async () => {

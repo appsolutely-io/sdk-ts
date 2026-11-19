@@ -117,12 +117,13 @@ const idempotencyKey: Middleware = {
 function withNotModified<Args extends unknown[], Result extends { response: Response }>(
   call: (...args: Args) => Promise<Result>,
   operation: (args: Args) => string,
-): (...args: Args) => Promise<Result | NotModified> {
+): (...args: Args) => Promise<Result | NotModified | { error: string; response: Response }> {
   return async (...args: Args) => {
     const result = await call(...args);
-    return result.response.status === 304 && Object.hasOwn(notModifiedOperations, operation(args))
+    if (result.response.status !== 304) return result;
+    return Object.hasOwn(notModifiedOperations, operation(args))
       ? { response: result.response }
-      : result;
+      : { error: '', response: result.response };
   };
 }
 
@@ -207,6 +208,13 @@ export function createClient(options: ClientOptions): AppsolutelyClient {
   client.use(idempotencyKey);
   const conditionalClient = Object.assign(client, {
     GET: withNotModified(client.GET, ([url]) => `GET ${url}`),
+    PUT: withNotModified(client.PUT, ([url]) => `PUT ${url}`),
+    POST: withNotModified(client.POST, ([url]) => `POST ${url}`),
+    DELETE: withNotModified(client.DELETE, ([url]) => `DELETE ${url}`),
+    OPTIONS: withNotModified(client.OPTIONS, ([url]) => `OPTIONS ${url}`),
+    HEAD: withNotModified(client.HEAD, ([url]) => `HEAD ${url}`),
+    PATCH: withNotModified(client.PATCH, ([url]) => `PATCH ${url}`),
+    TRACE: withNotModified(client.TRACE, ([url]) => `TRACE ${url}`),
     request: withNotModified(client.request, ([method, url]) => `${method.toUpperCase()} ${url}`),
   });
   if (mock) {
